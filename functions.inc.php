@@ -93,5 +93,3 @@ function hotelwakeup_getconfig() {
 	$results[0][] = trim($res[0]);
 	return $results[0];
 }
-?>
-
