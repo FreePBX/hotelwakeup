@@ -1,0 +1,34 @@
+<module>
+	<rawname>hotelwakeup</rawname>
+	<name>Wake Up Calls</name>
+	<version>1.2.4</version>
+	<candisable>yes</candisable>
+	<canuninstall>yes</canuninstall>
+	<type>tool</type>
+	<publisher>projects.colsolgrp.net</publisher>
+	<category>Third Party Addon</category>
+       <description>
+                Create simple hotel-style wake up call services. 
+        </description>
+	<info>http://www.fonicaprojects.com/wiki/index.php/FreePBX_Module:_Hotel_Style_WakeUp_Calls</info>
+	 <changelog>
+		*1.2.4* Tickets #269 (http://projects.colsolgrp.net/issues/show/269) 12-31-2009 
+		*1.2.3* Tickets #163, #164, #165, #166 (http://projects.colsolgrp.net/projects/hotelwakeup/issues) 7-7-2009 
+		*1.2.2* Ticket #138 (http://projects.colsolgrp.net/projects/hotelwakeup/issues) 6-1-2009 	
+		*1.2.1* Ticket #134 (http://projects.colsolgrp.net/projects/hotelwakeup/issues) 6-1-2009 
+		*1.2.0* Removed dependancy on default db id/pw  (tshif) 4-8-2009 
+		*1.1.0* Quotation marks around Caller ID name now optional - for some unusual systems that did not like them. (tshif)  3-30-2009
+		*1.0.2* Added more info data url pointed to wiki (tshif) 3-2-09
+		*1.0.1* Increase max entension length to 10 to accomodate outside calls (tshif) 2-17-09
+		*1.0.0* First Module release   (tshif)  2-17-09
+        </changelog>
+	<menuitems>
+		<hotelwakeup>Wake Up Calls</hotelwakeup>
+       </menuitems>
+	<depends>
+                <module>core</module>
+                <module>ivr gt1.0</module>
+                <version>ge2.2</version>
+                <engine>asterisk 1.2</engine>
+         </depends>
+</module>
