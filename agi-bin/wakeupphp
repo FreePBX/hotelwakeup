@@ -976,4 +976,3 @@ function execute_agi( $command )
 	}
 } 
 ?>
-
