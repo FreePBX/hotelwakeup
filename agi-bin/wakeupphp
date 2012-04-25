@@ -281,33 +281,26 @@
 		while ( !$rc['result'] )
 		{
 			if ( !$rc['result'] )
-				$rc = execute_agi( "STREAM FILE for-wakeup-call \"123\" ");
+				$rc = execute_agi( "STREAM FILE for-wakeup-call \"12\" ");
 			if ( !$rc['result'] )
-				$rc = execute_agi( "STREAM FILE press-1 \"123\" ");
+				$rc = execute_agi( "STREAM FILE press-1 \"12\" ");
 			if ( !$rc['result'] )
-				$rc = execute_agi( "STREAM FILE to-cancel-wakeup \"123\" ");
+				$rc = execute_agi( "STREAM FILE to-cancel-wakeup \"12\" ");
 			if ( !$rc['result'] )
-				$rc = execute_agi( "STREAM FILE press-2 \"123\" ");
-				//1st edit by RossIV 10-19-2011 for additional wake up calls
-      		if ( !$rc['result'] )
-                $rc = execute_agi( "STREAM FILE addtl-wakeup-call \"123\" ");
-			if ( !$rc['result'] )
-                $rc = execute_agi( "STREAM FILE press-3 \"123\" ");
-				//end 1st edit by RossIV 10-19-2011 for additional wake up calls
-
+				$rc = execute_agi( "STREAM FILE press-2 \"12\" ");
 			if ( !$rc['result'] )
 			{
 				$rc = execute_agi( "WAIT FOR DIGIT 15000");
 			}
 			if ( $rc['result'] != -1 )
 			{
-				if ( $rc['result'] == 49 || $rc['result'] == 50 || $rc['result'] == 51 )
+				if ( $rc['result'] == 49 || $rc['result'] == 50 )
 				{
 					; // Do nothing
 				}
 				else
 				{
-					// This was just for fun, if they press something other than 1 or 2 or 3
+					// This was just for fun, if they press something other than 1 or 2
 					$rc['result'] = 0;
 				$rc = execute_agi( "STREAM FILE im-sorry \"\" ");
 				$rc = execute_agi( "STREAM FILE you-dialed-wrong-number \"\" ");
@@ -602,243 +595,8 @@
 			
 		}
 			break;
-		//begin edit 2 by RossIV 10-19-2011 for multiple wakeup calls
-		case '51':	// Pressed 3  - This is to schedule an ADDITIONAL wakeup call
-		{
-			$rc['result'] = 0;
-			while ( !$rc['result'] )
-			{
-				$rc = execute_agi( "STREAM FILE please-enter-the \"0123456789\" ");
-				
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE time \"0123456789\" ");
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE for \"0123456789\" ");
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE your \"0123456789\" ");
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE additional \"0123456789\" ");
-				
-				// If we get here, they haven't pressed anything yet.
-				if ( !$rc['result'] )
-				{
-					$rc = execute_agi( "GET DATA wakeup-call 15000 4");
-					
-					if ( isset($rc['timeout']) )
-						$rc['result'] = '';
-					else if ( $rc['result'] != -1  && $parm_short_entry )
-						$rc['result'] = str_pad( $rc['result'], 4, '0', STR_PAD_LEFT );
-					else if ( strlen( $rc['result'] ) != 4 )
-						$rc['result'] = '';
-				}
-				
-				if ( $rc['result'] != -1 )
-				{
-					
-					
-					if ($parm_debug_on)
-						fputs( $stdlog, "We have digits: len=" . strlen( $rc['result']) . " val=$rc[result] \r\n\r\n" );
-					
-					
-					// This check how many digits, if 2 then they pre-pressed a digit, 
-					// Otherwise it will be 4
-					if ( strlen( $rc['result'] ) == 2 )
-					{
-						$num= $rc['result']-48;
-						while ( strlen($num) < 4 && $rc['result'] > 0 )
-						{
-							$rc = execute_agi( "WAIT FOR DIGIT 15000");
-							if ($parm_debug_on)
-								fputs( $stdlog, "We have a digit:" . strlen( $rc['result']) . "- $rc[result] \r\n" );
-							
-							
-							if ( $rc['result'] >= 48 && $rc['result'] <= 57 )
-								$num .= $rc['result'] - 48;
-							else if ( $rc['result'] == '35' && $parm_short_entry )		// User pressed the # key, maybe 700# for 7:00
-								$num = str_pad($num, 4, '0', STR_PAD_LEFT);
-							else	
-								$rc['result'] = 0;
-							
-						}
-						if (strlen($num) == 4 )
-							$rc['result'] = $num;
-					}
-					
-					if ($parm_debug_on)
-						fputs( $stdlog, "Checking Results [$rc[result]] \r\n\r\n" );
-					
-					// They entered 4 digits,  check if its a valid time or they hung up
-					
-					$overTime =  ( $parm_prompt_ampm == 2 ) ? 1259 : 2359;
-					
-					if ( $rc['result'] > $overTime || strlen( $rc['result']) < 4 || substr($rc['result'],2,2) > 59 || $rc['result'] < 0)
-					{
-						$rc['result'] = 0;
-						//$rc = execute_agi( "STREAM FILE invalid \"\" ");
-						//$rc = execute_agi( "STREAM FILE time \"\" ");
-						$rc = execute_agi( "STREAM FILE please-try-again \"\" ");
-					}
-					
-					if (strlen( $rc['result'] ) == 4 && $rc['result'] == 0 )
-						$rc['result'] = -2;	// Special 00:00 time
-					
-				}	
-			}
 			
-			if ( $rc['result'] == -2 )
-				$rc['result'] = '0000';	
-			else if ( $rc['result'] == -1 )
-				exit;			// The user hung up
-			
-			
-			
-			// Save the time entered
-			$wtime = $rc['result'];
-			
-			
-			// We don't know who the user is, so if its less than 1300 it could be AM or PM, so prompt
-			// them for am pm
-			if ( $wtime != -1 && $wtime < 1300 && $parm_prompt_ampm != 1)
-			{
-				$rc['result'] = 0;
-				while ( !$rc['result'] )
-				{
-					
-					if ( !$rc[result] )
-						$rc = execute_agi( "GET DATA 1-for-am-2-for-pm 15000 1");
-					
-				}	
-				
-				switch( $rc['result'] )
-				{
-					case '1':			// Set to AM should be under 1159 or less
-						if ( $wtime > 1159 )
-							$wtime -= 1200;
-						$rc['result'] = 0;
-						break;
-						
-					case '2':			// Set to PM should be equal or over 1200
-						if ( $wtime < 1159 )
-							$wtime += 1200;
-						$rc['result'] = 0;
-						break;
-				}
-			}
-			
-			
-			// At this point we have a millitary time in the $wtime variable
-			if ( $parm_chan_ext )
-			{
-				$wakefile = "$parm_temp_dir/$wtime.$chan.$sta.call";
-				$callfile = "$parm_call_dir/$wtime.$chan.$sta.call";
-			}
-			else
-			{
-				$wakefile = "$parm_temp_dir/$wtime.ext.$cidn.call";
-				$callfile = "$parm_call_dir/$wtime.ext.$cidn.call";
-			}            
-			
-			if ($parm_debug_on)
-				fputs( $stdlog, "Wakeup File [$wakefile]\n" );
-			
-			// Open up a wakeup file to write it out.
-			$wuc = fopen( $wakefile, 'w');
-			
-			if ( $wuc )
-			{
-				// Delete any old Wakeup call files this one will override 
-				for ($i=0; $i < $outc; $i++ )
-				{
-					if( file_exists( "$parm_call_dir/$out[$i]" ) )
-					{
-						//if ($parm_debug_on)
-						//	fputs( $stdlog, "Unlinking Old File [$parm_call_dir/$out[$i]]\n" );
-						
-						//unlink( "$parm_call_dir/$out[$i]" );
-					}
-				}
-				
-				// I've noticed that the other WAKEUP example has a different format.  This worked for me
-				// Here is where we either make the call to the Extension or the Channel.  Extension
-				// is the better way to go, but required the caller ID information.  Where Channel
-				// should always get you back to where you were called from, provided its on your system
-				if ( $parm_chan_ext )
-					fputs( $wuc, "channel: $chan/$sta\n" );
-				else
-	//				fputs( $wuc, "channel: Local/$cidn@$agivar[agi_context]\n" );
-					fputs( $wuc, "channel: Local/$cidn@from-internal\n" );
-
-				fputs( $wuc, "maxretries: $parm_maxretries\n");
-				fputs( $wuc, "retrytime: $parm_retrytime\n");
-				fputs( $wuc, "waittime: $parm_waittime\n");
-				fputs( $wuc, "callerid: $parm_wakeupcallerid\n");
-				
-				fputs( $wuc, "application: $parm_application\n");
-				fputs( $wuc, "data: $parm_data\n");
-				
-				fclose( $wuc );
-				
-				$w = getdate();
-				
-				$w['hours']   = substr( $wtime, 0, 2 );
-				$w['minutes'] = substr( $wtime, 2, 2 );
-				
-				$time_wakeup = mktime( substr( $wtime, 0, 2 ), substr( $wtime, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-				
-				$time_now = time( );
-				
-				if ($parm_debug_on)
-					fputs( $stdlog, 'time_wakeup=' . date('l dS \of F Y h:i:s A', $time_wakeup) . " ($time_wakeup) | time_now=" . date('l dS \of F Y h:i:s A',$time_now) . " ($time_now)\n" );
-				
-				if ( $time_wakeup <= $time_now )
-					$time_wakeup += 86400; // Add One Day on
-				
-				if ($parm_debug_on)
-					fputs( $stdlog, 'Setting WAKEUP file to =' . date('l dS \of F Y h:i:s A', $time_wakeup) . " - $time_wakeup\n" );
-				
-				
-				touch( $wakefile, $time_wakeup, $time_wakeup );
-				
-				rename( $wakefile, $callfile );
-				
-			}
-			else
-			{
-				// Couldn't open the file.  Make sure you created the /var/lib/asterisk/wakeups directory
-				if ($parm_debug_on)
-					fputs( $stdlog, "Error opening file [$wakefile]\n" );
-				
-				$rc = execute_agi( "STREAM FILE something-terribly-wrong \"\" ");
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE goodbye \"\" ");
-				if ( !$rc['result'] )
-					$rc = execute_agi( "HANGUP");
-				exit;
-			}
-			
-			//  If we have a caller ID  and waking up by extension say the extension number
-			if ( $cidn && $parm_chan_ext == 0 )
-			{
-				$rc = execute_agi( "STREAM FILE for \"\" ");
-				
-				if ( !$rc['result'] )
-					$rc = execute_agi( "STREAM FILE extension \"\" ");
-				
-				
-				if ( !$rc['result'] )
-					$rc = execute_agi( "SAY DIGITS $cidn \"\" ");
-				
-			}
-			
-			say_wakeup( $wtime );
-			$rc['result'] = 0;
-			
-		}
-			break;
-			
-			// This is the END Of an ADDITIONAL wakeup call
 	}
-	//end edit 2 by RossIV 10-19-2011 for multiple wakeup calls
 	
 	if ( !$rc['result'] )
 		$rc = execute_agi( "STREAM FILE goodbye \"\" ");
