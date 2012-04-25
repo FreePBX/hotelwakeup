@@ -37,7 +37,7 @@ function hotelwakeup_hotelwakeup($c) {
 	$ext->add($id, $c, '', new ext_Macro('user-callerid'));
 	$ext->add($id, $c, '', new ext_answer(''));
 	$ext->add($id, $c, '', new ext_wait(1));
-	$ext->add($id, $c, '', new ext_AGI(WAKEUPPHP));
+	$ext->add($id, $c, '', new ext_AGI(wakeupphp));
 	$ext->add($id, $c, '', new ext_Hangup);
 	}
 
