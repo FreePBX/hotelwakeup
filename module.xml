@@ -2,16 +2,16 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<license>GNU GPLv2</license>
-	<version>1.2.5.x</version>
+	<version>1.2.5.3</version>
 	<candisable>yes</candisable>
 	<canuninstall>yes</canuninstall>
 	<type>tool</type>
-	<publisher>Lorne Gaetz</publisher>
+	<publisher>POSSA</publisher>
 	<category>Third Party Addon</category>
        <description>
                 Create simple hotel-style wake up call services. 
         </description>
-	<info>https://github.com/lgaetz/Hotel-Style-Wakeup-Calls</info>
+	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
 		*1.2.5* Project moved to Github and minor fixes for FreePBX compatibility
 		*1.2.4* Tickets #269 (http://projects.colsolgrp.net/issues/show/269) 12-31-2009 
