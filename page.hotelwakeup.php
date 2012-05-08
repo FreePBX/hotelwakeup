@@ -8,7 +8,9 @@ if(count($_POST)){
 }
 $date = hotelwakeup_getconfig();
 
-$module_info = xml2array("modules/hotelwakeup/module.xml");
+// Following line was removed by lgaetz because xml2arry is not defined within the module and caused issues on FreePBX distro
+//$module_info = xml2array("modules/hotelwakeup/module.xml");
+
 ?>
 <h1><b>Wake Up Calls</b></h1>
 <hr><br>
@@ -134,5 +136,5 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
 <input type="submit" value="Submit" name="B1"><br><br>
 <?php
 print '<p align="center" style="font-size:11px;">This module is based upon, and includes previous wake-up scripts whose authors are individually credited within.<br>Hotel Style Wakup Calls was put into FreePBX Module format by Tony Shiffer.<br>
-The module is maintained by the developer community at <a target="_blank" href="https://github.com/lgaetz/Hotel-Style-Wakeup-Calls"> https://github.com/lgaetz/Hotel-Style-Wakeup-Calls</a><br><strong>Module version '.$module_info['module']['version'].'</strong></p>';
+The module is maintained by the developer community at <a target="_blank" href="https://github.com/POSSA/Hotel-Style-Wakeup-Calls"> https://github.com/POSSA/Hotel-Style-Wakeup-Calls</a><br></p>';
 ?>

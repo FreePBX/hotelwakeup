@@ -1,16 +1,14 @@
 <module>
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
-	<license>GNU GPLv2</license>
 	<version>1.2.5.3</version>
+	<license>GNU-GPLv2</license>
 	<candisable>yes</candisable>
 	<canuninstall>yes</canuninstall>
 	<type>tool</type>
 	<publisher>POSSA</publisher>
 	<category>Third Party Addon</category>
-       <description>
-                Create simple hotel-style wake up call services. 
-        </description>
+       <description>Create simple hotel-style wake up call services</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
 		*1.2.5* Project moved to Github and minor fixes for FreePBX compatibility
