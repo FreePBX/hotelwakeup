@@ -18,7 +18,7 @@ if (DB::IsError($check)) {
 
 
 ?>Installing Default Values<br>
-<?
+<?php
 # the easy why to debug your SQL Q its missing a value or something do let me do this :P
 # is  that telling yo how yur puting it upp you dont need to have them in a serten order as long as the value ar in teh same place
 $sql ="INSERT INTO hotelwakeup (maxretries, waittime, retrytime, wakeupcallerid,  operator_mode, operator_extensions, extensionlength) ";
