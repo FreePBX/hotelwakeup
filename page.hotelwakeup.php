@@ -8,9 +8,8 @@ if(count($_POST)){
 }
 $date = hotelwakeup_getconfig();
 
-// Following line was removed by lgaetz because xml2arry is not defined within the module and caused issues on FreePBX distro
+//removed by lgaetz may 2012, xml2array is not defined in functions.inc.php and was causing issues on FreePBX distro
 //$module_info = xml2array("modules/hotelwakeup/module.xml");
-
 ?>
 <h1><b>Wake Up Calls</b></h1>
 <hr><br>
@@ -72,53 +71,28 @@ echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$da
   <tr>
     <td width="155"><a href="javascript: return false;" class="info">Ring Time:<span>The number of seconds for the phone to ring. Must be set lower than the voicemail threshold or the wakeup call can end up going to voicemail.</span></a></td>
     <td>
-<select size="1" name="waittime">
 <?php
-echo "<option".(($date[1]==20)?' selected':'').">20</option>\n";
-echo "<option".(($date[1]==30)?' selected':'').">30</option>\n";
-echo "<option".(($date[1]==40)?' selected':'').">40</option>\n";
-echo "<option".(($date[1]==50)?' selected':'').">50</option>\n";
-echo "<option".(($date[1]==60)?' selected':'').">60</option>\n";
-?>
-</select> Seconds
+echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[1]}\" style=\"text-align: right\">\n";
+?> Seconds
     </td>
   </tr>
   <tr>
     <td width="155"><a href="javascript: return false;" class="info">Retry Time:<span>The number of seconds to wait between retrys.  A 'retry' happens if the wakeup call is not answered.</span></a></td>
     <td>
-<select size="1" name="retrytime">
 <?php
-echo "<option".(($date[2]==20)?' selected':'').">20</option>\n";
-echo "<option".(($date[2]==30)?' selected':'').">30</option>\n";
-echo "<option".(($date[2]==40)?' selected':'').">40</option>\n";
-echo "<option".(($date[2]==50)?' selected':'').">50</option>\n";
-echo "<option".(($date[2]==60)?' selected':'').">60</option>\n";
-echo "<option".(($date[2]==75)?' selected':'').">75</option>\n";
-echo "<option".(($date[2]==90)?' selected':'').">90</option>\n";
-echo "<option".(($date[2]==105)?' selected':'').">105</option>\n";
-echo "<option".(($date[2]==120)?' selected':'').">120</option>\n";
-?>
-</select> Seconds
+echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[2]}\" style=\"text-align: right\">\n";
+?> Seconds
     </td>
   </tr>
   <tr>
     <td width="155"><a href="javascript: return false;" class="info">Max Retries:<span>The maximum number of times the system should attempt to deliver the wakeup call when there is no answer.</span></a></td>
     <td>
-<select size="1" name="maxretries">
 <?php
-echo "<option".(($date[0]==2)?' selected':'').">2</option>\n";
-echo "<option".(($date[0]==3)?' selected':'').">3</option>\n";
-echo "<option".(($date[0]==4)?' selected':'').">4</option>\n";
-echo "<option".(($date[0]==5)?' selected':'').">5</option>\n";
-echo "<option".(($date[0]==6)?' selected':'').">6</option>\n";
-echo "<option".(($date[0]==7)?' selected':'').">7</option>\n";
-echo "<option".(($date[0]==8)?' selected':'').">8</option>\n";
-echo "<option".(($date[0]==9)?' selected':'').">9</option>\n";
-echo "<option".(($date[0]==10)?' selected':'').">10</option>\n";
-?>
-</select>
+echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$date[0]}\" style=\"text-align: right\">\n";
+?> Tries
     </td>
   </tr>
+
   <tr>
     <td width="155"><a href="javascript: return false;" class="info">Wake Up Caller ID:<span><u>First Box: </u>Enter the Textual Portion of the caller ID to be sent by the system when placing the wakeup calls.<br><u>Second Box: </u>Enter the numberic portion of the Caller ID to be sent when the system places wake up calls.</span></a></td>
     <td>
