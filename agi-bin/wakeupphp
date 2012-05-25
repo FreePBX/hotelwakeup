@@ -140,17 +140,21 @@
 					$rc = execute_agi( "STREAM FILE please-enter-the \"0123456789\" ");
 
 					if ( !$rc['result'] )
-						$rc = execute_agi( "STREAM FILE extension \"0123456789\" ");
+						$rc = execute_agi( "STREAM FILE number \"0123456789\" ");
 
 					if ( !$rc['result'] )
 						$rc = execute_agi( "STREAM FILE for \"0123456789\" ");
 
 					if ( !$rc['result'] )
 						$rc = execute_agi( "STREAM FILE your \"0123456789\" ");
+
+					if ( !$rc['result'] )
+						$rc = execute_agi( "STREAM FILE wakeup-call \"0123456789\" ");
+
 					// If we get here, they haven't pressed anything yet.
 					if ( !$rc['result'] )
 					{
-						$rc = execute_agi( "GET DATA wakeup-call 15000 $parm_operator_ext_len");
+						$rc = execute_agi( "GET DATA then-press-pound 15000 $parm_operator_ext_len");
 
 						if ( isset($rc['timeout']) )
 							$rc['result'] = '';
