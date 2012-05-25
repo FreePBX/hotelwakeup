@@ -94,6 +94,9 @@
 	if ( !$rc[result] )
 		$rc = execute_agi( "STREAM FILE hello \"\" ");
 
+	// initialize a counter so the while loop will eventually expire
+	$lgcount = $lgcount++;
+
 	// Start prompting them if they want to snooze or turn off the wake up
 	while ( !$rc[result] )
 	{
@@ -137,7 +140,7 @@
 			{
 				; // Do nothing correct input
 			}
-			else
+			else if ($lgcount < 15)   //loops a maximum of 15 times to prevent looping forever
 			{
 				// This was just for fun, if they press something other than 1, 2, 3, or 4
 				$rc[result] = 0;
@@ -146,7 +149,12 @@
 				$rc = execute_agi( "STREAM FILE i-dont-understand3 \"\" ");
 				$rc = execute_agi( "STREAM FILE your \"\" ");
 				$rc = execute_agi( "STREAM FILE communications \"\" ");
+				$lgcount = $lgcount++;
 
+			}
+			else   // cancel the lookup for the unresponsive user
+			{
+				$rc[result] = 49;
 			}
 		}
 	}
