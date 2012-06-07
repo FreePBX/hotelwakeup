@@ -450,13 +450,13 @@
 			// At this point we have a millitary time in the $wtime variable
 			if ( $parm_chan_ext )
 			{
-				$wakefile = "$parm_temp_dir/$wtime.$chan.$sta.call";
-				$callfile = "$parm_call_dir/$wtime.$chan.$sta.call";
+				$wakefile = "$parm_temp_dir/wuc.$wtime.$chan.$sta.call";
+				$callfile = "$parm_call_dir/wuc.$wtime.$chan.$sta.call";
 			}
 			else
 			{
-				$wakefile = "$parm_temp_dir/$wtime.ext.$cidn.call";
-				$callfile = "$parm_call_dir/$wtime.ext.$cidn.call";
+				$wakefile = "$parm_temp_dir/wuc.$wtime.ext.$cidn.call";
+				$callfile = "$parm_call_dir/wuc.$wtime.ext.$cidn.call";
 			}            
 			
 			if ($parm_debug_on)
