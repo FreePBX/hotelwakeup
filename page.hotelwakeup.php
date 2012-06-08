@@ -205,9 +205,6 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
   </tr>
 </table>
 <small>*Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
-echo "<input type=\"text\" name=\"calleridtext\" size=\"13\" value=\"{$date[8]}\" style=\"text-align: center\">\n";
-
-
 
 <br><input type="submit" value="Submit" name="B1"><br><br>
 </FORM>

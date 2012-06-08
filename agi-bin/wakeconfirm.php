@@ -5,6 +5,7 @@
 	// Version 1.0
 
 	require 'wake.inc';
+	require '/var/www/html/admin/modules/hotelwakeup/functions.inc.php';	//required for hotelwakeup_gencall function
     
 	GLOBAL	$stdin, $stdout, $stdlog, $result, $parm_debug_on, $parm_test_mode;
     
@@ -373,6 +374,24 @@ function create_wakeup( $time_wakeup )
 	GLOBAL $parm_chan_ext, $parm_temp_dir, $parm_call_dir, $parm_debug_on, $chan, $sta, $cidn, $agivar, $parm_maxretries, $parm_retrytime, $parm_waittime, $parm_wakeupcallerid, $parm_application, $parm_data, $stdin, $stdout, $stdlog;
 
 	$w = getdate( $time_wakeup );
+
+	$foo = array(
+		time  => $time_wakeup,
+		date => 'unused',
+		ext => $cidn,
+		maxretries => $parm_maxretries,
+		retrytime => $parm_retrytime,
+		waittime => $parm_waittime,
+		callerid => $parm_wakeupcallerid,
+	        application => $parm_application,
+	        data => $parm_data,
+		);
+
+	hotelwakeup_gencallfile($foo);
+
+
+
+/********** old .call file system replaced with above to maintain compatibility with module gui
 	$wtime = sprintf("%02d%02d", $w['hours'], $w['minutes'] );
 
 	if ( $parm_chan_ext )
@@ -444,6 +463,6 @@ function create_wakeup( $time_wakeup )
 		
 		exit;
 	}
-
+********************/
 }
 ?>
