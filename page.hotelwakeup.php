@@ -1,11 +1,22 @@
 <?php
-// HotelWakeUp put into module format by tshif 2/17/2009
-//PHP Programming by Swordsteel 2/17/2009
-// including Wakeup scripts last modified by Jcoulter (credits included within)
-//
-// Last modified Jun 7, 2012
+/*************** Wakeup Calls Module  ***************
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
+History:
+Put into module format by tshif 2/17/2009
+PHP Programming by Swordsteel 2/17/2009
 
+Currently maintained by the PBX Open Source Software Alliance
+https://github.com/POSSA/Hotel-Style-Wakeup-Calls
+Last modified Jun 8, 2012
+**********************************************************/
 
 // Process form if button B1 is clicked
 if (isset($_POST['B1'])){
@@ -26,49 +37,49 @@ if(isset($_POST['SCHEDULE'])) :
 	$HH=$_POST['HH'];
 	$MM=$_POST['MM'];
 	$Ext=$_POST['ExtBox'];
+        $DD=$_POST['DD'];
+        $MON = $_POST['MON'];
+        $YYYY = $_POST['YYYY'];
 
-	$parm_call_dir = '/var/spool/asterisk/outgoing/';
-	$parm_temp_dir = '/var/spool/asterisk/tmp/';
+	//  could use a check here to prevent user from scheduling a call in the past
 
-	$wtime = $HH.$MM;
-	$w = getdate();
-	$time_wakeup = mktime( substr( $wtime, 0, 2 ), substr( $wtime, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	$time_now = time( );
-	if ( $time_wakeup <= $time_now ){
-		$time_wakeup += 86400; // Add One Day on if time is in the past
-		}
+        // check for insufficient data
+     if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == ""  )
+     {
+		// abandon .call file creation
+     }
+     else
+     {
 
-	$wakefile = "$parm_temp_dir/wuc.$wtime.ext.$Ext.call";
-	$callfile = "$parm_call_dir/wuc.$wtime.ext.$Ext.call";
-        // Get module config info for writing the file
-	$date = hotelwakeup_getconfig();
+        // Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
+        // does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
+        // their own destination
+	$date = hotelwakeup_getconfig();  // module config provided by user
 	$parm_application = 'AGI';
 	$parm_data = 'wakeconfirm.php';
+        if ($MM == ""){
+        	$MM = "0";
+           	}
 
-	// Delete any old Wakeup call files this one will override
-	if( file_exists( "$callfile" ) )
-	{
-		unlink( "$callfile" );
-	}
+	$foo = array(
+		time  => mktime( $HH , $MM, 0, $MON, $DD, $YYYY ),
+		date => 'unused',
+		ext => $Ext,
+		maxretries => $date[0],
+		retrytime => $date[2],
+		waittime => $date[1],
+		callerid => $date[4],
+	        application => $parm_application,
+	        data => $parm_data,
+		);
 
-	// Open up a wakeup file, write and close
-	$wuc = fopen( $wakefile, 'w');
-	fputs( $wuc, "channel: Local/$Ext@from-internal\n" );
-	fputs( $wuc, "maxretries: $date[0]\n");
-	fputs( $wuc, "retrytime: $date[2]\n");
-	fputs( $wuc, "waittime: $date[1]\n");
-	fputs( $wuc, "callerid: $date[4]\n");
-	fputs( $wuc, "application: $parm_application\n");
-	fputs( $wuc, "data: $parm_data\n");
-	fclose( $wuc );
-
-	// fix time of temp file and move to outgoing
-	touch( $wakefile, $time_wakeup, $time_wakeup );
-	rename( $wakefile, $callfile );
+	hotelwakeup_gencallfile($foo);
+      }
 endif;
 
 // Get module config info
 $date = hotelwakeup_getconfig();
+$w = getdate();
 
 
 ?>
@@ -80,38 +91,38 @@ form below.<br><br>
 
 <h2><b>Schedule a new call:</b></h2>
 
-<FORM NAME="InsertFORM"  ACTION="" METHOD=POST>
-Destination: <INPUT TYPE="TEXTBOX" NAME="ExtBox" SIZE="12" MAXLENGTH="20">
-HH:MM <INPUT TYPE="TEXTBOX" NAME="HH" SIZE="2" MAXLENGTH="2">:<INPUT TYPE="TEXTBOX" NAME="MM" SIZE="2" MAXLENGTH="2">
-<INPUT TYPE="SUBMIT" NAME="SCHEDULE" VALUE="SCHEDULE">
-</FORM>
-<br>
-<h2><b>Scheduled Calls:</b></h2><?PHP
+<?php
+echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD:MM:YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mday'].">:\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mon'].">:<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=".$w['year'].">\n";
+echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
+echo "</FORM>\n";
 
+echo "<br><h2><b>Scheduled Calls:</b></h2>\n";
 echo "<FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST>\n";
 echo "<TABLE cellSpacing=1 cellPadding=1 width=900 border=1 >\n" ;
-echo "<TR><TD>Time</TD><TD>Extension</TD><TD>Delete</TD></TR>\n" ;
+echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
 
-
-	$count = 0;
-
-	$count++;
-	$dir1 = "/var/spool/asterisk/outgoing";
-	$files = glob($dir1."/wuc*.call");
-
-       foreach($files as $file) {
-		$myresult = CheckWakeUpProp($file);
-		If ($myresult <> '') {
-			$h = substr($myresult[0],0,2);
-			$m = substr($myresult[0],2,3);
-			$wucext = $myresult[1];
-		 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $h .":" . $m . "</TD><TD>" .$wucext ."</TD><TD><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"".$myresult[0]. "-" . $wucext ."\"></TD>\n";
-			}
+// check spool directory and create a table listing all .call files created by this module
+$count = 0;
+$files = glob("/var/spool/asterisk/outgoing/wuc*.call");
+foreach($files as $file) {
+	$myresult = CheckWakeUpProp($file);
+	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file))  ; //create a date string to display from the file timestamp
+        $filetime = date(H,filemtime($file)).":".date(i,filemtime($file));   //create a time string to display from the file timestamp
+	If ($myresult <> '') {
+		$h = substr($myresult[0],0,2);
+		$m = substr($myresult[0],2,3);
+		$wucext = $myresult[1];
+ 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"".$myresult[0]. "-" . $wucext ."\"></TD>\n";
 		}
-
-echo "</TABLE>\n";
-echo "<INPUT TYPE=\"HIDDEN\" NAME=\"num_rows\" VALUE=\"" .$count. "\">\n" ;
-echo "</FORM>\n";?>
+	$count++;
+	}
+echo "</TABLE></FORM>\n";
+if (!$count){
+	print "No scheduled calls";
+        }
+?>
 <br><br>
 
 <form NAME="SAVECONFIG" id="SAVECONFIG" method="POST" action="">
@@ -194,6 +205,10 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
   </tr>
 </table>
 <small>*Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
+echo "<input type=\"text\" name=\"calleridtext\" size=\"13\" value=\"{$date[8]}\" style=\"text-align: center\">\n";
+
+
+
 <br><input type="submit" value="Submit" name="B1"><br><br>
 </FORM>
 <?php
@@ -209,5 +224,8 @@ The module is maintained by the developer community at the <a target="_blank" hr
 			$myresult[1] = $WakeUpTmp[3];
 		return $myresult;
    	}
+
+
+
 
 ?>

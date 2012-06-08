@@ -4,6 +4,7 @@
 	// Version 2.0 2008-Jun-25
 
 	require 'wake.inc';
+	require '/var/www/html/admin/modules/hotelwakeup/functions.inc.php';	//required for hotelwakeup_gencall function
 	
 	GLOBAL	$stdin, $stdout, $stdlog, $result, $parm_debug_on, $parm_test_mode;
 	
@@ -264,8 +265,9 @@
 		while ( $out[$i] )
 		{
 			
-			$wtime = strtok( $out[$i], '.' );
-			
+//			$wtime = strtok( $out[$i], '.' );   // changed Jun 2012 for new .call filename format
+			$wtime = date(H,filemtime($parm_call_dir."/".$out[$i])).date(i,filemtime($parm_call_dir."/".$out[$i]));   //create a time string from the file timestamp			
+
 			if ($parm_debug_on)
 				fputs( $stdlog, "wakeup found=$out[0] saying time $wtime\n" );
 			
@@ -461,8 +463,30 @@
 			
 			if ($parm_debug_on)
 				fputs( $stdlog, "Wakeup File [$wakefile]\n" );
+
+			$w = getdate();
+			$time_wakeup = mktime( substr( $wtime, 0, 2 ), substr( $wtime, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
 			
-			// Open up a wakeup file to write it out.
+
+
+
+	$foo = array(
+		time  => $time_wakeup,
+		date => 'unused',
+		ext => $cidn,
+		maxretries => $parm_maxretries,
+		retrytime => $parm_retrytime,
+		waittime => $parm_waittime,
+		callerid => $parm_wakeupcallerid,
+	        application => $parm_application,
+	        data => $parm_data,
+		);
+
+	hotelwakeup_gencallfile($foo);
+
+
+			
+/*			// Open up a wakeup file to write it out.
 			$wuc = fopen( $wakefile, 'w');
 			
 			if ( $wuc )
@@ -504,7 +528,7 @@
 				$w['hours']   = substr( $wtime, 0, 2 );
 				$w['minutes'] = substr( $wtime, 2, 2 );
 				
-				$time_wakeup = mktime( substr( $wtime, 0, 2 ), substr( $wtime, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
+				
 				
 				$time_now = time( );
 				
@@ -536,6 +560,7 @@
 					$rc = execute_agi( "HANGUP");
 				exit;
 			}
+*/
 			
 			//  If we have a caller ID  and waking up by extension say the extension number
 			if ( $cidn && $parm_chan_ext == 0 )

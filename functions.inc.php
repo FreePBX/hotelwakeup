@@ -60,28 +60,16 @@ function hotelwakeup_saveconfig($c) {
 	$sql .= ", `waittime`='{$waittime}'";
 	$sql .= ", `retrytime`='{$retrytime}'";
 	$sql .= ", `extensionlength`='{$extensionlength}'";
-//	$sql .= ", `wakeupcallerid`='\"{$calleridtext}\" <{$calleridnumber}>'";
 	$sql .= ", `wakeupcallerid`='{$calleridtext} <{$calleridnumber}>'";
 	$sql .= ", `operator_mode`='{$operator_mode}'";
 	$sql .= ", `operator_extensions`='{$operator_extensions}'";
 	$sql .= " LIMIT 1;";
 
-
 	sql($sql);
 }
 
 function hotelwakeup_getconfig() {
-// this function shall get the valuses from the wakeup database, and load them into the Wake Up calls COnfig Screen positions.
-#	$sql = "SELECT maxretries, waittime, retrytime, extensionlength, wakeupcallerid, operator_mode, operator_extensions FROM hotelwakeup";
-# This is the same as your but smaller this get everthing. ok i understand.  its ok to do this way.
-
-	#print_r($results);
-	#die();
-
-	#foreach($results as $result){
-	#	$configitems[] = array($result[0],$result[1]);
-	#}
-	#return isset($configitems)?$configitems:null;
+// this function gets the values from the wakeup database, and returns them in an array
 
 	$sql = "SELECT * FROM hotelwakeup LIMIT 1";
 	$results= sql($sql, "getAll");
@@ -92,4 +80,48 @@ function hotelwakeup_getconfig() {
 	$results[0][] = trim($res[1]);
 	$results[0][] = trim($res[0]);
 	return $results[0];
+}
+
+// This function will generate the wakeup call file based on the array provided
+function hotelwakeup_gencallfile($foo) {
+
+/**** array format ******
+array(
+	time  => timestamp value,
+	date => value,   // not used
+	ext => phone number,
+	maxretries => int value seconds,
+	retrytime => int value seconds,
+        waittime => int value seconds,
+        callerid => in 'name <number>' format,
+        application => value,
+        data => value,
+
+)
+*********/
+
+	$tempfile =     "/var/spool/asterisk/tmp/wuc.".$foo['time'].".ext.".$foo['ext'].".call";
+	$outfile = "/var/spool/asterisk/outgoing/wuc.".$foo['time'].".ext.".$foo['ext'].".call";
+
+	// Delete any old .call file with the same name as the one we are creating.
+	if( file_exists( "$callfile" ) )
+	{
+		unlink( "$callfile" );
+	}
+
+	// Create up a .call file, write and close
+	$wuc = fopen( $tempfile, 'w');
+	fputs( $wuc, "channel: Local/".$foo['ext']."@from-internal\n" );
+	fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
+	fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
+	fputs( $wuc, "waittime: ".$foo['waittime']."\n");
+	fputs( $wuc, "callerid: ".$foo['callerid']."\n");
+	fputs( $wuc, "application: ".$foo['application']."\n");
+	fputs( $wuc, "data: ".$foo['data']."\n");
+	fclose( $wuc );
+
+	// set time of temp file and move to outgoing
+	touch( $tempfile, $foo['time'], $foo['time'] );
+	rename( $tempfile, $outfile );
+
 }
