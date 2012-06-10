@@ -15,72 +15,67 @@ PHP Programming by Swordsteel 2/17/2009
 
 Currently maintained by the PBX Open Source Software Alliance
 https://github.com/POSSA/Hotel-Style-Wakeup-Calls
-Last modified Jun 8, 2012
+Last modified Jun 10, 2012
 **********************************************************/
 
-// Process form if button B1 is clicked
+// Process form if Submit button B1 is clicked
 if (isset($_POST['B1'])){
 	hotelwakeup_saveconfig();
 	}
 
 // Process form if delete button clicked
-if(isset($_POST['DELETE'])) :
-	$WakeUpTmp = explode("-", $_POST['DELETE']);
-	$filename = "/var/spool/asterisk/outgoing/wuc.".$WakeUpTmp[0].".ext.".$WakeUpTmp[1].".call";
-	if (file_exists($filename)) {
-		unlink($filename);
+if(isset($_POST['DELETE'])) {
+	if (file_exists($_POST['filename'])) {
+		unlink($_POST['filename']);
 		}
-endif;
+	}
 
 //  Process form if Schedule button clicked
-if(isset($_POST['SCHEDULE'])) :
+if(isset($_POST['SCHEDULE'])) {
 	$HH=$_POST['HH'];
 	$MM=$_POST['MM'];
 	$Ext=$_POST['ExtBox'];
-        $DD=$_POST['DD'];
-        $MON = $_POST['MON'];
-        $YYYY = $_POST['YYYY'];
+	$DD=$_POST['DD'];
+	$MON = $_POST['MON'];
+	$YYYY = $_POST['YYYY'];
 
 	//  could use a check here to prevent user from scheduling a call in the past
 
-        // check for insufficient data
-     if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == ""  )
-     {
+	// check for insufficient data
+	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == ""  ){
 		// abandon .call file creation
-     }
-     else
-     {
+	} 
+	else
+	{
 
-        // Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
-        // does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
-        // their own destination
-	$date = hotelwakeup_getconfig();  // module config provided by user
-	$parm_application = 'AGI';
-	$parm_data = 'wakeconfirm.php';
-        if ($MM == ""){
-        	$MM = "0";
-           	}
+	 	// Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
+		// does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
+		// their own destination
+		$date = hotelwakeup_getconfig();  // module config provided by user
+		$parm_application = 'AGI';
+		$parm_data = 'wakeconfirm.php';
+		if ($MM == ""){
+			$MM = "0";
+		}
 
-	$foo = array(
-		time  => mktime( $HH , $MM, 0, $MON, $DD, $YYYY ),
-		date => 'unused',
-		ext => $Ext,
-		maxretries => $date[0],
-		retrytime => $date[2],
-		waittime => $date[1],
-		callerid => $date[4],
-	        application => $parm_application,
-	        data => $parm_data,
-		);
+		$foo = array(
+			time  => mktime( $HH , $MM, 0, $MON, $DD, $YYYY ),
+			ext => $Ext,
+			maxretries => $date[0],
+			retrytime => $date[2],
+			waittime => $date[1],
+			callerid => $date[4],
+			application => $parm_application,
+			data => $parm_data,
+			);
 
-	hotelwakeup_gencallfile($foo);
-      }
-endif;
+		hotelwakeup_gencallfile($foo);
+	}
+}
 
 // Get module config info
 $date = hotelwakeup_getconfig();
 $w = getdate();
-
 
 ?>
 <h1><b>Wake Up Calls</b></h1>
@@ -92,6 +87,7 @@ form below.<br><br>
 <h2><b>Schedule a new call:</b></h2>
 
 <?php
+//  Form to schedule a call
 echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
 echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD:MM:YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mday'].">:\n";
 echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mon'].">:<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=".$w['year'].">\n";
@@ -99,6 +95,11 @@ echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
 echo "</FORM>\n";
 
 echo "<br><h2><b>Scheduled Calls:</b></h2>\n";
+// Page is static, so add button to refresh table
+echo "<FORM NAME=\"Refresh\" ACTION=\"\" METHOD=POST>\n";
+echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
+echo "</FORM>\n";
+ 
 echo "<FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST>\n";
 echo "<TABLE cellSpacing=1 cellPadding=1 width=900 border=1 >\n" ;
 echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
@@ -114,7 +115,8 @@ foreach($files as $file) {
 		$h = substr($myresult[0],0,2);
 		$m = substr($myresult[0],2,3);
 		$wucext = $myresult[1];
- 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"".$myresult[0]. "-" . $wucext ."\"></TD>\n";
+ 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD>\n";
+
 		}
 	$count++;
 	}
