@@ -94,72 +94,51 @@
 
 	if ( !$rc[result] )
 		$rc = execute_agi( "STREAM FILE hello \"\" ");
+	if ( !$rc[result] )
+		$rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"\" ");
 
 	// initialize a counter so the while loop will eventually expire
-	$lgcount = $lgcount++;
+	$lgcount = 0;
 
-	// Start prompting them if they want to snooze or turn off the wake up
-	while ( !$rc[result] )
+	// Start prompting them if they want to snooze
+	while ( !$rc[result] && $lgcount < 15)   // set hard limit of 15 repeats
 	{
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"1234\" ");
+			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE to-cancel-wakeup \"1234\" ");
+			$rc = execute_agi( "STREAM FILE digits/$lgcount \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
 		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE press-1 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE digits/5 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE press-2 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE digits/10 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE press-3 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE digits/15 \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE press-4 \"1234\" ");
+
 		if ( !$rc[result] )
 		{
 			$rc = execute_agi( "WAIT FOR DIGIT 15000");
 		}
+		$lgcount++;
 		if ( $rc[result] != -1 )
 		{
-			if ( $rc[result] == 49 || $rc[result] == 50 || $rc[result] == 51 || $rc[result] == 52 )
+			if ( $rc[result] )
 			{
-				; // Do nothing correct input
-			}
-			else if ($lgcount < 15)   //loops a maximum of 15 times to prevent looping forever
-			{
-				// This was just for fun, if they press something other than 1, 2, 3, or 4
-				$rc[result] = 0;
-				$rc = execute_agi( "STREAM FILE im-sorry \"\" ");
-				$rc = execute_agi( "STREAM FILE you-dialed-wrong-number \"\" ");
-				$rc = execute_agi( "STREAM FILE i-dont-understand3 \"\" ");
-				$rc = execute_agi( "STREAM FILE your \"\" ");
-				$rc = execute_agi( "STREAM FILE communications \"\" ");
-				$lgcount = $lgcount++;
+				$time_wakeup = time( );
+				$time_wakeup += 540;
 
+				create_wakeup( $time_wakeup );
+
+				execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
+				execute_agi( "EXEC background \"digits/9\" ");
+				execute_agi( "EXEC background \"minutes\" ");
+				execute_agi( "EXEC background \"vm-from\" ");
+				execute_agi( "EXEC background \"now\" ");
 			}
-			else   // cancel the lookup for the unresponsive user
-			{
-				$rc[result] = 49;
-			}
+			
+			
 		}
+	
 	}
 
+/********* these options no longer used ********************
 	switch( $rc[result] )
 	{
 	case '49':	// Pressed 1  - This is to cancel the wakeup call
@@ -249,7 +228,8 @@
 		}
 		break;
 	}
-
+********* these options no longer used ********************/
+$rc = execute_agi( "STREAM FILE goodbye \"\" ");
 	execute_agi( "HANGUP" );
 	exit;
 }
@@ -383,8 +363,8 @@ function create_wakeup( $time_wakeup )
 		retrytime => $parm_retrytime,
 		waittime => $parm_waittime,
 		callerid => $parm_wakeupcallerid,
-	        application => $parm_application,
-	        data => $parm_data,
+		application => $parm_application,
+		data => $parm_data,
 		);
 
 	hotelwakeup_gencallfile($foo);

@@ -1,6 +1,7 @@
 #!/usr/bin/php -q
 <?php
 {
+//  test save and reload
 	// Version 2.0 2008-Jun-25
 
 	require 'wake.inc';

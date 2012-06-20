@@ -6,7 +6,8 @@ $cols['maxretries'] = "INT NOT NULL";
 $cols['waittime'] = "INT NOT NULL";
 $cols['retrytime'] = "INT NOT NULL";
 $cols['extensionlength'] = "INT NOT NULL";
-$cols['wakeupcallerid'] = "VARCHAR(30)";
+$cols['cid'] = "VARCHAR(30)";
+$cols['cnam'] = "VARCHAR(30)";
 $cols['operator_mode'] = "INT NOT NULL";
 $cols['operator_extensions'] = "VARCHAR(30)";
 //new config table columns
@@ -20,7 +21,8 @@ $sc_cols['ext'] = "INT NOT NULL";
 $sc_cols['maxretries'] = "INT NOT NULL";
 $sc_cols['retrytime'] = "INT NOT NULL";
 $sc_cols['waittime'] = "INT NOT NULL";
-$sc_cols['callerid'] = "VARCHAR(30)";
+$sc_cols['cid'] = "VARCHAR(30)";
+$sc_cols['cnam'] = "VARCHAR(30)";
 $sc_cols['application'] = "VARCHAR(30)";
 $sc_cols['data'] = "VARCHAR(30)";
 $sc_cols['tempdir'] = "VARCHAR(100)";
@@ -155,19 +157,15 @@ foreach($sc_cols as $key=>$val)
 	}
 }
 
-
-/******************** temporarily removed, need to figure out a way to put defaults without overwriting existing values
+//  Set default values - need mechanism to prevent overwriting existing values 
 print "Installing Default Values<br>";
-# the easy why to debug your SQL Q its missing a value or something do let me do this :P
-# is  that telling yo how yur puting it upp you dont need to have them in a serten order as long as the value ar in teh same place
-$sql ="INSERT INTO hotelwakeup (maxretries, waittime, retrytime, wakeupcallerid,  operator_mode, operator_extensions, extensionlength) ";
-$sql .= "               VALUES ('3',        '60',     '60',      '\"Wake Up Calls\" <*68>', '1',          '00 , 01',           '4')";
+$sql ="INSERT INTO hotelwakeup (maxretries, waittime, retrytime, cnam,             cid,    operator_mode, operator_extensions, extensionlength, application, data) ";
+$sql .= "               VALUES ('3',        '60',     '60',      'Wake Up Calls',  '*68',  '1',           '00 , 01',           '4',             'AGI',        'wakeconfirm.php')";
 
 $check = $db->query($sql);
 if (DB::IsError($check)) {
         die_freepbx( "Can not create default values in `hotelwakeup` table: " . $check->getMessage() .  "\n");
 }
-**********************/
 
 // Register FeatureCode - Hotel Wakeup;
 $fcc = new featurecode('hotelwakeup', 'hotelwakeup');
