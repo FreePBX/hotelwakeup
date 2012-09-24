@@ -1,8 +1,8 @@
 #!/usr/bin/php -q
 <?php
 {
-//  test save and reload
-	// Version 2.0 2008-Jun-25
+//  PBX Open Source Software Alliance
+//  last edited Sept 24, 2012 by lgaetz
 
 	require 'wake.inc';
 	require '/var/www/html/admin/modules/hotelwakeup/functions.inc.php';	//required for hotelwakeup_gencall function
@@ -19,21 +19,23 @@
 	
 	// You will see a whole bunch of this its for development or if you change anything and
 	// want to write to a log file in the TMP directory
-	if ($parm_debug_on)
-	{
+	// Settings pulled from wake.inc included above
+	if ($parm_debug_on)  {
 		$stdlog = fopen( $parm_error_log, 'w' );
-		fputs( $stdlog, "---Start---\n" );
+		fputs( $stdlog, "---Start of log---\n" );
 	}
-	
-	
+
 	// ASTERISK * Sends in a bunch of variables, This accepts them and puts them in an array
 	// http://www.voip-info.org/tiki-index.php?page=Asterisk%20AGI%20php
-	while ( !feof($stdin) ) 
-	{
+	if ($parm_debug_on) {
+		fputs( $stdlog, "--- Start of Asterisk channel data ---\n" );
+	}
+	while ( !feof($stdin) ) {
 		$temp = fgets( $stdin );
 		
-		if ($parm_debug_on)
-			fputs( $stdlog, $temp );
+		if ($parm_debug_on) {
+			fputs( $stdlog, "    ".$temp );
+		}
 		
 		// Strip off any new-line characters
 		$temp = str_replace( "\n", "", $temp );
@@ -44,9 +46,11 @@
 		{
 			break;
 		}
-	} 
-	
-	
+	}
+	if ($parm_debug_on) {
+		fputs( $stdlog, "--- End of Asterisk channel data ---\n" );
+	}
+
 	// There are two ways to contact a phone, by its channel or by its local 
 	// extension number.  This next session will extract both sides
 	
@@ -86,11 +90,11 @@
 	}
 		
 	
-	//=========================================================================
-	// This is where we interact with the caller.  Answer the phone and so on
-	//=========================================================================
-	
-	
+//=========================================================================
+// This is where we interact with the caller.  Answer the phone and so on
+//=========================================================================
+
+
 	$rc = execute_agi( "ANSWER ");
 	
 	sleep(1);	// Wait for the channel to get created and RTP packets to be sent
@@ -100,13 +104,13 @@
 	if ( !$rc['result'] )
 		$rc = execute_agi( "STREAM FILE hello \"\" ");
 
-
 	// Check if we have an outstanding Wakeup Call file
+
 	if ( $parm_chan_ext )
 		$dir_check = "$chan.$sta.call";
 	else
 		$dir_check = "ext.$cidn.call";
-	
+
 
 	if ( $parm_operator_mode )
 	{
@@ -173,8 +177,9 @@
 					{
 
 
-						if ($parm_debug_on)
+						if ($parm_debug_on) {
 							fputs( $stdlog, "We have digits: len=" . strlen( $rc['result']) . " val=$rc[result] \r\n\r\n" );
+						}
 
 
 						// This check how many digits, if 2 then they pre-pressed a digit, 
@@ -243,6 +248,7 @@
 	// it got very confusing on how to delete just one of them.  I wasn't about
 	// to prompt each and every one.  So I went back to JUST ONE wakeup call
 	// But this will get a list of all of them incase of problems
+
 	$outc=0;
 	$dir_handle = opendir( $parm_call_dir );
 	while( $file = readdir($dir_handle ) )
@@ -467,7 +473,14 @@
 
 			$w = getdate();
 			$time_wakeup = mktime( substr( $wtime, 0, 2 ), substr( $wtime, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-			
+
+			$time_now = time( );
+			if ( $time_wakeup <= $time_now )
+					$time_wakeup += 86400; // Add One Day on
+
+			if ($parm_debug_on)
+				fputs( $stdlog, 'time_wakeup=' . date('l dS \of F Y h:i:s A', $time_wakeup) . " ($time_wakeup) | time_now=" . date('l dS \of F Y h:i:s A',$time_now) . " ($time_now)\n" );
+
 
 
 
