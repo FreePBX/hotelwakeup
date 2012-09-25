@@ -1,9 +1,11 @@
 <?php
+
+// this function required to make the feature code work
 function hotelwakeup_get_config($engine) {
 	$modulename = 'hotelwakeup';
-	
+
 	// This generates the dialplan
-	global $ext;  
+	global $ext;
 	global $asterisk_conf;
 	switch($engine) {
 		case "asterisk":
@@ -15,18 +17,19 @@ function hotelwakeup_get_config($engine) {
 						$fcc = new featurecode($modulename, $featurename);
 						$fc = $fcc->getCodeActive();
 						unset($fcc);
-						
+
 						if ($fc != '')
 							$fname($fc);
 					} else {
 						$ext->add('from-internal-additional', 'debug', '', new ext_noop($modulename.": No func $fname"));
-					}	
+					}
 				}
 			}
 		break;
 	}
 }
 
+// this function required to make the feature code work
 function hotelwakeup_hotelwakeup($c) {
 	global $ext;
 	global $asterisk_conf;
@@ -60,36 +63,76 @@ function hotelwakeup_saveconfig($c) {
 	$sql .= ", `waittime`='{$waittime}'";
 	$sql .= ", `retrytime`='{$retrytime}'";
 	$sql .= ", `extensionlength`='{$extensionlength}'";
-//	$sql .= ", `wakeupcallerid`='\"{$calleridtext}\" <{$calleridnumber}>'";
-	$sql .= ", `wakeupcallerid`='{$calleridtext} <{$calleridnumber}>'";
+	$sql .= ", `cnam`='{$calleridtext}'";
+	$sql .= ", `cid`='{$calleridnumber}'";
 	$sql .= ", `operator_mode`='{$operator_mode}'";
 	$sql .= ", `operator_extensions`='{$operator_extensions}'";
 	$sql .= " LIMIT 1;";
-
 
 	sql($sql);
 }
 
 function hotelwakeup_getconfig() {
-// this function shall get the valuses from the wakeup database, and load them into the Wake Up calls COnfig Screen positions.
-#	$sql = "SELECT maxretries, waittime, retrytime, extensionlength, wakeupcallerid, operator_mode, operator_extensions FROM hotelwakeup";
-# This is the same as your but smaller this get everthing. ok i understand.  its ok to do this way.
-
-	#print_r($results);
-	#die();
-
-	#foreach($results as $result){
-	#	$configitems[] = array($result[0],$result[1]);
-	#}
-	#return isset($configitems)?$configitems:null;
+// this function gets the values from the wakeup database, and returns them in an associative array
 
 	$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-	$results= sql($sql, "getAll");
-	$tmp = $results[0][4];
-	$tmp = eregi_replace('"', '', $tmp);
-	$tmp = eregi_replace('>', '', $tmp);
-	$res = explode('<', $tmp);
-	$results[0][] = trim($res[1]);
-	$results[0][] = trim($res[0]);
-	return $results[0];
+	$query = mysql_query($sql);
+	$results = mysql_fetch_array($query, MYSQL_BOTH);
+	return $results;
+
+}
+
+function hotelwakeup_gencallfile($foo) {
+// This function will generate the wakeup call file based on the array provided
+
+/**** array format ******
+array(
+	time  => timestamp value,
+	ext => phone number,
+	maxretries => int value seconds,
+	retrytime => int value seconds,
+	waittime => int value seconds,
+	callerid => in 'name <number>' format,
+	application => value,
+	data => value,
+	tempdir => path to temp directory including trailing slash
+	outdir => path to outgoing directory including trailing slash
+	filename => filename to use for call file
+)
+**** array format ******/
+
+	if ($foo['tempdir'] == "") {
+		$foo['tempdir'] = "/var/spool/asterisk/tmp/";
+	}
+	if ($foo['outdir'] == "") {
+		$foo['outdir'] = "/var/spool/asterisk/outgoing/";
+	}
+	if ($foo['filename'] == "") {
+		$foo['filename'] = "wuc.".$foo['time'].".ext.".$foo['ext'].".call";
+	}
+
+	$tempfile = $foo['tempdir'].$foo['filename'];
+	$outfile = $foo['outdir'].$foo['filename'];
+
+	// Delete any old .call file with the same name as the one we are creating.
+	if( file_exists( "$callfile" ) )
+	{
+		unlink( "$callfile" );
+	}
+
+	// Create up a .call file, write and close
+	$wuc = fopen( $tempfile, 'w');
+	fputs( $wuc, "channel: Local/".$foo['ext']."@from-internal\n" );
+	fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
+	fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
+	fputs( $wuc, "waittime: ".$foo['waittime']."\n");
+	fputs( $wuc, "callerid: ".$foo['callerid']."\n");
+	fputs( $wuc, "application: ".$foo['application']."\n");
+	fputs( $wuc, "data: ".$foo['data']."\n");
+	fclose( $wuc );
+
+	// set time of temp file and move to outgoing
+	touch( $tempfile, $foo['time'], $foo['time'] );
+	rename( $tempfile, $outfile );
+
 }

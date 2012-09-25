@@ -1,7 +1,7 @@
 April 25, 2012
-master branch becomes ver. 2.2.5
+working branch becomes 2.2.5.x
 
-Github is now the home of the FreePBX Wakeup Calls Module.  
+Module Name:  	Hotel Style Wakeup Calls  
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -11,4 +11,3 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-Module Name:		Hotel Style Wakeup Calls
