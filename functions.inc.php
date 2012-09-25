@@ -141,9 +141,9 @@ array(
 // returns true if a new version is available
 function hotelwakeup_vercheck() {
 	$newver = false;
-	if ( function_exists(xml2array)){
-		$module_local = xml2array("modules/hotelwakeup/module.xml");
-		$module_remote = xml2array("https://raw.github.com/POSSA/Hotel-Style-Wakeup-Calls/master/module.xml");
+	if ( function_exists(hotelwakeup_xml2array)){
+		$module_local = hotelwakeup_xml2array("modules/hotelwakeup/module.xml");
+		$module_remote = hotelwakeup_xml2array("https://raw.github.com/POSSA/Hotel-Style-Wakeup-Calls/master/module.xml");
 		if ( $module_remote[module][version] > $module_local[module][version])
 			{
 			$newver = true;
@@ -153,7 +153,7 @@ function hotelwakeup_vercheck() {
 	}
 
 //Parse XML file into an array
-function xml2array($url, $get_attributes = 1, $priority = 'tag')  {
+function hotelwakeup_xml2array($url, $get_attributes = 1, $priority = 'tag')  {
 	$contents = "";
 	if (!function_exists('xml_parser_create'))
 	{
