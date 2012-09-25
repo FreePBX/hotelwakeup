@@ -18,6 +18,11 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Jun 8, 2012
 **********************************************************/
 
+// check if new version of module is available
+if ($foo = hotelwakeup_vercheck()) {
+	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
+	}
+
 // Process form if button B1 is clicked
 if (isset($_POST['B1'])){
 	hotelwakeup_saveconfig();
@@ -35,41 +40,48 @@ if(isset($_POST['SCHEDULE'])) :
 	$HH=$_POST['HH'];
 	$MM=$_POST['MM'];
 	$Ext=$_POST['ExtBox'];
-        $DD=$_POST['DD'];
-        $MON = $_POST['MON'];
-        $YYYY = $_POST['YYYY'];
+	$DD=$_POST['DD'];
+	$MON = $_POST['MON'];
+	$YYYY = $_POST['YYYY'];
 
-	//  could use a check here to prevent user from scheduling a call in the past
+	//  check to prevent user from scheduling a call in the past
+	if ($MM == "") {
+		$MM = "0";
+	}
+	$time_wakeup = mktime( $HH , $MM, 0, $MON, $DD, $YYYY );
+	$time_now = time( );
+	$badtime = false;
+	if ( $time_wakeup <= $time_now )  {
+		$badtime = true;
+	}
 
-        // check for insufficient data
-     if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == ""  )
-     {
+	// check for insufficient data
+	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == "" || $badtime )
+    {
 		// abandon .call file creation
-     }
+    }
      else
      {
 
-        // Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
-        // does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
-        // their own destination
+	// Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
+	// does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
+	// their own destination
 	$date = hotelwakeup_getconfig();  // module config provided by user
 	$parm_application = 'AGI';
 	$parm_data = 'wakeconfirm.php';
-        if ($MM == ""){
-        	$MM = "0";
-           	}
+        
 
 	$foo = array(
-		time  => mktime( $HH , $MM, 0, $MON, $DD, $YYYY ),
+		time  => $time_wakeup,
 		date => 'unused',
 		ext => $Ext,
-		maxretries => $date[0],
-		retrytime => $date[2],
-		waittime => $date[1],
-		callerid => $date[4],
-	        application => $parm_application,
-	        data => $parm_data,
-		);
+		maxretries => $date[maxretries],
+		retrytime => $date[retrytime],
+		waittime => $date[waittime],
+		callerid => $date[cid],
+		application => $parm_application,
+		data => $parm_data,
+	);
 
 	hotelwakeup_gencallfile($foo);
       }
@@ -98,10 +110,11 @@ echo "</FORM>\n";
 
 echo "<br><h2><b>Scheduled Calls:</b></h2>\n";
 // Page is static, so add button to refresh table
-echo "<FORM NAME=\"Refresh\" ACTION=\"\" METHOD=POST>\n";
-echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
-echo "</FORM>\n<br>";
+//echo "<FORM NAME=\"Refresh\" ACTION=\"\" METHOD=POST>\n";
+//echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
+//echo "</FORM>\n<br>";
 echo "<FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST>\n";
+echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
 echo "<TABLE cellSpacing=1 cellPadding=1 width=900 border=1 >\n" ;
 echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
 
@@ -138,12 +151,12 @@ Wake Up call for any valid internal or external destination.<br><br>
     <td width="153"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
     <td width="129">
 <?php 
-echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($date[5]==0)?' checked':'').">\n";
+echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($date[operator_mode]==0)?' checked':'').">\n";
 ?> 
 Disabled&nbsp;</td>
     <td>
 <?php
-echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[5]==1)?' checked':'').">\n";
+echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[operator_mode]==1)?' checked':'').">\n";
 ?>
 &nbsp; Enabled</td>
   </tr>
@@ -151,7 +164,7 @@ echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[5]==1)?'
     <td width="180"><a href="javascript: return false;" class="info">Max Destination Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
     <td width="129">&nbsp;
 <?php
-echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[3]}\" style=\"text-align: right\">\n ";
+echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">\n ";
 ?>Digits
 </td>
     <td> &nbsp;</td>
@@ -160,7 +173,7 @@ echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[3]
     <td width="180"><a href="javascript: return false;" class="info">Operator Extensions: <span>Enter the Caller ID's of each telephone you wish to be recognized as an `Operator`.  Operator extensions are allowed to create wakeup calls for any valid destination. Numbers entered must be formatted <i>exactly</i> as the caller ID of the device will be received by the system.</span></a></td>
     <td colspan="2">
 <?php
-echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$date[6]}\">\n";
+echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$date[operator_extensions]}\">\n";
 ?>
     </td>
   </tr>
@@ -175,7 +188,7 @@ echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$da
     <td width="155"><a href="javascript: return false;" class="info">Ring Time:<span>The number of seconds for the phone to ring. Consider setting lower than the voicemail threshold or the wakeup call can end up going to voicemail.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[1]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[waittime]}\" style=\"text-align: right\">\n";
 ?> Seconds
     </td>
   </tr>
@@ -183,7 +196,7 @@ echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[1]}\" st
     <td width="155"><a href="javascript: return false;" class="info">Retry Time:<span>The number of seconds to wait between retrys.  A 'retry' happens if the wakeup call is not answered.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[2]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[retrytime]}\" style=\"text-align: right\">\n";
 ?> Seconds
     </td>
   </tr>
@@ -191,7 +204,7 @@ echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[2]}\" s
     <td width="155"><a href="javascript: return false;" class="info">Max Retries:<span>The maximum number of times the system should attempt to deliver the wakeup call when there is no answer.  Zero retries means only one call will be placed.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$date[0]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$date[maxretries]}\" style=\"text-align: right\">\n";
 ?> Tries
     </td>
   </tr>
@@ -200,9 +213,9 @@ echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$date[0]}\" 
     <td width="155"><a href="javascript: return false;" class="info">Wake Up Caller ID:<span><u>First Box: </u>Enter the CNAM (Caller ID Name) to be sent by the system when placing the wakeup calls.  Enclose this string with " if required by your system.<br><u>Second Box: </u>Enter the CID (Caller ID number) of the Caller ID to be sent when the system places wake up calls.</span></a></td>
     <td>
 <?php
-//echo "&quot;<input type=\"text\" name=\"calleridtext\" size=\"10\" value=\"{$date[8]}\" style=\"text-align: center\">&quot;\n";
-echo "<input type=\"text\" name=\"calleridtext\" size=\"13\" value=\"{$date[8]}\" style=\"text-align: center\">\n";
-echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date[7]}\" style=\"text-align: center\">&gt;\n";
+//echo "&quot;<input type=\"text\" name=\"calleridtext\" size=\"10\" value=\"{$date[cnam]}\" style=\"text-align: center\">&quot;\n";
+echo "<input type=\"text\" name=\"calleridtext\" size=\"13\" value=\"{$date[cnam]}\" style=\"text-align: center\">\n";
+echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date[cid]}\" style=\"text-align: center\">&gt;\n";
 ?>
     </td>
   </tr>
