@@ -5,9 +5,9 @@
 	<license>GNU-GPLv2</license>
 	<candisable>yes</candisable>
 	<canuninstall>yes</canuninstall>
-	<type>tool</type>
+	<type>setup</type>
 	<publisher>POSSA</publisher>
-	<category>Third Party Addon</category>
+	<category>Other</category>
        <description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
