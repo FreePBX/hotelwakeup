@@ -18,8 +18,12 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Jun 8, 2012
 **********************************************************/
 
+// check to see if user has automatic updates enabled
+$cm =& cronmanager::create($db);
+$online_updates = $cm->updates_enabled() ? true : false;
+
 // check if new version of module is available
-if ($foo = hotelwakeup_vercheck()) {
+if ($online_updates && $foo = hotelwakeup_vercheck()) {
 	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
 	}
 
@@ -78,7 +82,7 @@ if(isset($_POST['SCHEDULE'])) :
 		maxretries => $date[maxretries],
 		retrytime => $date[retrytime],
 		waittime => $date[waittime],
-		callerid => $date[cid],
+		callerid => $date[cnam]." <".$date[cid].">",
 		application => $parm_application,
 		data => $parm_data,
 	);
@@ -226,7 +230,7 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
 </FORM>
 <?php
 print '<p align="center" style="font-size:11px;"><br>
-The module is maintained by the developer community at the <a target="_blank" href="https://github.com/POSSA/Hotel-Style-Wakeup-Calls"> PBX Open Source Software Alliance</a><br></p>';
+The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
 
 
 	function CheckWakeUpProp($file) {
@@ -237,8 +241,5 @@ The module is maintained by the developer community at the <a target="_blank" hr
 			$myresult[1] = $WakeUpTmp[3];
 		return $myresult;
    	}
-
-
-
 
 ?>

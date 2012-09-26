@@ -1,7 +1,7 @@
 <module>
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
-	<version>1.3.0.4</version>
+	<version>1.3.0.5</version>
 	<license>GNU-GPLv2</license>
 	<candisable>yes</candisable>
 	<canuninstall>yes</canuninstall>
@@ -47,7 +47,7 @@
 	<depends>
                 <module>core</module>
                 <module>ivr gt1.0</module>
-                <version>ge2.2</version>
+                <version>ge 2.9</version>
                 <engine>asterisk 1.2</engine>
          </depends>
 </module>
