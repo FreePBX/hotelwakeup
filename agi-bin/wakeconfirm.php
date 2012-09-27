@@ -4,9 +4,9 @@
 	// Wakeconfirm AKA ANNOY
 	// Version 1.0
 
+	// all user settings come from the file wake.inc which is shared by both agi files
 	require 'wake.inc';
-	require '/var/www/html/admin/modules/hotelwakeup/functions.inc.php';	//required for hotelwakeup_gencall function
-    
+
 	GLOBAL	$stdin, $stdout, $stdlog, $result, $parm_debug_on, $parm_test_mode;
     
 	// These setting are on the WIKI pages http://www.voip-info.org
@@ -106,7 +106,7 @@
 		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE digits/$lgcount \"1234\" ");
+			$rc = execute_agi( "STREAM FILE digits/9 \"1234\" ");
 		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
 		if ( !$rc[result] )
@@ -132,103 +132,9 @@
 				execute_agi( "EXEC background \"vm-from\" ");
 				execute_agi( "EXEC background \"now\" ");
 			}
-			
-			
 		}
-	
 	}
 
-/********* these options no longer used ********************
-	switch( $rc[result] )
-	{
-	case '49':	// Pressed 1  - This is to cancel the wakeup call
-		{
-			//srand((double)microtime()*1000000);
-			//$num1 = rand(0,99);
-			//$num2 = rand(0,99);
-			//$num3 = $num1 + $num2;
-
-			//execute_agi( "STREAM FILE please-answer-the-following \"\" ");
-			//execute_agi( "EXEC wait \"1\" ");
-			//execute_agi( "SAY NUMBER $num1 \"\" ");
-			//execute_agi( "STREAM FILE plus \"\" ");
-			//execute_agi( "SAY NUMBER $num2 \"\" ");
-
-			//$rc = execute_agi( "GET DATA equals 15000 ".strlen($num3)." ");
-
-			//if ( $rc[result] == $num3 )		// they answered correctly
-			//{
-				execute_agi( "EXEC background \"wakeup-call-cancelled\" ");
-				execute_agi( "EXEC wait \"1\" ");
-				execute_agi( "EXEC background \"goodbye\" ");
-				execute_agi( "HANGUP" );
-				exit;
-			//}
-			//else	// the user can't add while half asleep
-			//{
-			//	$time_wakeup = time( );
-			//	$time_wakeup += 120;
-
-			//	create_wakeup( $time_wakeup );
-
-			//	execute_agi( "EXEC background \"vm-sorry\" ");
-			//	execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
-			//	execute_agi( "EXEC background \"digits/2\" ");
-			//	execute_agi( "EXEC background \"minutes\" ");
-			//	execute_agi( "EXEC background \"vm-from\" ");
-			//	execute_agi( "EXEC background \"now\" ");
-			//	execute_agi( "HANGUP" );
-			//	exit;
-			//}
-		}
-		break;
-
-	case '50':		// Pressed 2 - Snooze for 5 minutes
-		{
-			$time_wakeup = time( );
-			$time_wakeup += 300;
-
-			create_wakeup( $time_wakeup );
-
-			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
-			execute_agi( "EXEC background \"digits/5\" ");
-			execute_agi( "EXEC background \"minutes\" ");
-			execute_agi( "EXEC background \"vm-from\" ");
-			execute_agi( "EXEC background \"now\" ");
-		}
-		break;
-
-	case '51':		// Pressed 3 - Snooze for 10 minutes
-		{
-			$time_wakeup = time( );
-			$time_wakeup += 600;
-
-			create_wakeup( $time_wakeup );
-
-			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
-			execute_agi( "EXEC background \"digits/10\" ");
-			execute_agi( "EXEC background \"minutes\" ");
-			execute_agi( "EXEC background \"vm-from\" ");
-			execute_agi( "EXEC background \"now\" ");
-		}
-		break;
-
-	case '52':		// Pressed 4 - Snooze for 15 minutes
-		{
-			$time_wakeup = time( );
-			$time_wakeup += 900;
-
-			create_wakeup( $time_wakeup );
-
-			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
-			execute_agi( "EXEC background \"digits/15\" ");
-			execute_agi( "EXEC background \"minutes\" ");
-			execute_agi( "EXEC background \"vm-from\" ");
-			execute_agi( "EXEC background \"now\" ");
-		}
-		break;
-	}
-********* these options no longer used ********************/
 $rc = execute_agi( "STREAM FILE goodbye \"\" ");
 	execute_agi( "HANGUP" );
 	exit;
@@ -369,80 +275,4 @@ function create_wakeup( $time_wakeup )
 
 	hotelwakeup_gencallfile($foo);
 
-
-
-/********** old .call file system replaced with above to maintain compatibility with module gui
-	$wtime = sprintf("%02d%02d", $w['hours'], $w['minutes'] );
-
-	if ( $parm_chan_ext )
-	{
-		$wakefile = "$parm_temp_dir/$wtime.$chan.$sta.call";
-		$callfile = "$parm_call_dir/$wtime.$chan.$sta.call";
-	}
-	else
-	{
-		$wakefile = "$parm_temp_dir/$wtime.ext.$cidn.call";
-		$callfile = "$parm_call_dir/$wtime.ext.$cidn.call";
-	}
-
-	if ($parm_debug_on)
-		fputs( $stdlog, "Wakeup File [$wakefile]\n" );
-		
-	// Open up a wakeup file to write it out.
-	$wuc = fopen( $wakefile, 'w');
-
-	if ( $wuc )
-	{
-		// Delete any old Wakeup call files this one will override
-		for ($i=0; $i < $outc; $i++ )
-		{
-			if( file_exists( "$parm_call_dir/$out[$i]" ) )
-			{
-				if ($parm_debug_on)
-					fputs( $stdlog, "Unlinking Old File [$parm_call_dir/$out[$i]]\n" );
-
-				unlink( "$parm_call_dir/$out[$i]" );
-			}
-		}
-
-		// I've noticed that the other WAKEUP example has a different format.  This worked for me
-		// Here is where we either make the call to the Extension or the Channel.  Extension
-		// is the better way to go, but required the caller ID information.  Where Channel
-		// should always get you back to where you were called from, provided its on your system
-		if ( $parm_chan_ext )
-			fputs( $wuc, "channel: $chan/$sta\n" );
-		else
-//			fputs( $wuc, "channel: Local/$cidn@$agivar[agi_context]\n" );
-			fputs( $wuc, "channel: Local/$cidn@from-internal\n" );
-
-
-		fputs( $wuc, "maxretries: $parm_maxretries\n");
-		fputs( $wuc, "retrytime: $parm_retrytime\n");
-		fputs( $wuc, "waittime: $parm_waittime\n");
-		fputs( $wuc, "callerid: $parm_wakeupcallerid\n");
-
-		fputs( $wuc, "application: $parm_application\n");
-		fputs( $wuc, "data: $parm_data\n");
-
-      fclose( $wuc );
-
-		touch( $wakefile, $time_wakeup, $time_wakeup );
-		rename( $wakefile, $callfile );
-	}
-	else
-   {
-		// Couldn't open the file.  Make sure you created the /var/lib/asterisk/wakeups directory
-		if ($parm_debug_on)
-			fputs( $stdlog, "Error opening file [$wakefile]\n" );
-
-		$rc = execute_agi( "STREAM FILE something-terribly-wrong \"\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE goodbye \"\" ");
-		if ( !$rc[result] )
-			$rc = execute_agi( "HANGUP");
-		
-		exit;
-	}
-********************/
 }
-?>
