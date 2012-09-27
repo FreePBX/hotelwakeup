@@ -2,11 +2,11 @@
 <?php
 {
 //  PBX Open Source Software Alliance
-//  last edited Sept 24, 2012 by lgaetz
+//  last edited Sept 26, 2012 by lgaetz
 
+	// all user settings come from the file wake.inc which is shared by both agi files
 	require 'wake.inc';
-	require '/var/www/html/admin/modules/hotelwakeup/functions.inc.php';	//required for hotelwakeup_gencall function
-	
+
 	GLOBAL	$stdin, $stdout, $stdlog, $result, $parm_debug_on, $parm_test_mode;
 	
 	// These setting are on the WIKI pages http://www.voip-info.org
