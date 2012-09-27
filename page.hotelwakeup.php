@@ -62,7 +62,10 @@ if(isset($_POST['SCHEDULE'])) :
 	// check for insufficient data
 	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == "" || $badtime )
     {
-		// abandon .call file creation
+		// abandon .call file creation and pop up a js alert to the user
+		echo "<script type='text/javascript'>\n";
+		echo "alert('Cannot schedule the call, either due to insufficient data or the scheduled time was in the past');\n";
+		echo "</script>";
     }
      else
      {
