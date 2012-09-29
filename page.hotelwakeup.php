@@ -15,7 +15,7 @@ PHP Programming by Swordsteel 2/17/2009
 
 Currently maintained by the PBX Open Source Software Alliance
 https://github.com/POSSA/Hotel-Style-Wakeup-Calls
-Last modified Jun 8, 2012
+Last modified Sept 29, 2012
 **********************************************************/
 
 // check to see if user has automatic updates enabled
@@ -40,7 +40,7 @@ if(isset($_POST['DELETE'])) {
 }
 
 //  Process form if Schedule button clicked
-if(isset($_POST['SCHEDULE'])) :
+if(isset($_POST['SCHEDULE'])) {
 	$HH=$_POST['HH'];
 	$MM=$_POST['MM'];
 	$Ext=$_POST['ExtBox'];
@@ -60,15 +60,14 @@ if(isset($_POST['SCHEDULE'])) :
 	}
 
 	// check for insufficient data
-	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == "" || $badtime )
-    {
+	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == "" || $badtime )  {
 		// abandon .call file creation and pop up a js alert to the user
 		echo "<script type='text/javascript'>\n";
 		echo "alert('Cannot schedule the call, either due to insufficient data or the scheduled time was in the past');\n";
 		echo "</script>";
     }
-     else
-     {
+	else
+	{
 
 	// Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
 	// does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
@@ -76,7 +75,6 @@ if(isset($_POST['SCHEDULE'])) :
 	$date = hotelwakeup_getconfig();  // module config provided by user
 	$parm_application = 'AGI';
 	$parm_data = 'wakeconfirm.php';
-        
 
 	$foo = array(
 		time  => $time_wakeup,
@@ -91,13 +89,18 @@ if(isset($_POST['SCHEDULE'])) :
 	);
 
 	hotelwakeup_gencallfile($foo);
-      }
-endif;
+	// Can't decide if I should clear the $_POST array here to refresh schedule fields in GUI
+	}
+}
 
 // Get module config info
 $date = hotelwakeup_getconfig();
-$w = getdate();
 
+// Prepopulate date fields with current day if $_POST values unavailable
+$w = getdate();
+if (!$MON) { $MON  = $w['mon'];}
+if (!$DD)  { $DD   = $w['mday'];}
+if (!$YYYY){ $YYYY = $w['year'];}
 
 ?>
 <h1><b>Wake Up Calls</b></h1>
@@ -109,9 +112,9 @@ form below.<br><br>
 <h2><b>Schedule a new call:</b></h2>
 
 <?php
-echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD:MM:YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mday'].">:\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=".$w['mon'].">:<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=".$w['year'].">\n";
+echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" VALUE=\"$Ext\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" VALUE=\"$HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" VALUE=\"$MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD:MM:YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$DD\">:\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$MON\">:<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=\"$YYYY\">\n";
 echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
 echo "</FORM>\n";
 
@@ -131,16 +134,15 @@ $files = glob("/var/spool/asterisk/outgoing/wuc*.call");
 foreach($files as $file) {
 	$myresult = CheckWakeUpProp($file);
 	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file))  ; //create a date string to display from the file timestamp
-        $filetime = date(H,filemtime($file)).":".date(i,filemtime($file));   //create a time string to display from the file timestamp
+	$filetime = date(H,filemtime($file)).":".date(i,filemtime($file));   //create a time string to display from the file timestamp
 	If ($myresult <> '') {
 		$h = substr($myresult[0],0,2);
 		$m = substr($myresult[0],2,3);
 		$wucext = $myresult[1];
  		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD>\n";
-//		                                                                                               $wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD>\n";
-		}
-	$count++;
 	}
+	$count++;
+}
 echo "</TABLE></FORM>\n";
 if (!$count){
 	print "No scheduled calls";
