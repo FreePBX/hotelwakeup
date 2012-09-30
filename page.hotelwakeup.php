@@ -34,8 +34,8 @@ if (isset($_POST['B1'])){
 
 // Process form if delete button clicked
 if(isset($_POST['DELETE'])) {
-	if (file_exists($_POST['filename'])) {
-		unlink($_POST['filename']);
+	if (file_exists($_POST['DELETE'])) {
+		unlink($_POST['DELETE']);
 	}
 }
 
@@ -139,7 +139,7 @@ foreach($files as $file) {
 		$h = substr($myresult[0],0,2);
 		$m = substr($myresult[0],2,3);
 		$wucext = $myresult[1];
- 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD>\n";
+ 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"$file\"></TD>\n";
 	}
 	$count++;
 }
