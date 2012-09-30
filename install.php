@@ -163,9 +163,11 @@ $sql ="INSERT INTO hotelwakeup (maxretries, waittime, retrytime, cnam,          
 $sql .= "               VALUES ('3',        '60',     '60',      'Wake Up Calls',  '*68',  '1',           '00 , 01',           '4',             'AGI',        'wakeconfirm.php')";
 
 $check = $db->query($sql);
-if (DB::IsError($check)) {
-        die_freepbx( "Can not create default values in `hotelwakeup` table: " . $check->getMessage() .  "\n");
-}
+
+//  Removed the following check because it prevents install if the query above fails to overwrite existing values.
+//if (DB::IsError($check)) {
+//        die_freepbx( "Can not create default values in `hotelwakeup` table: " . $check->getMessage() .  "\n");
+//}
 
 // Register FeatureCode - Hotel Wakeup;
 $fcc = new featurecode('hotelwakeup', 'hotelwakeup');
