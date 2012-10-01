@@ -18,11 +18,11 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Sept 29, 2012
 **********************************************************/
 
-// check to see if user has automatic updates enabled
+// check to see if user has automatic updates enabled in FreePBX settings
 $cm =& cronmanager::create($db);
 $online_updates = $cm->updates_enabled() ? true : false;
 
-// check if new version of module is available
+// check dev site to see if new version of module is available
 if ($online_updates && $foo = hotelwakeup_vercheck()) {
 	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
 	}
@@ -34,8 +34,8 @@ if (isset($_POST['B1'])){
 
 // Process form if delete button clicked
 if(isset($_POST['DELETE'])) {
-	if (file_exists($_POST['DELETE'])) {
-		unlink($_POST['DELETE']);
+	if (file_exists($_POST['filename'])) {
+		unlink($_POST['filename']);
 	}
 }
 
@@ -89,7 +89,7 @@ if(isset($_POST['SCHEDULE'])) {
 	);
 
 	hotelwakeup_gencallfile($foo);
-	// Can't decide if I should clear the $_POST array here to refresh schedule fields in GUI
+	// Can't decide if I should clear the schedule variables ($HH, $MM, etc.) here to refresh schedule fields in GUI
 	}
 }
 
@@ -105,7 +105,7 @@ if (!$YYYY){ $YYYY = $w['year'];}
 ?>
 <h1><b>Wake Up Calls</b></h1>
 <hr><br>
-Wake Up calls can be used to schedule a hotel-style wakeup call to any valid destination.<br>
+Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination.<br>
 To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the<br>
 form below.<br><br>
 
@@ -120,11 +120,7 @@ echo "</FORM>\n";
 
 echo "<br><h2><b>Scheduled Calls:</b></h2>\n";
 // Page is static, so add button to refresh table
-//echo "<FORM NAME=\"Refresh\" ACTION=\"\" METHOD=POST>\n";
-//echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
-//echo "</FORM>\n<br>";
-echo "<FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST>\n";
-echo "<INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\">\n";
+echo "<FORM NAME=\"refresh\" ACTION=\"\" METHOD=POST><INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\"></form>\n";
 echo "<TABLE cellSpacing=1 cellPadding=1 width=900 border=1 >\n" ;
 echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
 
@@ -139,11 +135,11 @@ foreach($files as $file) {
 		$h = substr($myresult[0],0,2);
 		$m = substr($myresult[0],2,3);
 		$wucext = $myresult[1];
- 		echo "<TR><TD><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"$file\"></TD>\n";
+ 		echo "<TR><TD><FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD></FORM>\n";
 	}
 	$count++;
 }
-echo "</TABLE></FORM>\n";
+echo "</TABLE>\n";
 if (!$count){
 	print "No scheduled calls";
         }

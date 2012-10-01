@@ -19,19 +19,21 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	// ------------
 	
 	// If the application is having problems you can log to this file
-	$parm_error_log = '/tmp/wakeup.log';   // this needs to come from FreePBX
+	$parm_error_log =  $amp_conf[ASTLOGDIR].'/wakeup.log';   
 	
 	// Set to 1 to turn on the log file
 	$parm_debug_on = 1;	  //  currently this setting is not set in the module
 	
 	// This is where the Temporary WakeUp Call Files will be created
-	$parm_temp_dir = '/var/spool/asterisk/tmp';     // this setting needs to come from FreePBX which avoids the next line
+	// $parm_temp_dir =  '/var/spool/asterisk/tmp';     // old setting
+	$parm_temp_dir =  $amp_conf[ASTSPOOLDIR].'/tmp';
 	// Create Temporary WakeUp directory if it doesn't exist, as 0775 (rwxrwxrx), limited by overall umask
 	if (!is_dir ($parm_temp_dir)) mkdir ($parm_temp_dir, 0775);
 	
 	// This is where the WakeUp Call Files will be moved to when finished
-	$parm_call_dir = '/var/spool/asterisk/outgoing';    //this setting needs to come from FreePBX
-	
+	// $parm_call_dir = '/var/spool/asterisk/outgoing';    //old setting
+	$parm_call_dir = $amp_conf[ASTSPOOLDIR].'/outgoing';
+
 	// How many times to try the call
 	//$parm_maxretries = 3;   // old setting
 	$parm_maxretries = $date['maxretries'];
