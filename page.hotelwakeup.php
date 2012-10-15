@@ -15,7 +15,7 @@ PHP Programming by Swordsteel 2/17/2009
 
 Currently maintained by the PBX Open Source Software Alliance
 https://github.com/POSSA/Hotel-Style-Wakeup-Calls
-Last modified Sept 29, 2012
+Last modified Oct 15, 2012
 **********************************************************/
 
 // check to see if user has automatic updates enabled in FreePBX settings
@@ -229,6 +229,70 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
 
 <br><input type="submit" value="Submit" name="B1"><br><br>
 </FORM>
+
+<h2><b>System Settings:</b></h2>
+For scheduled calls to be delivered at the correct time, the system time zone and current time must be set properly.<br>
+The system is reporting the following time zone and time:<br>
+<b>Time zone:</b>  <?php echo date_default_timezone_get() ?><br>
+<?php echo _("<b>Server time:</b> ")?> <span id="idTime">00:00:00</span>
+
+<script>
+var hour = <?php $l = localtime(); echo $l[2]?>;
+var min  = <?php $l = localtime(); echo $l[1]?>;
+var sec  = <?php $l = localtime(); echo $l[0]?>;
+
+//wakeupcalls stole this from timegroups
+//who stole this from timeconditions
+//who stole it from http://www.aspfaq.com/show.asp?id=2300
+function PadDigits(n, totalDigits) 
+{ 
+	n = n.toString(); 
+	var pd = ''; 
+	if (totalDigits > n.length) 
+	{ 
+		for (i=0; i < (totalDigits-n.length); i++) 
+		{ 
+			pd += '0'; 
+		} 
+	} 
+	return pd + n.toString(); 
+} 
+
+function updateTime()
+{
+	sec++;
+	if (sec==60)
+	{
+		min++;
+		sec = 0;
+	}	
+		
+	if (min==60)
+	{
+		hour++;
+		min = 0;
+	}
+
+	if (hour==24)
+	{
+		hour = 0;
+	}
+	
+	document.getElementById("idTime").innerHTML = PadDigits(hour,2)+":"+PadDigits(min,2)+":"+PadDigits(sec,2);
+	setTimeout('updateTime()',1000);
+}
+
+updateTime();
+$(document).ready(function(){
+	$(".remove_section").click(function(){
+    if (confirm('<?php echo _("This section will be removed from this time group and all current settings including changes will be updated. OK to proceed?") ?>')) {
+      $(this).parent().parent().prev().remove();
+      $(this).closest('form').submit();
+    }
+  });
+});
+</script>
+
 <?php
 print '<p align="center" style="font-size:11px;"><br>
 The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
@@ -242,5 +306,4 @@ The module is maintained by the developer community at the <a target="_blank" hr
 			$myresult[1] = $WakeUpTmp[3];
 		return $myresult;
    	}
-
 ?>
