@@ -298,3 +298,177 @@ function hotelwakeup_xml2array($url, $get_attributes = 1, $priority = 'tag')  {
 	}
 	return ($xml_array);
 }
+
+function wuc_match_pattern_all($array, $number){
+
+	// If we did not get an array, it's probably a list. Convert it to an array.
+	if(!is_array($array)){
+		$array =  explode("\n",trim($array));		
+	}
+
+	$match = false;
+	$pattern = false;
+	
+	// Search for a match
+	foreach($array as $pattern){
+		// Strip off any leading underscore
+		$pattern = (substr($pattern,0,1) == "_")?trim(substr($pattern,1)):trim($pattern);
+		if($match = wuc_match_pattern($pattern,$number)){
+			break;
+		}elseif($pattern == $number){
+			$match = $number;
+			break;
+		}
+	}
+
+	// Return an array with our results
+	return array(
+		'pattern' => $pattern,
+		'number' => $match,
+		'status' => (isset($array[0]) && (strlen($array[0])>0))
+	);
+}
+
+/**
+	Parses Asterisk dial patterns and produces a resulting number if the match is successful or false if there is no match.
+*/
+
+function wuc_match_pattern($pattern, $number)
+{
+	global $debug;
+	$pattern = trim($pattern);
+	$p_array = str_split($pattern);
+	$tmp = "";
+	$expression = "";
+	$new_number = false;
+	$remove = NULL;
+	$insert = "";
+	$error = false;
+	$wildcard = false;
+	$match = $pattern?true:false;
+	$regx_num = "/^\[[0-9]+(\-*[0-9])[0-9]*\]/i";
+	$regx_alp = "/^\[[a-z]+(\-*[a-z])[a-z]*\]/i";
+
+	// Try to build a Regular Expression from the dial pattern
+	$i = 0;
+	while (($i < strlen($pattern)) && (!$error) && ($pattern))
+	{
+		switch(strtolower($p_array[$i]))
+		{
+			case 'x':
+				// Match any number between 0 and 9
+				$expression .= $tmp."[0-9]";
+				$tmp = "";
+				break;
+			case 'z':
+				// Match any number between 1 and 9
+				$expression .= $tmp."[1-9]";
+				$tmp = "";
+				break;
+			case 'n':
+				// Match any number between 2 and 9
+				$expression .= $tmp."[2-9]";
+				$tmp = "";
+				break;
+			case '[':
+				// Find out if what's between the brackets is a valid expression.
+				// If so, add it to the regular expression.
+				if(preg_match($regx_num,substr($pattern,$i),$matches)
+					||preg_match($regx_alp,substr(strtolower($pattern),$i),$matches))
+				{
+					$expression .= $tmp."".$matches[0];
+					$i = $i + (strlen($matches[0])-1);
+					$tmp = "";
+				}
+				else
+				{
+					$error = "Invalid character class";
+				}
+				break;
+			case '.':
+			case '!':
+				// Match and number, and any amount of them
+				if(!$wildcard){
+					$wildcard = true;
+					$expression .= $tmp."[0-9]+";
+					$tmp = "";
+				}else{
+					$error = "Cannot have more than one wildcard";
+				}
+				break;
+			case '+':
+				// Prepend any numbers before the '+' to the final match
+                                // Store the numbers that will be prepended for later use
+				if(!$wildcard){
+					if($insert){
+						$error = "Cannot have more than one '+'";
+					}elseif($expression){
+						$error = "Cannot use '+' after X,Z,N or []'s";
+					}else{
+						$insert = $tmp;
+						$tmp = "";
+					}
+				}else{
+					$error = "Cannot have '+' after wildcard";
+				}
+				break;
+			case '|':
+				// Any numbers/expression before the '|' will be stripped
+				if(!$wildcard){
+					if($remove){
+						$error = "Cannot have more than one '|'";
+					}else{
+						// Move any existing expression to the "remove" expression
+						$remove = $tmp."".$expression;
+						$tmp = "";
+						$expression = "";
+					}
+				}else{
+					$error = "Cannot have '|' after wildcard";
+				}
+				break;
+			default:
+				// If it's not any of the above, is it a number betwen 0 and 9?
+				// If so, store in a temp buffer.  Depending on what comes next
+				// we may use in in an expression, or a prefix, or a removal expression
+				if(preg_match("/[0-9]/i",strtoupper($p_array[$i]))){
+					$tmp .= strtoupper($p_array[$i]);
+				}else{
+					$error = "Invalid character '".$p_array[$i]."' in pattern";
+				}
+		}
+		$i++;
+	}
+	$expression .= $tmp;
+	$tmp = "";
+	if($error){
+		// If we had any error, report them
+		$match = false;
+		if($debug){print $error." - position $i<br>\n";}
+	}else{
+		// Else try out the regular expressions we built
+		if(isset($remove)){
+			// If we had a removal expression, se if it works
+			if(preg_match("/^".$remove."/i",$number,$matches)){
+				$number = substr($number,strlen($matches[0]));
+			}else{
+				$match = false;
+			}
+		}
+		// Check the expression for the rest of the number
+		if(preg_match("/^".$expression."$/i",$number,$matches)){
+			$new_number = $matches[0];
+		}else{
+			$match = false;
+		}
+		// If there was a prefix defined, add it.
+		$new_number = $insert . "" . $new_number;
+		
+	}
+	if(!$match){
+		// If our match failed, return false
+		$new_number = false;
+	}
+	return $new_number;
+
+}
