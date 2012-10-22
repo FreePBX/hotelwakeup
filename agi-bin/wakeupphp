@@ -131,10 +131,14 @@
 		{
 
 			$ext_ok = 0;
-			foreach( $parm_operator_extensions AS $oe )
-				if ( $oe == $cidn )
-					$ext_ok = 1;
-			
+//			foreach( $parm_operator_extensions AS $oe )
+//				if ( $oe == $cidn )
+
+//          Replace simple match with pattern match
+			$oe = wuc_match_pattern_all($parm_operator_extensions, $cidn );
+			if ($oe['number']) {
+				$ext_ok = 1;
+			}
 			$pound = 0;
 			$loop = 0;
 
