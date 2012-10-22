@@ -386,7 +386,7 @@ function wuc_match_pattern($pattern, $number)
 				}
 				break;
 			case '.':
-				// Match one or more occurances of any number
+				// Match one or more occurrences of any number
 				if(!$wildcard){
 					$wildcard = true;
 					$expression .= $tmp."[0-9]+";
@@ -396,7 +396,7 @@ function wuc_match_pattern($pattern, $number)
 				}
 				break;
 			case '!':
-				// Match zero or more occurances of any number
+				// Match zero or more occurrences of any number
 				if(!$wildcard){
 					$wildcard = true;
 					$expression .= $tmp."[0-9]*";
