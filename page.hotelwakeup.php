@@ -113,8 +113,8 @@ form below.<br><br>
 
 <?php
 echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" VALUE=\"$Ext\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" VALUE=\"$HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" VALUE=\"$MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD:MM:YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$DD\">:\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$MON\">:<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=\"$YYYY\">\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" VALUE=\"$MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD / MM / YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$DD\">/\n";
+echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$MON\">/<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=\"$YYYY\">\n";
 echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
 echo "</FORM>\n";
 
@@ -175,7 +175,7 @@ echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[ex
     <td> &nbsp;</td>
   </tr>
   <tr>
-    <td width="180"><a href="javascript: return false;" class="info">Operator Extensions: <span>Enter the Caller ID's of each telephone you wish to be recognized as an `Operator`.  Operator extensions are allowed to create wakeup calls for any valid destination. Numbers entered must be formatted <i>exactly</i> as the caller ID of the device will be received by the system.</span></a></td>
+    <td width="180"><a href="javascript: return false;" class="info">Operator Extensions: <span>Enter the Caller ID's of each telephone you wish to be recognized as an `Operator`.  Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns.</span></a></td>
     <td colspan="2">
 <?php
 echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$date[operator_extensions]}\">\n";
@@ -234,7 +234,7 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
 For scheduled calls to be delivered at the correct time, the system time zone and current time must be set properly.<br>
 The system is reporting the following time zone and time:<br>
 <b>Time zone:</b>  <?php echo date_default_timezone_get() ?><br>
-<?php echo _("<b>Server time:</b> ")?> <span id="idTime">00:00:00</span>
+<?php echo _("<b>System time:</b> ")?> <span id="idTime">00:00:00</span>
 
 <script>
 var hour = <?php $l = localtime(); echo $l[2]?>;
