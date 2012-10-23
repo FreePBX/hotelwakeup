@@ -104,8 +104,6 @@
 	while ( !$rc[result] && $lgcount < 15)   // set hard limit of 15 repeats
 	{
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"1234\" ");
-		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE to-cancel-wakeup \"1234\" ");
 		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE press-1 \"1234\" ");
