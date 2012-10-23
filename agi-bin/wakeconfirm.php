@@ -100,39 +100,120 @@
 	// initialize a counter so the while loop will eventually expire
 	$lgcount = 0;
 
-	// Start prompting them if they want to snooze
+	// Start prompting them if they want to snooze or turn off the wake up
 	while ( !$rc[result] && $lgcount < 15)   // set hard limit of 15 repeats
 	{
 		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE to-cancel-wakeup \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE press-1 \"1234\" ");
+		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE digits/9 \"1234\" ");
+			$rc = execute_agi( "STREAM FILE digits/5 \"1234\" ");
 		if ( !$rc[result] )
 			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
 		if ( !$rc[result] )
-			$rc = execute_agi( "STREAM FILE press-1 \"1234\" ");
-
+			$rc = execute_agi( "STREAM FILE press-2 \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE digits/10 \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE press-3 \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE to-snooze-for \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE digits/15 \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE minutes \"1234\" ");
+		if ( !$rc[result] )
+			$rc = execute_agi( "STREAM FILE press-4 \"1234\" ");
 		if ( !$rc[result] )
 		{
 			$rc = execute_agi( "WAIT FOR DIGIT 15000");
 		}
-		$lgcount++;
 		if ( $rc[result] != -1 )
 		{
-			if ( $rc[result] )
+			if ( $rc[result] == 49 || $rc[result] == 50 || $rc[result] == 51 || $rc[result] == 52 )
 			{
-				$time_wakeup = time( );
-				$time_wakeup += 540;
+				; // Do nothing correct input
+			}
+			else
+			{
+				// This was just for fun, if they press something other than 1, 2, 3, or 4
+				$rc[result] = 0;
+				$rc = execute_agi( "STREAM FILE im-sorry \"\" ");
+				$rc = execute_agi( "STREAM FILE you-dialed-wrong-number \"\" ");
+				$rc = execute_agi( "STREAM FILE i-dont-understand3 \"\" ");
+				$rc = execute_agi( "STREAM FILE your \"\" ");
+				$rc = execute_agi( "STREAM FILE communications \"\" ");
 
-				create_wakeup( $time_wakeup );
-
-				execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
-				execute_agi( "EXEC background \"digits/9\" ");
-				execute_agi( "EXEC background \"minutes\" ");
-				execute_agi( "EXEC background \"vm-from\" ");
-				execute_agi( "EXEC background \"now\" ");
 			}
 		}
+		$lgcount++;   // increment counter so loop will give up eventually
+	}
+
+	switch( $rc[result] )
+	{
+	case '49':	// Pressed 1  - This is to cancel the wakeup call
+		{
+				execute_agi( "EXEC background \"wakeup-call-cancelled\" ");
+				execute_agi( "EXEC wait \"1\" ");
+				execute_agi( "EXEC background \"goodbye\" ");
+				execute_agi( "HANGUP" );
+				exit;
+		}
+		break;
+
+	case '50':		// Pressed 2 - Snooze for 5 minutes
+		{
+			$time_wakeup = time( );
+			$time_wakeup += 300;
+
+			create_wakeup( $time_wakeup );
+
+			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
+			execute_agi( "EXEC background \"digits/5\" ");
+			execute_agi( "EXEC background \"minutes\" ");
+			execute_agi( "EXEC background \"vm-from\" ");
+			execute_agi( "EXEC background \"now\" ");
+		}
+		break;
+
+	case '51':		// Pressed 3 - Snooze for 10 minutes
+		{
+			$time_wakeup = time( );
+			$time_wakeup += 600;
+
+			create_wakeup( $time_wakeup );
+
+			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
+			execute_agi( "EXEC background \"digits/10\" ");
+			execute_agi( "EXEC background \"minutes\" ");
+			execute_agi( "EXEC background \"vm-from\" ");
+			execute_agi( "EXEC background \"now\" ");
+		}
+		break;
+
+	case '52':		// Pressed 4 - Snooze for 15 minutes
+		{
+			$time_wakeup = time( );
+			$time_wakeup += 900;
+
+			create_wakeup( $time_wakeup );
+
+			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
+			execute_agi( "EXEC background \"digits/15\" ");
+			execute_agi( "EXEC background \"minutes\" ");
+			execute_agi( "EXEC background \"vm-from\" ");
+			execute_agi( "EXEC background \"now\" ");
+		}
+		break;
 	}
 
 $rc = execute_agi( "STREAM FILE goodbye \"\" ");
