@@ -1,0 +1,54 @@
+<module>
+	<rawname>hotelwakeup</rawname>
+	<name>Wake Up Calls</name>
+	<repo>extended</repo>
+	<version>1.3.0.9</version>
+	<license>GNU-GPLv2</license>
+	<candisable>yes</candisable>
+	<canuninstall>yes</canuninstall>
+	<type>setup</type>
+	<publisher>POSSA</publisher>
+	<category>Other</category>
+       <description>FreePBX module for generating reminder and wakeup calls</description>
+	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
+	 <changelog>
+			Lorne Gaetz: Merge remote-tracking branch 'origin/working',,Conflicts:,	README,	module.xml
+			Lorne Gaetz: GUI improvements
+			Lorne Gaetz: Fixed issue when setting calls for the next day
+			Lorne Gaetz: Milestone commit, everything working
+			Lorne Gaetz: Overhaul install and uninstall
+			lgaetz: Minor changes to GUI
+			Lorne Gaetz: cleanup
+			Lorne Gaetz: Updates for managing files via GUI
+			Lorne Gaetz: Merge remote-tracking branch 'origin/working' into working
+			Lorne Gaetz: schedule/delete calls via module GUI
+			lgaetz: Merge remote-tracking branch 'origin/working' into working
+			Lorne Gaetz: Fixes for Issue #27, #7
+			Lorne Gaetz: Fixes for Issue #27, #7
+			Lorne Gaetz: First attempt at issue #15
+			Lorne Gaetz: Fixes for issue #25
+			lgaetz: Short tag install bug for issue #25
+			Lorne Gaetz: fixed refs to POSSA
+			lgaetz: Update for POSSA
+			Lorne Gaetz: Fixed typos
+			Lorne Gaetz: Fixed typo
+			Lorne Gaetz: Update README
+			Lorne Gaetz: Update master branch to 2.2.5
+			Lorne Gaetz: Added license info to xml and fix for #17
+			Lorne Gaetz: Updated for release of ver. 2.2.5
+			Lorne Gaetz: Update README
+			Andrew Nagy: Fixes #17. PHP requires defines to be in uppercase. Otherwise you will get a warn
+			Lorne Gaetz: Update README
+			Lorne Gaetz: Removed CR/LF
+			Lorne Gaetz: Removed CR/LF
+	</changelog>
+	<menuitems>
+		<hotelwakeup>Wake Up Calls</hotelwakeup>
+       </menuitems>
+	<depends>
+                <module>core</module>
+                <module>ivr gt1.0</module>
+                <version>ge 2.9</version>
+                <engine>asterisk 1.2</engine>
+         </depends>
+</module>
