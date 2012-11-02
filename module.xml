@@ -1,6 +1,7 @@
 <module>
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
+	<repo>extended</repo>
 	<version>1.3.0.9</version>
 	<license>GNU-GPLv2</license>
 	<candisable>yes</candisable>
