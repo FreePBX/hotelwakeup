@@ -22,6 +22,6 @@
 		<version>ge 2.9</version>
 		<engine>asterisk 1.2</engine>
 	</depends>
-	<location>release/2.11/hotelwakeup-2.11.0.0beta1.tgz</location>
-	<md5sum>da1cb6cb69b59032c59c47248478bc31</md5sum>
+	<location>release/2.11/hotelwakeup-2.11.0beta1.tgz</location>
+	<md5sum>483f4b8293ef55fcc28e89bb257f5c70</md5sum>
 </module>
