@@ -18,6 +18,7 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Oct 15, 2012
 **********************************************************/
 
+/***** remove check for updates now that module is pushed from FreePBX repo ***
 // check to see if user has automatic updates enabled in FreePBX settings
 $cm =& cronmanager::create($db);
 $online_updates = $cm->updates_enabled() ? true : false;
@@ -26,6 +27,7 @@ $online_updates = $cm->updates_enabled() ? true : false;
 if ($online_updates && $foo = hotelwakeup_vercheck()) {
 	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
 	}
+******************************************************************************/
 
 // Process form if button B1 is clicked
 if (isset($_POST['B1'])){
