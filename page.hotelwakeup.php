@@ -18,6 +18,7 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Oct 15, 2012
 **********************************************************/
 
+/***** remove check for updates now that module is pushed from FreePBX repo ***
 // check to see if user has automatic updates enabled in FreePBX settings
 $cm =& cronmanager::create($db);
 $online_updates = $cm->updates_enabled() ? true : false;
@@ -26,6 +27,7 @@ $online_updates = $cm->updates_enabled() ? true : false;
 if ($online_updates && $foo = hotelwakeup_vercheck()) {
 	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
 	}
+******************************************************************************/
 
 // Process form if button B1 is clicked
 if (isset($_POST['B1'])){
@@ -166,11 +168,11 @@ echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[operator
 &nbsp; Enabled</td>
   </tr>
   <tr>
-    <td width="180"><a href="javascript: return false;" class="info">Max Destination Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
+    <td width="180"><a href="javascript: return false;" class="info">Max Dest. Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
     <td width="129">&nbsp;
 <?php
-echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">\n ";
-?>Digits
+echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">Digits\n ";
+?>
 </td>
     <td> &nbsp;</td>
   </tr>

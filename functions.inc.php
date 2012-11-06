@@ -386,8 +386,7 @@ function wuc_match_pattern($pattern, $number)
 				}
 				break;
 			case '.':
-			case '!':
-				// Match and number, and any amount of them
+				// Match one or more occurrences of any number
 				if(!$wildcard){
 					$wildcard = true;
 					$expression .= $tmp."[0-9]+";
@@ -396,6 +395,17 @@ function wuc_match_pattern($pattern, $number)
 					$error = "Cannot have more than one wildcard";
 				}
 				break;
+			case '!':
+				// Match zero or more occurrences of any number
+				if(!$wildcard){
+					$wildcard = true;
+					$expression .= $tmp."[0-9]*";
+					$tmp = "";
+				}else{
+					$error = "Cannot have more than one wildcard";
+				}
+				break;
+
 			case '+':
 				// Prepend any numbers before the '+' to the final match
                                 // Store the numbers that will be prepended for later use
