@@ -166,11 +166,11 @@ echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[operator
 &nbsp; Enabled</td>
   </tr>
   <tr>
-    <td width="180"><a href="javascript: return false;" class="info">Max Destination Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
+    <td width="180"><a href="javascript: return false;" class="info">Max Dest. Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
     <td width="129">&nbsp;
 <?php
-echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">\n ";
-?>Digits
+echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">Digits\n ";
+?>
 </td>
     <td> &nbsp;</td>
   </tr>
