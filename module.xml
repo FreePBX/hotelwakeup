@@ -12,6 +12,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
+		*2.11.0.0beta2* Removed online check for updates for POSSA
 		*2.11.0.0beta1* imported from web to online repo
 	</changelog>
 	<menuitems>
