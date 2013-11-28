@@ -25,4 +25,4 @@
 	</depends>
 	<location>release/2.11/hotelwakeup-2.11.0beta2.tgz</location>
 	<md5sum>c39485aa2101b09680dcd9acec88bc19</md5sum>
-</module>
+<supported><version>2.11</version></supported></module>
