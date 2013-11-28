@@ -51,4 +51,4 @@
                 <version>ge 2.9</version>
                 <engine>asterisk 1.2</engine>
          </depends>
-</module>
+<supported><version>2.11</version></supported></module>
