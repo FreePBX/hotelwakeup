@@ -1,5 +1,5 @@
 <?php
-print "Installing Hotel Style Wake Up Calls<br>";
+out("Installing Hotel Style Wake Up Calls");
 // list of the columns that need to be included in the hotelwakup table.  Add/subract values to this list and trigger a reinstall to alter the table
 // this table is used to store module config info
 $cols['maxretries'] = "INT NOT NULL";
@@ -71,7 +71,7 @@ while($row = $res->fetchRow())
 		$check = $db->query($sql);
 		if (DB::IsError($check))
 		{
-			die_freepbx( "Can not update column ".$row[0].": " . $check->getMessage() .  "<br>");
+			die_freepbx( "Can not update column ".$row[0].": " . $check->getMessage());
 		}
 	}
 	else
@@ -81,11 +81,11 @@ while($row = $res->fetchRow())
 		$check = $db->query($sql);
 		if(DB::IsError($check))
 		{
-			die_freepbx( "Can not remove column ".$row[0].": " . $check->getMessage() .  "<br>");
+			die_freepbx( "Can not remove column ".$row[0].": " . $check->getMessage( );
 		}
 		else
 		{
-			print 'Removed no longer needed column '.$row[0].' from hotelwakup table.<br>';
+			out('Removed no longer needed column '.$row[0].' from hotelwakup table.');
 		}
 	}
 }
@@ -98,11 +98,11 @@ foreach($cols as $key=>$val)
 		$check = $db->query($sql);
 		if (DB::IsError($check))
 		{
-			die_freepbx( "Can not add column ".$key.": " . $check->getMessage() .  "<br>");
+			die_freepbx( "Can not add column ".$key.": " . $check->getMessage());
 		}
 		else
 		{
-			print 'Added column '.$key.' to hotelwakeup table.<br>';
+			out('Added column '.$key.' to hotelwakeup table');
 		}
 	}
 }
@@ -135,7 +135,7 @@ while($row = $res->fetchRow())
 		}
 		else
 		{
-			print 'Removed no longer needed column '.$row[0].' from hotelwakeup_calls table.<br>';
+			out('Removed no longer needed column '.$row[0].' from hotelwakeup_calls table');
 		}
 	}
 }
@@ -152,13 +152,13 @@ foreach($sc_cols as $key=>$val)
 		}
 		else
 		{
-			print 'Added column '.$key.' to hotelwakeup_calls table.<br>';
+			out('Added column '.$key.' to hotelwakeup_calls table');
 		}
 	}
 }
 
 //  Set default values - need mechanism to prevent overwriting existing values 
-print "Installing Default Values<br>";
+out("Installing Default Values");
 $sql ="INSERT INTO hotelwakeup (maxretries, waittime, retrytime, cnam,             cid,    operator_mode, operator_extensions, extensionlength, application, data) ";
 $sql .= "               VALUES ('3',        '60',     '60',      'Wake Up Calls',  '*68',  '1',           '00 , 01',           '4',             'AGI',        'wakeconfirm.php')";
 
@@ -175,4 +175,3 @@ $fcc->setDescription('Wake Up Calls');
 $fcc->setDefault('*68');
 $fcc->update();
 unset($fcc);
-?>
