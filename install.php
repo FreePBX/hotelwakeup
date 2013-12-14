@@ -81,7 +81,7 @@ while($row = $res->fetchRow())
 		$check = $db->query($sql);
 		if(DB::IsError($check))
 		{
-			die_freepbx( "Can not remove column ".$row[0].": " . $check->getMessage( );
+			die_freepbx( "Can not remove column ".$row[0].": " . $check->getMessage());
 		}
 		else
 		{
