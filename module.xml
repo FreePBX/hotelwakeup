@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>2.11.0beta2</version>
+	<version>2.11.1</version>
 	<license>GNU-GPLv2</license>
 	<candisable>yes</candisable>
 	<canuninstall>yes</canuninstall>
@@ -12,6 +12,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
+	 	*2.11.1* #7011 fix errors in hotel wakeup
 		*2.11.0.0beta2* Removed online check for updates for POSSA
 		*2.11.0.0beta1* imported from web to online repo
 	</changelog>
@@ -23,6 +24,9 @@
 		<version>ge 2.9</version>
 		<engine>asterisk 1.2</engine>
 	</depends>
+	<supported>
+		<version>2.10</version>
+	</supported>
 	<location>release/2.11/hotelwakeup-2.11.0beta2.tgz</location>
 	<md5sum>c39485aa2101b09680dcd9acec88bc19</md5sum>
 </module>
