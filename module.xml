@@ -27,6 +27,6 @@
 	<supported>
 		<version>2.10</version>
 	</supported>
-	<location>release/2.11/hotelwakeup-2.11.0beta2.tgz</location>
-	<md5sum>c39485aa2101b09680dcd9acec88bc19</md5sum>
+	<location>release/2.11/hotelwakeup-2.11.1.tgz</location>
+	<md5sum>d6f25e0c000f752a27577ae14037e44c</md5sum>
 </module>
