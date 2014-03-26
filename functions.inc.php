@@ -46,16 +46,17 @@ function hotelwakeup_hotelwakeup($c) {
 
 
 function hotelwakeup_saveconfig($c) {
+	global $db;
 
 	# clean up
-	$operator_mode = mysql_escape_string($_POST['operator_mode']);
-	$extensionlength = mysql_escape_string($_POST['extensionlength']);
-	$operator_extensions = mysql_escape_string($_POST['operator_extensions']);
-	$waittime = mysql_escape_string($_POST['waittime']);
-	$retrytime = mysql_escape_string($_POST['retrytime']);
-	$maxretries = mysql_escape_string($_POST['maxretries']);
-	$calleridtext = mysql_escape_string($_POST['calleridtext']);
-	$calleridnumber = mysql_escape_string($_POST['calleridnumber']);
+	$operator_mode = $db->escapeSimple(($_POST['operator_mode']);
+	$extensionlength = $db->escapeSimple($_POST['extensionlength']);
+	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
+	$waittime = $db->escapeSimple($_POST['waittime']);
+	$retrytime = $db->escapeSimple($_POST['retrytime']);
+	$maxretries = $db->escapeSimple($_POST['maxretries']);
+	$calleridtext = $db->escapeSimple($_POST['calleridtext']);
+	$calleridnumber = $db->escapeSimple($_POST['calleridnumber']);
 
 	# Make SQL thing
 	$sql = "UPDATE `hotelwakeup` SET";
@@ -75,9 +76,9 @@ function hotelwakeup_saveconfig($c) {
 function hotelwakeup_getconfig() {
 // this function gets the values from the wakeup database, and returns them in an associative array
 
+	global $db;
 	$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-	$query = mysql_query($sql);
-	$results = mysql_fetch_array($query, MYSQL_BOTH);
+	$results = sql($sql,"getAll");
 	return $results;
 
 }
