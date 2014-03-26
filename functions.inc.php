@@ -78,7 +78,7 @@ function hotelwakeup_getconfig() {
 
 	global $db;
 	$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-	$results = sql($sql,"getAll");
+	$results = sql($sql,"getAll",DB_FETCHMODE_ASSOC);
 	return $results;
 
 }
