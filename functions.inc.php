@@ -49,7 +49,7 @@ function hotelwakeup_saveconfig($c) {
 	global $db;
 
 	# clean up
-	$operator_mode = $db->escapeSimple(($_POST['operator_mode']);
+	$operator_mode = $db->escapeSimple($_POST['operator_mode']);
 	$extensionlength = $db->escapeSimple($_POST['extensionlength']);
 	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
 	$waittime = $db->escapeSimple($_POST['waittime']);
