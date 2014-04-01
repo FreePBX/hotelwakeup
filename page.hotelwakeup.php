@@ -97,6 +97,7 @@ if(isset($_POST['SCHEDULE'])) {
 
 // Get module config info
 $date = hotelwakeup_getconfig();
+	$module_local = hotelwakeup_xml2array("modules/hotelwakeup/module.xml");
 
 // Prepopulate date fields with current day if $_POST values unavailable
 $w = getdate();
@@ -296,8 +297,8 @@ $(document).ready(function(){
 </script>
 
 <?php
-print '<p align="center" style="font-size:11px;"><br>
-The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
+print '<p align="center" style="font-size:11px;">Wake Up Calls Module version '.$module_local['module']['version'];
+print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
 
 
 	function CheckWakeUpProp($file) {
