@@ -2,16 +2,14 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>2.11.2</version>
-	<license>GNU-GPLv2</license>
-	<candisable>yes</candisable>
-	<canuninstall>yes</canuninstall>
-	<type>setup</type>
+	<version>2.11.3</version>
+	<license>GPLv2</license>
 	<publisher>POSSA</publisher>
 	<category>Applications</category>
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	 <changelog>
+		 *2.11.3* Fixes outstanding database issues
 		 *2.11.2* Database abstraction layer fixes
 		 *2.11.1* #7011 fix errors in hotel wakeup
 		 *2.11.0.0beta2* Removed online check for updates for POSSA
