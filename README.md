@@ -1,11 +1,11 @@
-FreePBX Module Name:  	Hotel Style Wakeup Calls  
+FreepBX Module - Wakeup Calls  
 
 This is a beta version (2.11.4 betaX)of Wake Up Calls module for FreePBX. This
 version has a number of improvements over 2.11.3 and is ready for testing
 
 Install Instructions:
 
-From the Linux CLI, first get red of pre 2.11.3 version:
+From the Linux CLI, first remove any old existing version:
 ```
 amportal a ma uninstall hotelwakeup
 amportal a ma delete hotelwakeup
@@ -17,17 +17,17 @@ cd /var/www/html/admin/modules
 git clone https://github.com/lgaetz/Hotel-Style-Wakeup-Calls.git hotelwakeup
 chown -R asterisk:asterisk hotelwakeup
 ```
-In FreePBX,go to module admin, locate Wakeup Calls in the list and install like normal. Report bugs here or on the PIAF forum.
+In FreePBX, go to Module Admin, locate Wakeup Calls in the list and install like normal. Report bugs here or on the PIAF forum. Ignore any automatic notices from FreePBX to upgrade, that will replace your beta version with the older version.
 
 
-Whenever you need it, update your beta install to the most recent version:
+To incorporate the most recent changes, update your beta install to the most recent version:
 ```
 cd /var/www/html/admin/modules/hotelwakeup
 git pull
 chown -R asterisk:asterisk .
 ```
 
-To abandon the beta version and revert to 2.11.3:
+To abandon the beta version and revert to the supported version:
 ```
 amportal a ma uninstall hotelwakeup
 amportal a ma delete hotelwakeup
