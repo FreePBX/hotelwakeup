@@ -674,4 +674,3 @@ function fputx ($stdlog,$msg)
 				exit;
 			}
 ******************** end of removed code********************/
-?>

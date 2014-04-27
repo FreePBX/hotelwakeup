@@ -31,4 +31,3 @@ function wuc_delete_cron() {
 		echo exec('crontab '.$temp_file);
 	}
 }
-?>?>
