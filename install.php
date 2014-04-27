@@ -125,7 +125,7 @@ create_table($tablename2, $cols2);
  * generate .call files, this part creates the cron job
  */
 
-$wuc_cron_string = "* * * * * ".$amp_conf['AMPBIN']."/hotelwakeup_genalldue.php";
+$wuc_cron_string = "* * * * * ".$amp_conf['ASTAGIDIR']."/hotelwakeup_genalldue.php";
 $run = wuc_add_cron($wuc_cron_string);
 
 # The following is written as a function in case it is needed elsewhere
