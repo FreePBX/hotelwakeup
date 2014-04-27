@@ -28,7 +28,7 @@ function hotelwakeup_get_config($engine) {
 		break;
 	}
 }
-
+#============================================================================
 // this function required to make the feature code work
 function hotelwakeup_hotelwakeup($c) {
 	global $ext;
@@ -43,20 +43,22 @@ function hotelwakeup_hotelwakeup($c) {
 	$ext->add($id, $c, '', new ext_AGI('wakeupphp'));
 	$ext->add($id, $c, '', new ext_Hangup);
 	}
+#============================================================================
 
-
-function hotelwakeup_saveconfig($c) {
+function hotelwakeup_saveconfig($pkey) {
 	global $db;
 
-	# clean up
-	$operator_mode = $db->escapeSimple($_POST['operator_mode']);
-	$extensionlength = $db->escapeSimple($_POST['extensionlength']);
-	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
+# Extract fields from page
+	$maxretries = $db->escapeSimple($_POST['maxretries']);
 	$waittime = $db->escapeSimple($_POST['waittime']);
 	$retrytime = $db->escapeSimple($_POST['retrytime']);
-	$maxretries = $db->escapeSimple($_POST['maxretries']);
-	$calleridtext = $db->escapeSimple($_POST['calleridtext']);
-	$calleridnumber = $db->escapeSimple($_POST['calleridnumber']);
+	$extensionlength = $db->escapeSimple($_POST['extensionlength']);
+	$cid = $db->escapeSimple($_POST['cid']);
+	$cnam = $db->escapeSimple($_POST['cnam']);
+	$operator_mode = $db->escapeSimple($_POST['operator_mode']);
+	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
+	$application = $db->escapeSimple($_POST['application']);
+	$data = $db->escapeSimple($_POST['data']);
 
 	# Make SQL thing
 	$sql = "UPDATE `hotelwakeup` SET";
@@ -64,32 +66,144 @@ function hotelwakeup_saveconfig($c) {
 	$sql .= ", `waittime`='{$waittime}'";
 	$sql .= ", `retrytime`='{$retrytime}'";
 	$sql .= ", `extensionlength`='{$extensionlength}'";
-	$sql .= ", `cnam`='{$calleridtext}'";
-	$sql .= ", `cid`='{$calleridnumber}'";
+	$sql .= ", `cnam`='{$cnam}'";
+	$sql .= ", `cid`='{$cid}'";
 	$sql .= ", `operator_mode`='{$operator_mode}'";
 	$sql .= ", `operator_extensions`='{$operator_extensions}'";
-	$sql .= " LIMIT 1;";
+	$sql .= ", `application`='{$application}'";
+	$sql .= ", `data`='{$data}'";
+	$sql .= " WHERE `id-cfg` = '{$pkey}';";
 
 	sql($sql);
 }
-
-function hotelwakeup_getconfig() {
-// this function gets the values from the wakeup database, and returns them in an associative array
-
+#============================================================================
+function hotelwakeup_getconfig($id_key="WUC") {
+# This function gets the config values from the wakeup database, and returns them in an associative array
+# $id-cfg identifies the particular config record being used (Primary key)
+#?? The code here is not clear (foreach seems redundant as only one row returned) and needs cleaning up
 	global $db;
-	$sql = "SELECT * FROM hotelwakeup LIMIT 1";
+	$sql = "SELECT * FROM hotelwakeup WHERE `id-cfg`='$id_key'";
 	$results_2d = sql($sql,"getAll",DB_FETCHMODE_ASSOC);
 	$results_1d = array();
 	foreach ($results_2d[0] as $key => $value) {
 		$results_1d[$key] = $value;
 	}
 	return $results_1d;
-
 }
-
+#============================================================================
+# List all schedules matching a config id
+function hotelwakeup_listschedule($idcfg) {
+	global $db;
+	$sql = "SELECT * FROM `hotelwakeup_calls` WHERE `id_cfg`='$idcfg' ORDER BY `time`";
+	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	if(DB::IsError($res)) {
+		hotelwakeup_reportsqlerror($sql,$res,"I",'hotelwakeup_listschedule');
+		return null;
+	}
+	return $res;	
+}
+#============================================================================
+function hotelwakeup_deleterow($tablename,$pkey,$pkeyname,$mode,$OK) {
+	global $db;
+	$sql = "DELETE FROM `$tablename` WHERE `$pkeyname` =".$pkey.";";
+	$res = $db->query($sql);
+	if (DB::IsError($res)) {
+		# Report error
+		hotelwakeup_reportsqlerror($sql,$res,$mode,'hotelwakeup_deleterow');
+		$OK="NO";
+	}
+	else {$OK="YES";}
+}
+#============================================================================
+function hotelwakeup_updaterow($tablename,$pkey,$pkeyname,$field,$fieldnewval,$mode,$OK) {
+	global $db;
+	$sql = "UPDATE `$tablename` SET `$field`=$fieldnewval WHERE `$pkeyname` =".$pkey.";";
+	$res = $db->query($sql);
+	if (DB::IsError($res)) {
+		# Report error
+		hotelwakeup_reportsqlerror($sql,$res,$mode,'hotelwakeup_updaterow');
+		$OK="NO";
+	}
+	else {$OK="YES";}
+}
+#============================================================================
+# Report SQL error
+function hotelwakeup_reportsqlerror($sql,$res,$mode,$fromfunction) {
+# $mode: I = interactive - message to screen
+# ?? Mode for the moment is assumed I as don't know what to do to report errors in batch mode
+	# Pop-up error message 
+	echo "<script type='text/javascript'>\n";
+	
+	echo "alert('ERROR: SQL SELECT statement failed: In FN: ".$fromfunction.'\n'.$res."')";
+	echo "</script>";
+	# Pop-up SQL	
+	echo "<script type='text/javascript'>\n";
+	echo "alert('SQL: ".'\n'.$sql."')";
+	echo "</script>";	
+	#echo 'SQL: '.$sql;  #?? temp code as above does not always work
+}
+#============================================================================
+# Generate .call files for all schedules that are now due
+# $limit may be set to a specific record key to generate just for that records
+# even if not due
+function hotelwakeup_genalldue($limit) {
+	global $db;
+	# Due time is now + 1.5 minutes
+	$timebefore = time() + 90;
+	if ($limit=="") {
+		$sql = "SELECT * FROM `hotelwakeup_calls` WHERE `time` < $timebefore ORDER BY `time`";
+	} else {
+		$sql = "SELECT * FROM `hotelwakeup_calls` WHERE `id_schedule` = $limit";
+	}
+	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	if(DB::IsError($res)) {
+	# Error reporting mode must be B(atch) mode as this will run from cron job
+		hotelwakeup_reportsqlerror($sql,$res,"B",'hotelwakeup_genalldue');
+		return null;
+	}
+	# Return if nothing is due
+	if (!isset($res)) {return null;}
+	# Process each returned row
+	$id_cfg="";
+	foreach ($res as $schedule) {
+		# Get config data for this schedule - if not already done
+		if ($id_cfg<>$schedule['id_cfg']) {
+			$id_cfg=$schedule['id_cfg'];
+			$cfg_data = hotelwakeup_getconfig($id_cfg);
+		}
+		# Create .call file
+		$foo = array(time => $schedule['time'], ext => $schedule['ext'], maxretries => $cfg_data[maxretries],
+			retrytime => $cfg_data[retrytime],
+			waittime => $cfg_data[waittime],
+			callerid => $cfg_data[cnam]." <".$cfg_data[cid].">",
+			application => $cfg_data[application],
+			data => $cfg_data[data],
+		);
+		hotelwakeup_gencallfile($foo);
+		# If the record is for a one-off alarm, it is deleted otherwise it is updated to the next date/time in the cycle
+		switch ($schedule['per']) {
+			# If schedule is not repeating then delete it from DB
+			case "X":
+				hotelwakeup_deleterow('hotelwakeup_calls',$schedule['id_schedule'],'id_schedule',"B",&$OK);
+				break;
+			# If schedule is repeating daily then update record to next day
+			case "D":
+				$time=$schedule['time']+(60*60*24);		# + 1 day in seconds
+				hotelwakeup_updaterow('hotelwakeup_calls',$schedule['id_schedule'],'id_schedule','time',$time,"B",&$OK); 
+				break;
+			# If schedule is repeating weekly then update record to next week
+			case "W":
+				$time=$schedule['time']+(60*60*24*7);		# + 7 days in seconds
+				hotelwakeup_updaterow('hotelwakeup_calls',$schedule['id_schedule'],'id_schedule','time',$time,"B",&$OK); 
+				break;
+		}
+	}	
+}
+#============================================================================
 function hotelwakeup_gencallfile($foo) {
 // This function will generate the wakeup call file based on the array provided
-
+# It is called both from the GUI interface and 
+# from agi files wakeupphp and wakeconfirm.php
 /**** array format ******
 array(
 	time  => timestamp value,
@@ -139,9 +253,27 @@ array(
 	// set time of temp file and move to outgoing
 	touch( $tempfile, $foo['time'], $foo['time'] );
 	rename( $tempfile, $outfile );
-
 }
+#============================================================================
 
+function hotelwakeup_saveschedule($idcfg, $ext,$timewakeup,$repcode) {
+# This will save a new schedule in hotelwakeup_calls
+# $idcfg is the key to the config record being used
+	$errmsg="";
+	global $db;
+# pre-process fields
+	$w_idcfg = "'".$db->escapeSimple($idcfg)."'";
+	$w_ext = "'".$db->escapeSimple($ext)."'";
+	$w_timewakeup = $db->escapeSimple($timewakeup);
+	$w_repcode = "'".$db->escapeSimple($repcode)."'";
+	$sql = "INSERT INTO `hotelwakeup_calls` (id_cfg, ext, time, per) VALUES($w_idcfg, $w_ext, $w_timewakeup, $w_repcode);";
+	# Execute SQL
+	$check = $db->query($sql);
+#	sql($sql); 	#?? Alternative method not used as no error checking
+	if (DB::IsError($check)) {$errmsg=$check."|".$sql;}
+	return $errmsg;
+}
+#============================================================================
 // compare version numbers of local module.xml and remote module.xml 
 // returns true if a new version is available
 function hotelwakeup_vercheck() {
@@ -156,7 +288,7 @@ function hotelwakeup_vercheck() {
 		return ($newver);
 		}
 	}
-
+#============================================================================
 //Parse XML file into an array
 function hotelwakeup_xml2array($url, $get_attributes = 1, $priority = 'tag')  {
 	$contents = "";
@@ -303,7 +435,7 @@ function hotelwakeup_xml2array($url, $get_attributes = 1, $priority = 'tag')  {
 	}
 	return ($xml_array);
 }
-
+#============================================================================
 function wuc_match_pattern_all($array, $number){
 
 	// If we did not get an array, it's probably a list. Convert it to an array.
@@ -334,12 +466,9 @@ function wuc_match_pattern_all($array, $number){
 	);
 }
 
-/**
-	Parses Asterisk dial patterns and produces a resulting number if the match is successful or false if there is no match.
-*/
-
-function wuc_match_pattern($pattern, $number)
-{
+#============================================================================
+//	Parses Asterisk dial patterns and produces a resulting number if the match is successful or false if there is no match.
+function wuc_match_pattern($pattern, $number) {
 	global $debug;
 	$pattern = trim($pattern);
 	$p_array = str_split($pattern);
@@ -485,5 +614,4 @@ function wuc_match_pattern($pattern, $number)
 		$new_number = false;
 	}
 	return $new_number;
-
 }
