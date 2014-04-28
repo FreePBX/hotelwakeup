@@ -94,4 +94,3 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	//-------------------
 	// END CONFIG PARMS
 	//-------------------
-

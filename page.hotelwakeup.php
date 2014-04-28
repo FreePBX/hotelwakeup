@@ -131,8 +131,8 @@ if(isset($_POST['SCHEDULE'])) {
 			echo "alert('Schedule has been saved')";
 			echo "</script>";		
 		}
-# Here ends the block of code if the Schedule button is clicked 
 	}
+# Here ends the block of code if the Schedule button is clicked 
 }
 #===============================================================================
 # All options fall through to here
@@ -152,37 +152,73 @@ $w = getdate();
 if (!$MON) { $MON  = $w['mon'];}
 if (!$DD)  { $DD   = $w['mday'];}
 if (!$YYYY){ $YYYY = $w['year'];}
-
 ?>
 <h1><b>Wake Up Calls</b></h1>
 <hr>
-Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination.<br>
-To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the<br>
-form below.<br>
+This form has three independent sections.  The 1st is used to set up a new wakeup/reminder call.<br>
+The 2nd shows existing schedules.  The 3rd is used to configure the system.<br>
+<hr>
+Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination - internal or external.<br>
+To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.<br>
 
 <h2><b>Schedule a New Call:</b></h2>
 <?php
 echo "<FORM NAME='InsertFORM'  ACTION='' METHOD=POST>Destination: <INPUT TYPE='TEXTBOX' NAME='ExtBox' VALUE='$EXT' SIZE='12' MAXLENGTH='20'>";
-echo "HH:MM <INPUT TYPE='TEXTBOX' NAME='HH' autocomplete='off' VALUE='$HH' SIZE='1' MAXLENGTH='2'>:";
-echo "<INPUT TYPE='TEXTBOX' NAME='MM' autocomplete='off' VALUE='$MM' SIZE='1' MAXLENGTH='2'>";
-echo "DD / MM / YYYY <INPUT TYPE='TEXTBOX' NAME='DD' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$DD'>/";
-echo "<INPUT TYPE='TEXTBOX' NAME='MON' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$MON'>/";
-echo "<INPUT TYPE='TEXTBOX' NAME='YYYY' autocomplete='off' SIZE='1' MAXLENGTH='4' VALUE='$YYYY'>";
-echo 'Frequency: <SELECT id="repeat_cycle" name="thisItem" tabindex="<?php echo ++$tabindex;?>">
-	<OPTION VALUE="NONE">Once</option>
-	<OPTION VALUE="day" <?php if ($thisItem=="day") echo _("selected=\"selected\""); ?>Daily</OPTION>
-	<OPTION VALUE="week" <?php if ($thisItem=="week") echo _("selected=\"selected\""); ?>Weekly</OPTION>
-	<OPTION VALUE="month" <?php if ($thisItem=="month") echo _("selected=\"selected\""); ?>Monthly</OPTION>
-	</SELECT>';
-echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
+echo "HH:MM <INPUT TYPE='TEXTBOX' NAME='HH' autocomplete='off' VALUE='$HH' SIZE='1' MAXLENGTH='2' style='text-align: center'>:";
+echo "<INPUT TYPE='TEXTBOX' NAME='MM' autocomplete='off' VALUE='$MM' SIZE='1' MAXLENGTH='2' style='text-align: center'>";
+echo "DD / MM / YYYY <INPUT TYPE='TEXTBOX' NAME='DD' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$DD' style='text-align: center'>/";
+echo "<INPUT TYPE='TEXTBOX' NAME='MON' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$MON' style='text-align: center'>/";
+echo "<INPUT TYPE='TEXTBOX' NAME='YYYY' autocomplete='off' SIZE='1' MAXLENGTH='4' VALUE='$YYYY' style='text-align: center'>";
+echo "Frequency: <SELECT id='repeat_cycle' name='thisItem' tabindex='<?php echo ++$tabindex;?>'>
+	<OPTION VALUE='NONE'>Once</option>
+	<OPTION VALUE='day' <?php if ($thisItem=='day') echo _(\"selected='selected'\"); ?>Daily</OPTION>
+	<OPTION VALUE='week' <?php if ($thisItem=='week') echo _(\"selected='selected'\"); ?>Weekly</OPTION>
+	<OPTION VALUE='month' <?php if ($thisItem=='month') echo _(\"selected='selected'\"); ?>Monthly</OPTION>
+	</SELECT>";
+echo "<INPUT TYPE='SUBMIT' NAME='SCHEDULE' VALUE='SCHEDULE'>\n";
 echo "</FORM>\n";
 #-----------------------------------------------------------------------------
 echo "<hr>";
-echo "<h2><b>Scheduled Calls:</b></h2>\n";
+###?? echo "<h2><b>Existing Schedules</b></h2>";
+# Page is static, so add button to refresh table
+echo "<FORM NAME='refresh' ACTION='' METHOD=POST><INPUT NAME='RefreshTable' TYPE='SUBMIT' VALUE='Refresh Tables'></form>\n";
+#-----------------------------------------------------------------------------
+echo "<h3><b>Schedules Accessible from Telephones:</b></h3>";
+echo 'The following entries were set up by phone or are due within the next 24 hours or so.';
+# List of existing .call files
+echo "<TABLE cellSpacing=1 cellPadding=1 width=400 border=1 >\n" ;
+echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
+# Check spool directory and create a table listing all .call files created by this module
+$count = 0;
+# Include only file names starting with "WUC" and ending in ".call"
+$files = glob("/var/spool/asterisk/outgoing/wuc*.call");
+foreach($files as $file) {
+# Create a date string to display from the file timestamp = scheduled date for alarm
+	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file));
+# Create a time string to display from the file timestamp = scheduled time for alarm
+	$filetime = date(H,filemtime($file)).":".date(i,filemtime($file));
+# Break up file name into parts and use relevant parts
+	$filenamebits = explode(".", $file); 
+	If ($filenamebits <> '') {
+		$wucext = $filenamebits[3];  # [3] = Extension number 
+ 		echo "<TR><TD><FORM NAME='UpdateFORM' ACTION='' METHOD=POST><FONT face=verdana,sans-serif>"
+			.$filetime
+			."</TD><TD>".$filedate
+			."</TD><TD>".$wucext
+			."</TD><TD><input type='hidden' id='filename' name='filename' value='$file'>
+			<INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\">
+			</TD></FORM>\n";
+	}
+	$count++;
+}
+echo "</TABLE>\n";
+if (!$count){print "There are no existing call files";}
 #-----------------------------------------------------------------------------
 # List schedule records in SQL db
-# Page is static, so add button to refresh table
-echo "<FORM NAME=\"refresh2\" ACTION=\"\" METHOD=POST><INPUT NAME=\"RefreshTable2\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\"></form>\n";
+##?? # Page is static, so add button to refresh table
+##?? echo "<FORM NAME='refresh2' ACTION='' METHOD=POST><INPUT NAME='RefreshTable2' TYPE='SUBMIT' VALUE='Refresh Tables'></form>\n";
+echo '<br>';
+echo 'The following entries were set up via the screen and are stored in the MySQL database';
 # Table header
 echo "<TABLE cellSpacing=1 cellPadding=1 width=500 border=1 >\n" ;
 echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Repeating?</TD><TD>Delete</TD></TR>\n" ;
@@ -206,61 +242,31 @@ if (isset($results)) {
 		elseif ($rep == "D") {$repcode="Daily";}
 		elseif ($rep == "W") {$repcode="Weekly";}
 		elseif ($rep == "M") {$repcode="Monthly";}
-		echo "<TR><TD><FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST><FONT face=verdana,sans-serif>"
+		echo "<TR><TD><FORM NAME='UpdateFORM' ACTION='' METHOD=POST><FONT face=verdana,sans-serif>"
 		.$filetime
 		."</TD><TD>".$filedate
 		."</TD><TD>".$schedule['ext']
 		."</TD><TD>".$repcode
-		."</TD><TD><input type=\"hidden\" id=\"pkey\" name=\"pkey\" value=\"$idschedule\">
-		<INPUT NAME=\"DELETE2\" TYPE=\"SUBMIT\" VALUE=\"Delete\">
-		<INPUT NAME=\"G2\" TYPE=\"SUBMIT\" VALUE=\"Generate\">
+		."</TD><TD><input type='hidden' id='pkey' name='pkey' value='$idschedule'>
+		<INPUT NAME='DELETE2' TYPE='SUBMIT' VALUE='Delete'>
+		<INPUT NAME='G2' TYPE='SUBMIT' VALUE='Generate'>
 		</TD></FORM>\n";
 		$count2++;
 	}
 }
 echo "</TABLE>\n";
+echo 'Use a Generate button above to generate the Call file and move the schedule on one cycle.<br>';
+echo 'You can then delete the generated file and thereby skip one cycle.';
 if (!$count2){print "There are no scheduled calls";}		
-#-----------------------------------------------------------------------------
-# List of existing .call files
-# Page is static, so add button to refresh table
-echo "<FORM NAME=\"refresh\" ACTION=\"\" METHOD=POST><INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\"></form>\n";
-echo "<TABLE cellSpacing=1 cellPadding=1 width=400 border=1 >\n" ;
-echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
-
-# Check spool directory and create a table listing all .call files created by this module
-$count = 0;
-# Include only file names starting with "WUC" and ending in ".call"
-$files = glob("/var/spool/asterisk/outgoing/wuc*.call");
-foreach($files as $file) {
-# Create a date string to display from the file timestamp = scheduled date for alarm
-	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file));
-# Create a time string to display from the file timestamp = scheduled time for alarm
-	$filetime = date(H,filemtime($file)).":".date(i,filemtime($file));
-# Break up file name into parts and use relevant parts
-	$filenamebits = explode(".", $file); 
-	If ($filenamebits <> '') {
-		$wucext = $filenamebits[3];  # [3] = Extension number 
- 		echo "<TR><TD><FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST><FONT face=verdana,sans-serif>"
-			.$filetime
-			."</TD><TD>".$filedate
-			."</TD><TD>".$wucext
-			."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\">
-			<INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\">
-			</TD></FORM>\n";
-	}
-	$count++;
-}
-echo "</TABLE>\n";
-if (!$count){print "There are no existing call files";}
 #-----------------------------------------------------------------------------
 ?>
 <br>
 <hr>
 <form NAME="SAVECONFIG" id="SAVECONFIG" method="POST" action="">
 <h2><b>Module Configuration:</b></h2>
-By default, Wake Up calls are only made back to the Caller ID of the user which requests them.<br>
-When the Operator Mode is enabled, certain extensions are identified to be able to request a <br>
-Wake Up call for any valid internal or external destination.<br><br>
+<small>A Wake-Up-Call set up by phone, will normally call back the Caller ID of the user who requests it.<br>
+When the Operator Mode is enabled, the specified extensions are enabled to request a Wake-Up-Call <br>
+for any valid internal or external destination.<br></small>
 <table border="0" width="430" id="table1">
   <tr>
     <td width="153"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
@@ -279,7 +285,7 @@ echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($cfg_data[oper
     <td width="180"><a href="javascript: return false;" class="info">Max Dest. Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
     <td width="129">&nbsp;
 <?php
-echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$cfg_data[extensionlength]}\" style=\"text-align: right\">Digits\n ";
+echo "<input type=\"text\" name=\"extensionlength\" size=\"1\" value=\"{$cfg_data[extensionlength]}\" style=\"text-align: center\">Digits\n ";
 ?>
 </td>
     <td> &nbsp;</td>
@@ -294,7 +300,7 @@ echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$cf
   </tr>
   <tr>
     <td width="153">&nbsp;</td>
-    <td colspan="2">(Use a comma separated list)</td>
+    <td colspan="2"><small>(Use a comma separated list)<br><br></small></td>
   </tr>
 </table>
 
@@ -303,7 +309,7 @@ echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$cf
     <td width="155"><a href="javascript: return false;" class="info">Ring Time:<span>The number of seconds for the phone to ring. Consider setting lower than the voicemail threshold or the wakeup call can end up going to voicemail.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$cfg_data[waittime]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"waittime\" size=\"2\" value=\"{$cfg_data[waittime]}\" style=\"text-align: center\">\n";
 ?> Seconds
     </td>
   </tr>
@@ -311,7 +317,7 @@ echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$cfg_data[wait
     <td width="155"><a href="javascript: return false;" class="info">Retry Time:<span>The number of seconds to wait between retrys.  A 'retry' happens if the wakeup call is not answered.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$cfg_data[retrytime]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"retrytime\" size=\"2\" value=\"{$cfg_data[retrytime]}\" style=\"text-align: center\">\n";
 ?> Seconds
     </td>
   </tr>
@@ -319,7 +325,7 @@ echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$cfg_data[ret
     <td width="155"><a href="javascript: return false;" class="info">Max Retries:<span>The maximum number of times the system should attempt to deliver the wakeup call when there is no answer.  Zero retries means only one call will be placed.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$cfg_data[maxretries]}\" style=\"text-align: right\">\n";
+echo "<input type='text' name='maxretries' size='2' value='{$cfg_data[maxretries]}' style='text-align: center'>\n";
 ?> Tries
     </td>
   </tr>
@@ -354,11 +360,12 @@ echo "<input type=\"text\" name=\"data\" size=\"37\" value=\"{$cfg_data[data]}\"
 </table>
 <small>**Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
 <br><br><input type="submit" value="Submit" name="B1">
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- REMOVED
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="submit" value="Generate Call Files" name="G1">
 <input type="submit" value="Run Install.php" name="G3">
 <input type="submit" value="Run aatest.php" name="G4">
+-->
 </FORM>
 
 <hr>

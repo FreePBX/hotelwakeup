@@ -148,8 +148,17 @@ function hotelwakeup_reportsqlerror($sql,$res,$mode,$fromfunction) {
 # even if not due
 function hotelwakeup_genalldue($limit) {
 	global $db;
-	# Due time is now + 1.5 minutes
-	$timebefore = time() + 90;
+	
+# Set debug to 1 and then use fputy for debug logging.
+$parm_debug_on=1;
+$parm_error_log =  '/var/log/asterisk/wakeup.log';
+if ($parm_debug_on)  {
+	$stdlog = fopen( $parm_error_log, 'a' );  # Add mode
+	fputy( $stdlog, "hotelwakeup_genalldue called\n" );
+	}	
+	
+	# Due time is now + 24 hours
+	$timebefore = time() + 24*60*60;
 	if ($limit=="") {
 		$sql = "SELECT * FROM `hotelwakeup_calls` WHERE `time` < $timebefore ORDER BY `time`";
 	} else {
@@ -271,6 +280,8 @@ function hotelwakeup_saveschedule($idcfg, $ext,$timewakeup,$repcode) {
 	$check = $db->query($sql);
 #	sql($sql); 	#?? Alternative method not used as no error checking
 	if (DB::IsError($check)) {$errmsg=$check."|".$sql;}
+# Call the call file generator in case new alarm is due before the next cron job
+	if ($errmsg == "") hotelwakeup_genalldue("");
 	return $errmsg;
 }
 #============================================================================
@@ -614,4 +625,13 @@ function wuc_match_pattern($pattern, $number) {
 		$new_number = false;
 	}
 	return $new_number;
+}
+#====================================================================================
+function fputy ($stdlog,$msg)
+# Output $msg with date/time prefix
+{
+#	$w = getdate();
+#	$tmp=  $w['hours'].':'.$w['minutes'].':'.$w['seconds'].'  '.$w['mday'].' '.$w['month'].' '.$w['year'].': ';
+	$tmp=date('H:i:s  j M Y  ');
+	fputs( $stdlog, $tmp.$msg);
 }

@@ -23,6 +23,8 @@ echo("Installing Hotel Style Wake Up Calls<br>");
 if($amp_conf["AMPDBENGINE"] != "mysql")  {
 	echo "This module has not been tested on systems not running MySql.<br>File reports at http://pbxossa.org<br>";
 	}
+	
+# Set debug to 1 and then use fputx for debug logging.
 $parm_debug_on=0;
 $parm_error_log =  '/var/log/asterisk/wakeup.log';
 if ($parm_debug_on)  {
@@ -121,11 +123,18 @@ create_table($tablename2, $cols2);
 # The following section is specific to this application
 ### Change this section only ###################################################
 
+// Register FeatureCode - Hotel Wakeup;
+$fcc = new featurecode('hotelwakeup', 'hotelwakeup');
+$fcc->setDescription('Wake Up Calls');
+$fcc->setDefault('*68');
+$fcc->update();
+unset($fcc);
+#------------------------------------------------------------------------------
 /* Scheduled calls are stored in the database. A script is run periodically to 
  * generate .call files, this part creates the cron job
  */
-
-$wuc_cron_string = "* * * * * ".$amp_conf['ASTAGIDIR']."/hotelwakeup_genalldue.php";
+# Set to run every hour at 1 minute before the hour
+$wuc_cron_string = "59 * * * * ".$amp_conf['ASTAGIDIR']."/hotelwakeup_genalldue.php";
 $run = wuc_add_cron($wuc_cron_string);
 
 
