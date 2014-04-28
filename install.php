@@ -128,6 +128,15 @@ create_table($tablename2, $cols2);
 $wuc_cron_string = "* * * * * ".$amp_conf['ASTAGIDIR']."/hotelwakeup_genalldue.php";
 $run = wuc_add_cron($wuc_cron_string);
 
+
+// Register FeatureCode - Hotel Wakeup;
+$fcc = new featurecode('hotelwakeup', 'hotelwakeup');
+$fcc->setDescription('Wake Up Calls');
+$fcc->setDefault('*68');
+$fcc->update();
+unset($fcc);
+
+
 # The following is written as a function in case it is needed elsewhere
 function wuc_add_cron($cron) {
 	// WARNING:	Never change the following string, as comment is stored with cron job so we can 
