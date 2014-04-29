@@ -30,9 +30,9 @@ chown -R asterisk:asterisk .
 ```
 amportal a ma uninstall hotelwakeup
 amportal a ma delete hotelwakeup
+amportal a ma download hotelwakeup
+amportal a ma install hotelwakeup
 ```
-In FreePBX, Module Admin, click "Check Online" and install Wakeup Calls from the FreePBX servers.
-
 
 <h3>License</h3>
 This program is free software; you can redistribute it and/or
