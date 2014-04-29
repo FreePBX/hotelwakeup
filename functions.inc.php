@@ -149,15 +149,15 @@ function hotelwakeup_genalldue($limit) {
 	global $db;
 	
 # Set debug to 1 and then use fputy for debug logging.
-$parm_debug_on=1;
+$parm_debug_on=0;
 $parm_error_log =  '/var/log/asterisk/wakeup.log';
 if ($parm_debug_on)  {
 	$stdlog = fopen( $parm_error_log, 'a' );  # Add mode
 	fputy( $stdlog, "hotelwakeup_genalldue called\n" );
 	}	
-	
-	# Due time is now + 24 hours
-	$timebefore = time() + 24*60*60;
+	# Due time is now + 25 hours (assuming cron job repeats each hour) to ensure that file is
+	# generated at least 24 hours ahead.
+	$timebefore = time() + 25*60*60;
 	if ($limit=="") {
 		$sql = "SELECT * FROM `hotelwakeup_calls` WHERE `time` < $timebefore ORDER BY `time`";
 	} else {
