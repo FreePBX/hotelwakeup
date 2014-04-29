@@ -39,7 +39,6 @@ function hotelwakeup_hotelwakeup($c) {
 	$ext->addInclude('from-internal-additional', $id); // Add the include from from-internal
 	$ext->add($id, $c, '', new ext_Macro('user-callerid'));
 	$ext->add($id, $c, '', new ext_answer(''));
-	$ext->add($id, $c, '', new ext_wait(1));
 	$ext->add($id, $c, '', new ext_AGI('wakeupphp'));
 	$ext->add($id, $c, '', new ext_Hangup);
 	}
