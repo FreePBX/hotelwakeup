@@ -84,12 +84,12 @@
 
 	// Check if we have an outstanding Wakeup Call file
 
-	if ( $parm_chan_ext ) $dir_check = "$chan.$sta.call";
-	else $dir_check = "ext.$cidn.call";
+	if ( $parm_chan_ext ) 	$dir_check = "$chan.$sta.call";
+	else 					$dir_check = "ext.$cidn.call";
 
 	if ($parm_debug_on) fputx( $stdlog, "--- End of Asterisk channel data ---\n" );
 	if ($parm_debug_on) fputx( $stdlog, "parm_operator_mode=$parm_operator_mode\n" );
-	
+# If Operator Mode then allow entry for a different extension	
 	if ( $parm_operator_mode )
 	{
 		if ( $parm_chan_ext )
@@ -106,7 +106,6 @@
 		}
 		else
 		{
-
 			$ext_ok = 0;
 //			foreach( $parm_operator_extensions AS $oe )
 //				if ( $oe == $cidn )
@@ -123,27 +122,16 @@
 			{
 				while ( !$rc['result'] && !$pound )
 				{
-
 					$rc = execute_agi( "STREAM FILE please-enter-the \"0123456789\" ");
-
-					if ( !$rc['result'] )
-						$rc = execute_agi( "STREAM FILE number \"0123456789\" ");
-
-					if ( !$rc['result'] )
-						$rc = execute_agi( "STREAM FILE for \"0123456789\" ");
-
-					if ( !$rc['result'] )
-						$rc = execute_agi( "STREAM FILE your \"0123456789\" ");
-
-					if ( !$rc['result'] )
-						$rc = execute_agi( "STREAM FILE wakeup-call \"0123456789\" ");
-
+					if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE number \"0123456789\" ");
+					if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE for \"0123456789\" ");
+					if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE your \"0123456789\" ");
+					if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE wakeup-call \"0123456789\" ");
 					// If we get here, they haven't pressed anything yet.
 					if ( !$rc['result'] )
 					{
-						$rc = execute_agi( "GET DATA then-press-pound 15000 $parm_operator_ext_len");
-
-						if ( isset($rc['timeout']) )
+						$rc = execute_agi( "GET DATA then-press-pound 5000 $parm_operator_ext_len");
+						if ( isset($rc['timeout']) ) 
 							$rc['result'] = '';
 						else if ( $rc['result'] != -1 )
 						{
@@ -153,57 +141,41 @@
 						else if ( strlen( $rc['result'] ) != $parm_operator_ext_len )
 							$rc['result'] = '';
 					}
-
 					if ( $rc['result'] != -1 )
 					{
 						if ($parm_debug_on) fputx( $stdlog, "We have digits: len=" . strlen( $rc['result']) . " val=$rc[result] \r\n\r\n" );
-
 						// This check how many digits, if 2 then they pre-pressed a digit, 
 						if ( strlen( $rc['result'] ) == 2 && !$pound )
 						{
 							$num= $rc['result']-48;
 							while ( strlen($num) < $parm_operator_ext_len && $rc['result'] > 0 && !$pound)
 							{
-								$rc = execute_agi( "WAIT FOR DIGIT 15000");
+								$rc = execute_agi( "WAIT FOR DIGIT 5000");
 								if ($parm_debug_on) fputx( $stdlog, "We have a digit:" . strlen( $rc['result']) . "- $rc[result] \r\n" );
-
-								if ( $rc['result'] >= 48 && $rc['result'] <= 57 )
-									$num .= $rc['result'] - 48;
-								else if ( $rc['result'] == '35' )		// User pressed the # key
-									$pound = 1;
-								else	
-									$rc['result'] = 0;
-
+								if ( $rc['result'] >= 48 && $rc['result'] <= 57 ) 	$num .= $rc['result'] - 48;
+								else if ( $rc['result'] == '35' )					$pound = 1;		// User pressed the # key
+								else												$rc['result'] = 0;
 							}
 							//if (strlen($num) == 4 )
 							$rc['result'] = $num;
 						}
-
-						if ($parm_debug_on)
-							fputx( $stdlog, "Checking Results [$rc[result]] \r\n\r\n" );
-
-
+						if ($parm_debug_on) fputx( $stdlog, "Checking Results [$rc[result]] \r\n\r\n" );
 						if ( strlen( $num ) <= 0 )
 						{
 							$pound = 0;
 							$loop++;
-
-							if ( $loop >= 3 )
+							if ( $loop >= 4 )
 							{
-								$rc = execute_agi( "STREAM FILE goodbye \"\" ");
-								if ( !$rc['result'] )
-									$rc = execute_agi( "HANGUP");
+								$rc = execute_agi( "STREAM FILE sorry-youre-having-problems \"\" ");
+								if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE goodbye \"\" ");
+								if ( !$rc['result'] ) $rc = execute_agi( "HANGUP");
 								exit;
-
 							}
 						}
 						else
 						{
 							$rc = execute_agi( "STREAM FILE you-entered \"\" ");
-
-							if ( !$rc['result'] )
-								$rc = execute_agi( "SAY DIGITS $num \"\" ");
-
+							if ( !$rc['result'] ) $rc = execute_agi( "SAY DIGITS $num \"\" ");
 							$cidn = $num;
 							$dir_check = "ext.$num.call";
 							$pound = 1;
@@ -214,21 +186,14 @@
 			}
 		}
 	}
+# End of Operator Mode
 
-	if ($parm_debug_on)
-		fputx( $stdlog, "Checking Directory [$parm_call_dir] Check=[$dir_check]\n" );
-	
-	// I started to think we could have many outstanding wakup calls, but then
-	// it got very confusing on how to delete just one of them.  I wasn't about
-	// to prompt each and every one.  So I went back to JUST ONE wakeup call
-	// But this will get a list of all of them incase of problems
-
+/******************* removed
 	$outc=0;
 	$dir_handle = opendir( $parm_call_dir );
 	while( $file = readdir($dir_handle ) )
 	{
-		if ($parm_debug_on)
-			fputx( $stdlog, "File=$file\n" );
+		if ($parm_debug_on) fputx( $stdlog, "File=$file\n" );
 		# Get them in order
 		sort($file);
 		// Check if we have an outstanding wakup call
@@ -237,6 +202,20 @@
 		
 	}
 	closedir( $dir_handle );
+******************************************/
+	if ($parm_debug_on) fputx( $stdlog, "Checking Directory [$parm_call_dir] Check=[$dir_check]\n" );
+# List call files in date/time order into array
+	$files=scandir($parm_call_dir);
+# Extract WUC files only
+	$i = 0;
+	$outc=0;
+	while ( $files[$i] )
+	{
+		if ($parm_debug_on) fputx( $stdlog, "File=$files[$i]\n" );
+		if (strstr( $files[$i], $dir_check ) ) $out[$outc++] = $files[$i];
+		if ($parm_debug_on) fputx( $stdlog, "i=$i outc=$outc out=$out[$outc]\n" );
+		$i=$i+1;
+	}
 #==================================================================	
 	// They have an outstanding wakup call
 	# List each call and give option to keep or delete
@@ -260,8 +239,8 @@
 	}
 #================================================================================		
 # Schedule a NEW wakeup call
-
 	$rc['result'] = 0;
+	$loop=0;
 	while ( !$rc['result'] )
 	{
 		$rc = execute_agi( "STREAM FILE please-enter-the \"0123456789\" ");
@@ -271,10 +250,11 @@
 		// If we get here, they haven't pressed anything yet.
 		if ( !$rc['result'] )
 		{
-			$rc = execute_agi( "GET DATA wakeup-call 15000 4");
-			if (isset($rc['timeout'])) $rc['result'] = '';
-			else if ( $rc['result'] != -1  && $parm_short_entry ) $rc['result'] = str_pad( $rc['result'], 4, '0', STR_PAD_LEFT );
-			else if ( strlen( $rc['result'] ) != 4 ) $rc['result'] = '';
+			$rc = execute_agi( "GET DATA wakeup-call 5000 4");
+			if (isset($rc['timeout']))								$rc['result'] = '';
+# If $parm_short_entry is set then allow entry of something like 700# instead of 0700 and code will pad to the left with zeros
+			else if ( $rc['result'] != -1  && $parm_short_entry ) 	$rc['result'] = str_pad( $rc['result'], 4, '0', STR_PAD_LEFT );
+			else if ( strlen( $rc['result'] ) != 4 ) 				$rc['result'] = '';
 		}
 		
 		if ( $rc['result'] != -1 )
@@ -287,48 +267,59 @@
 				$num= $rc['result']-48;
 				while ( strlen($num) < 4 && $rc['result'] > 0 )
 				{
-					$rc = execute_agi( "WAIT FOR DIGIT 15000");
+					$rc = execute_agi( "WAIT FOR DIGIT 5000");
 					if ($parm_debug_on) fputx( $stdlog, "We have a digit:" . strlen( $rc['result']) . "- $rc[result] \r\n" );
-					if ( $rc['result'] >= 48 && $rc['result'] <= 57 )
-						$num .= $rc['result'] - 48;
-					else if ( $rc['result'] == '35' && $parm_short_entry )		// User pressed the # key, maybe 700# for 7:00
-						$num = str_pad($num, 4, '0', STR_PAD_LEFT);
-					else	
-						$rc['result'] = 0;
+					if ( $rc['result'] >= 48 && $rc['result'] <= 57 )		$num .= $rc['result'] - 48;
+					else if ( $rc['result'] == '35' && $parm_short_entry )	$num = str_pad($num, 4, '0', STR_PAD_LEFT);	// User pressed the # key, maybe 700# for 7:00
+					else													$rc['result'] = 0;
 				}
 				if (strlen($num) == 4 ) $rc['result'] = $num;
 			}
-			
 			if ($parm_debug_on) fputx( $stdlog, "Checking Results [$rc[result]] \r\n\r\n" );
-			
 			// They entered 4 digits,  check if its a valid time or they hung up
-			
 			$overTime =  ( $parm_prompt_ampm == 2 ) ? 1259 : 2359;
-			
 			if ( $rc['result'] > $overTime || strlen( $rc['result']) < 4 || substr($rc['result'],2,2) > 59 || $rc['result'] < 0)
 			{
 				$rc['result'] = 0;
+				$loop++;
+				if ( $loop >= 4 )
+				{
+					$rc = execute_agi( "STREAM FILE sorry-youre-having-problems \"\" ");
+					if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE goodbye \"\" ");
+					if ( !$rc['result'] ) $rc = execute_agi( "HANGUP");
+					exit;
+				}
 				$rc = execute_agi( "STREAM FILE please-try-again \"\" ");
 			}
-			
-			if (strlen( $rc['result'] ) == 4 && $rc['result'] == 0 ) $rc['result'] = -2;	// Special 00:00 time
+			if (strlen( $rc['result'] ) == 4 && $rc['result'] == 0 ) $rc['result'] = -2;	// Special 00:00 time entered
 		}	
 	}
-	
 	if ( $rc['result'] == -2 )  $rc['result'] = '0000';	
 	else if ( $rc['result'] == -1 )  exit;	// The user hung up
 		
 	// Save the time entered
 	$wtime = $rc['result'];
-	
-	// If time is less than 1300 it could be AM or PM, so prompt
-	// them for am pm
-	if ( $wtime != -1 && $wtime < 1300 && $parm_prompt_ampm != 1)
+	if ($parm_debug_on) fputx( $stdlog, "wtime=$wtime\n" );
+	// If time is less than 1300 it could be AM or PM, so prompt for am pm
+	# But do not ask if 0000 entered
+/**	if ( $wtime != -1 && $wtime < 1300 && $parm_prompt_ampm != 1) # ?? where does -1 come from? Removed **/
+	if ( $wtime != 0 && $wtime < 1300 && $parm_prompt_ampm != 1)	
 	{
 		$rc['result'] = 0;
+		$i=0;
 		while ( !$rc['result'] )
 		{
-			if ( !$rc[result] ) $rc = execute_agi( "GET DATA 1-for-am-2-for-pm 15000 1");
+			# Stop looping
+			$i=$i+1;
+			if ($i>4) 
+			{
+				$rc = execute_agi( "STREAM FILE sorry-youre-having-problems \"\" ");
+				if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE goodbye \"\" ");
+				if ( !$rc['result'] ) $rc = execute_agi( "HANGUP");
+				exit;
+			}
+			# Ask again
+			$rc = execute_agi( "GET DATA 1-for-am-2-for-pm 5000 1");
 		}	
 		
 		switch( $rc['result'] )
@@ -413,19 +404,17 @@ function say_wakeuph( $wtime )	# hhmm
 	GLOBAL	$stdin, $stdout, $stdlog, $parm_debug_on;
 	
 	$pm = 0;
-	
+	# If time >= 1200 then reduce by 1200 and set pm flag
 	if ($wtime > 1159 )
 	{
 		$wtime -=1200;
 		$pm = 1;
 	}
-	
-	if ($wtime <= 59 )
+	# If time <= 0059 then add 1200 except of equal to zero
+	if ($wtime <= 59 && $wtime <> 0)
 		$wtime += 1200;
 	
-	if ( strlen( $wtime ) == 3 )
-		$wtime = '0' . $wtime;
-	
+	if ( strlen( $wtime ) == 3 ) $wtime = '0' . $wtime;  # Add leading zero
 	
 	$h = substr( $wtime, 0, 2 );
 	$h1 = substr( $wtime, 0, 1 );
@@ -435,17 +424,14 @@ function say_wakeuph( $wtime )	# hhmm
 	$m2 = substr( $wtime, 3, 1);
 	
 	
-	if ($parm_debug_on)
-		fputx( $stdlog, "Wakeup time is set to $wtime\n" );
+	if ($parm_debug_on) fputx( $stdlog, "Wakeup time is set to $wtime\n" );
 	
 	$rc = execute_agi( "STREAM FILE rqsted-wakeup-for \"\" ");
 	
 	if ( !$rc['result'] )
 	{
-		if ( $h1 == 0 ) 
-			$rc = execute_agi( "SAY NUMBER $h2 \"\"");
-		else
-			$rc = execute_agi( "SAY NUMBER $h \"\"");
+		if ( $h1 == 0 ) $rc = execute_agi( "SAY NUMBER $h2 \"\"");
+		else 			$rc = execute_agi( "SAY NUMBER $h \"\"");
 		
 		if ( !$rc['result'] )
 		{
@@ -497,13 +483,11 @@ function execute_agi( $command )
 	
 	fputs( $stdout, $command . "\n" );
 	fflush( $stdout );
-	if ($parm_debug_on)
-		fputx( $stdlog, $command . "\n" );
+	if ($parm_debug_on) fputx( $stdlog, $command . "\n" );
 	
 	$resp = fgets( $stdin, 4096 );
 	
-	if ($parm_debug_on)
-		fputx( $stdlog, "      READ=$resp" );
+	if ($parm_debug_on) fputx( $stdlog, "      READ=$resp" );
 	
 	if ( preg_match("/^([0-9]{1,3}) (.*)/", $resp, $matches) ) 
 	{
@@ -520,16 +504,12 @@ function execute_agi( $command )
 				$arr['timeout'] = TRUE;
 			}
 			
-			if ($parm_debug_on)
-				fputx( $stdlog, "1=$match[1], 2=$match[2], 3=$match[3], 4=$match[4]\n" );
-			
-			
+			if ($parm_debug_on) fputx( $stdlog, "1=$match[1], 2=$match[2], 3=$match[3], 4=$match[4]\n" );
 			return $arr;
 		} 
 		else 
 		{
-			if ($parm_debug_on)
-				fputx( $stdlog, "Couldn't figure out returned string, Returning code=$matches[1] result=0\n" );	
+			if ($parm_debug_on) fputx( $stdlog, "Couldn't figure out returned string, Returning code=$matches[1] result=0\n" );	
 			$arr['code'] = $matches[1];
 			$arr['result'] = 0;
 			return $arr;
@@ -537,8 +517,7 @@ function execute_agi( $command )
 	} 
 	else 
 	{
-		if ($parm_debug_on)
-			fputx( $stdlog, "Could not process string, Returning -1\n" );
+		if ($parm_debug_on) fputx( $stdlog, "Could not process string, Returning -1\n" );
 		$arr['code'] = -1;
 		$arr['result'] = -1;
 		return $arr;
@@ -561,7 +540,7 @@ function keepordelete($out,$i)
 		if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE press-1 \"12\" ");
 		if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE otherwise \"12\" ");			
 		if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE press-2 \"12\" ");	
-		if ( !$rc['result'] ) $rc = execute_agi( "WAIT FOR DIGIT 15000");	
+		if ( !$rc['result'] ) $rc = execute_agi( "WAIT FOR DIGIT 5000");	
 		if ($parm_debug_on) fputx( $stdlog, "Response received [$rc[result]\n]" );
 
 		# If Option 1 selected = delete file
@@ -583,8 +562,10 @@ function keepordelete($out,$i)
 		$rc['result'] = 0;
 		$errcnt=$errcnt+1;
 		if ($errcnt>2) {
-			$rc = execute_agi( "STREAM FILE goodbye \"\" ");
-			return;
+			$rc = execute_agi( "STREAM FILE sorry-youre-having-problems \"\" ");
+			if ( !$rc['result'] ) $rc = execute_agi( "STREAM FILE goodbye \"\" ");
+			if ( !$rc['result'] ) $rc = execute_agi( "HANGUP");
+			exit;
 		}
 	}
 }
