@@ -47,9 +47,9 @@ $cols1['operator_mode'] = "INT NOT NULL DEFAULT '0'";
 $cols1['operator_extensions'] = "VARCHAR(30)";
 $cols1['application'] = "VARCHAR(30) DEFAULT 'AGI'";
 $cols1['data'] = "VARCHAR(30) DEFAULT 'wakeconfirm.php'";
-$cols1['context'] = "VARCHAR(30)";
-$cols1['extension'] = "VARCHAR(30)";
-$cols1['priority'] = "VARCHAR(30)";
+$cols1['context'] = "VARCHAR(30) DEFAULT 'app-hotelwakeup-wakeconfirm'";
+$cols1['extension'] = "VARCHAR(30) DEFAULT 's'";
+$cols1['priority'] = "VARCHAR(30) DEFAULT '1'";
 # ?? consider adding index on time
 ### End of section #############################################################
 
