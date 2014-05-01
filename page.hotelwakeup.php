@@ -338,30 +338,36 @@ echo "<input type='text' name='maxretries' size='2' value='{$cfg_data[maxretries
 <?php
 echo "<input type=\"text\" name=\"cnam\" size=\"13\" value=\"{$cfg_data[cnam]}\" style=\"text-align: center\"> **";
 
-echo "&lt;<input type=\"text\" name=\"cid\" size=\"5\" value=\"{$cfg_data[cid]}\" style=\"text-align: center\">&gt;<br><b><small>(WARNING: Do not change the fields below unless you know what you are doing)</b><br></small>";
+echo "&lt;<input type=\"text\" name=\"cid\" size=\"5\" value=\"{$cfg_data[cid]}\" style=\"text-align: center\">&gt;<br>";
 
 ?>
     </td>
   </tr>
-  
- <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Context:<span>Application to process the wake up call.  Usually set to: AGI</span></a></td>
-    <td>
-<?php
-echo "<input type=\"text\" name=\"context\" size=\"37\" value=\"{$cfg_data['context']}\" style=\"text-align: left\">";
-?>
-    </td>
-  </tr>  
+    <tr>
+	<td>Wake Up Call destination:
+	</td>
+  <td>
+  <b><small>(WARNING: Do not change the fields below unless you know what you are doing)</b><br></small>
+  </td>
+  </tr>
 <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Extension:<span>PHP file name to call to process the call.  Usually set to: wakeconfirm.php</span></a></td>
+    <td width="155"><a href="javascript: return false;" class="info">Extension:<span>Valid Asterisk extension associated with the context defined above. Leave empty to set default.</span></a></td>
     <td>
 <?php
 echo "<input type=\"text\" name=\"extension\" size=\"37\" value=\"{$cfg_data['extension']}\" style=\"text-align: left\">";
 ?>
     </td>
-  </tr> 
+  </tr>  
+ <tr>
+    <td width="155"><a href="javascript: return false;" class="info">Context:<span>Valid Asterisk context to which the wake up call will be placed. Leave empty to set default.</span></a></td>
+    <td>
+<?php
+echo "<input type=\"text\" name=\"context\" size=\"37\" value=\"{$cfg_data['context']}\" style=\"text-align: left\">";
+?>
+    </td>
+</tr>  
 <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Priority:<span>PHP file name to call to process the call.  Usually set to: wakeconfirm.php</span></a></td>
+    <td width="155"><a href="javascript: return false;" class="info">Priority:<span>Valid Asterisk priority associated with the context and extension defined above.Leave empty to set default.</span></a></td>
     <td>
 <?php
 echo "<input type=\"text\" name=\"priority\" size=\"37\" value=\"{$cfg_data['priority']}\" style=\"text-align: left\">";
@@ -371,7 +377,6 @@ echo "<input type=\"text\" name=\"priority\" size=\"37\" value=\"{$cfg_data['pri
 </table>
 
 
-<small>**Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
 <br><br><input type="submit" value="Submit" name="B1">
 <!-- REMOVED
 nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

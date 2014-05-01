@@ -68,8 +68,11 @@ function hotelwakeup_saveconfig($pkey) {
 //	$application = $db->escapeSimple($_POST['application']);
 //	$data = $db->escapeSimple($_POST['data']);
 	$context = $db->escapeSimple($_POST['context']);
+	 if ($context == "") $context = "app-hotelwakeup-wakeconfirm";
 	$extension = $db->escapeSimple($_POST['extension']);
+	 if ($extension == "") $extension = "s";
 	$priority = $db->escapeSimple($_POST['priority']);
+	 if ($priority == "") $priority = "1";
 	
 	# Make SQL thing
 	$sql = "UPDATE `hotelwakeup` SET";
