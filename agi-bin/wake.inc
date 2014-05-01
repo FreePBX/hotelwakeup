@@ -21,7 +21,7 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	// If the application is having problems you can log to this file
 	$parm_error_log =  $amp_conf[ASTLOGDIR].'/wakeup.log';   
 	// Set to 1 to turn on the log file
-	$parm_debug_on = 0;	  //  currently this setting is not set in the module	
+	$parm_debug_on = 1;	  //  currently this setting is not set in the module	
 	// This is where the Temporary WakeUp Call Files will be created
 	// $parm_temp_dir =  '/var/spool/asterisk/tmp';     // old setting
 	$parm_temp_dir =  $amp_conf[ASTSPOOLDIR].'/tmp';

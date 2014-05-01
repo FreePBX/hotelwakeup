@@ -345,22 +345,29 @@ echo "&lt;<input type=\"text\" name=\"cid\" size=\"5\" value=\"{$cfg_data[cid]}\
   </tr>
   
  <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Application Type:<span>Application to process the wake up call.  Usually set to: AGI</span></a></td>
+    <td width="155"><a href="javascript: return false;" class="info">Context:<span>Application to process the wake up call.  Usually set to: AGI</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"application\" size=\"13\" value=\"{$cfg_data[application]}\" style=\"text-align: center\">";
+echo "<input type=\"text\" name=\"context\" size=\"37\" value=\"{$cfg_data['context']}\" style=\"text-align: left\">";
 ?>
     </td>
   </tr>  
 <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Application Data:<span>PHP file name to call to process the call.  Usually set to: wakeconfirm.php</span></a></td>
+    <td width="155"><a href="javascript: return false;" class="info">Extension:<span>PHP file name to call to process the call.  Usually set to: wakeconfirm.php</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"data\" size=\"37\" value=\"{$cfg_data[data]}\" style=\"text-align: left\">";
+echo "<input type=\"text\" name=\"extension\" size=\"37\" value=\"{$cfg_data['extension']}\" style=\"text-align: left\">";
 ?>
     </td>
   </tr> 
-  
+<tr>
+    <td width="155"><a href="javascript: return false;" class="info">Priority:<span>PHP file name to call to process the call.  Usually set to: wakeconfirm.php</span></a></td>
+    <td>
+<?php
+echo "<input type=\"text\" name=\"priority\" size=\"37\" value=\"{$cfg_data['priority']}\" style=\"text-align: left\">";
+?>
+    </td>
+  </tr>   
 </table>
 
 

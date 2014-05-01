@@ -41,6 +41,15 @@ function hotelwakeup_hotelwakeup($c) {
 	$ext->add($id, $c, '', new ext_answer(''));
 	$ext->add($id, $c, '', new ext_AGI('wakeupphp'));
 	$ext->add($id, $c, '', new ext_Hangup);
+	
+	$id = "app-hotelwakeup-wakeconfirm"; // The context to be included
+	$extension = 's';
+
+	$ext->addInclude('from-internal-additional', $id); // Add the include from from-internal
+	$ext->add($id, $extension, '', new ext_Macro('user-callerid'));
+	$ext->add($id, $extension, '', new ext_answer(''));
+	$ext->add($id, $extension, '', new ext_AGI('wakeconfirm.php,${AMPUSER}'));
+	$ext->add($id, $extension, '', new ext_Hangup);
 	}
 #============================================================================
 
@@ -56,9 +65,12 @@ function hotelwakeup_saveconfig($pkey) {
 	$cnam = $db->escapeSimple($_POST['cnam']);
 	$operator_mode = $db->escapeSimple($_POST['operator_mode']);
 	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
-	$application = $db->escapeSimple($_POST['application']);
-	$data = $db->escapeSimple($_POST['data']);
-
+//	$application = $db->escapeSimple($_POST['application']);
+//	$data = $db->escapeSimple($_POST['data']);
+	$context = $db->escapeSimple($_POST['context']);
+	$extension = $db->escapeSimple($_POST['extension']);
+	$priority = $db->escapeSimple($_POST['priority']);
+	
 	# Make SQL thing
 	$sql = "UPDATE `hotelwakeup` SET";
 	$sql .= " `maxretries`='{$maxretries}'";
@@ -69,11 +81,18 @@ function hotelwakeup_saveconfig($pkey) {
 	$sql .= ", `cid`='{$cid}'";
 	$sql .= ", `operator_mode`='{$operator_mode}'";
 	$sql .= ", `operator_extensions`='{$operator_extensions}'";
-	$sql .= ", `application`='{$application}'";
-	$sql .= ", `data`='{$data}'";
+//	$sql .= ", `application`='{$application}'";
+//	$sql .= ", `data`='{$data}'";
+	$sql .= ", `context`='{$context}'";
+	$sql .= ", `extension`='{$extension}'";
+	$sql .= ", `priority`='{$priority}'";
 	$sql .= " WHERE `id-cfg` = '{$pkey}';";
 
-	sql($sql);
+	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	if(DB::IsError($res)) {
+		hotelwakeup_reportsqlerror($sql,$res,"I",'hotelwakeup_listschedule');
+		return null;
+	}
 }
 #============================================================================
 function hotelwakeup_getconfig($id_key="WUC") {
@@ -181,11 +200,12 @@ if ($parm_debug_on)  {
 		}
 		# Create .call file
 		$foo = array(time => $schedule['time'], ext => $schedule['ext'], maxretries => $cfg_data[maxretries],
-			retrytime => $cfg_data[retrytime],
-			waittime => $cfg_data[waittime],
-			callerid => $cfg_data[cnam]." <".$cfg_data[cid].">",
-			application => $cfg_data[application],
-			data => $cfg_data[data],
+			retrytime => $cfg_data['retrytime'],
+			waittime => $cfg_data['waittime'],
+			callerid => $cfg_data['cnam']." <".$cfg_data['cid'].">",
+			context => $cfg_data['context'],
+			extension => $cfg_data['extension'],
+			priority => $cfg_data['priority'],
 		);
 		hotelwakeup_gencallfile($foo);
 		# If the record is for a one-off alarm, it is deleted otherwise it is updated to the next date/time in the cycle
@@ -209,34 +229,46 @@ if ($parm_debug_on)  {
 }
 #============================================================================
 function hotelwakeup_gencallfile($foo) {
-// This function will generate the wakeup call file based on the array provided
-# It is called both from the GUI interface and 
-# from agi files wakeupphp and wakeconfirm.php
-/**** array format ******
-array(
-	time  => timestamp value,
-	ext => phone number,
-	maxretries => int value seconds,
-	retrytime => int value seconds,
-	waittime => int value seconds,
-	callerid => in 'name <number>' format,
-	application => value,
-	data => value,
-	tempdir => path to temp directory including trailing slash
-	outdir => path to outgoing directory including trailing slash
-	filename => filename to use for call file
-)
-**** array format ******/
+	// This function will generate the wakeup call file based on the array provided
+	# It is called both from the GUI interface and 
+	# from agi files wakeupphp and wakeconfirm.php
+	/**** array format ******
+	array(
+		time  => timestamp value,
+		ext => phone number,
+		maxretries => int value seconds,
+		retrytime => int value seconds,
+		waittime => int value seconds,
+		callerid => in 'name <number>' format,
+		context => valid context to direct call
+		extension => valid extension for context
+		priority => Asterisk priority for context, usually 1
+		application => value,
+		data => value,
+		tempdir => path to temp directory including trailing slash
+		outdir => path to outgoing directory including trailing slash
+		filename => filename to use for call file
+	)
+	**** array format ******/
 
+	global $amp_conf;
+	
 	if ($foo['tempdir'] == "") {
-		$foo['tempdir'] = "/var/spool/asterisk/tmp/";
+		$foo['tempdir'] = $amp_conf['ASTSPOOLDIR']."/tmp/";
 	}
 	if ($foo['outdir'] == "") {
-		$foo['outdir'] = "/var/spool/asterisk/outgoing/";
+		$foo['outdir'] = $amp_conf['ASTSPOOLDIR']."/outgoing/";
 	}
 	if ($foo['filename'] == "") {
 		$foo['filename'] = "wuc.".$foo['time'].".ext.".$foo['ext'].".call";
 	}
+	if ($foo['context'] == "") {
+		$foo['context'] = "from-internal";
+	}
+	if ($foo['priority'] == "") {
+		$foo['priority'] = 1;
+	}
+	
 
 	$tempfile = $foo['tempdir'].$foo['filename'];
 	$outfile = $foo['outdir'].$foo['filename'];
@@ -254,8 +286,14 @@ array(
 	fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
 	fputs( $wuc, "waittime: ".$foo['waittime']."\n");
 	fputs( $wuc, "callerid: ".$foo['callerid']."\n");
-	fputs( $wuc, "application: ".$foo['application']."\n");
-	fputs( $wuc, "data: ".$foo['data']."\n");
+	fputs( $wuc, "context: ".$foo['context']."\n");
+	fputs( $wuc, "extension: ".$foo['extension']."\n");
+	fputs( $wuc, "priority: ".$foo['priority']."\n");
+	
+	
+	
+//	fputs( $wuc, "application: ".$foo['application']."\n");
+//	fputs( $wuc, "data: ".$foo['data']."\n");
 	fclose( $wuc );
 
 	// set time of temp file and move to outgoing
