@@ -369,6 +369,9 @@
 		callerid => $parm_wakeupcallerid,
 		application => $parm_application,
 		data => $parm_data,
+		extension => $date['extension'],
+		context => $date['context'],
+		priority => $date['priority'],
 	);
 
 	hotelwakeup_gencallfile($foo);
