@@ -25,7 +25,6 @@
 		fputs( $stdlog, "---Start---\n" );
 	}
 
-
 	// ASTERISK * Sends in a bunch of variables, This accepts them and puts them in an array
 	// http://www.voip-info.org/tiki-index.php?page=Asterisk%20AGI%20php
 	while ( !feof($stdin) ) 
@@ -36,33 +35,30 @@
 
 		// Strip off any new-line characters
 		$temp = str_replace( "\n", "", $temp );
-
+		# Split variable name from its value
 		$s = explode( ":", $temp );
-		$agivar[$s[0]] = trim( $s[1] );
-		if ( ( $temp == "") || ($temp == "\n") )
-		{
-			break;
-		}
+		# Put it in associative array
+		$agivar[$s[0]] = trim($s[1]);
+		if ( ( $temp == "") || ($temp == "\n") ) break;
 	} 
 
 	// First check to see if the extension number was passed to the AGI by argument number 1
 	// if not, attempt to determine extension from channel variables
-	if ($parm_debug_on) fputs( $stdlog, "agivar[agi_arg_1]: ".$agivar['agi_arg_1']."\n\n" );
 	if ($agivar['agi_arg_1']) $cidn = $agivar['agi_arg_1'];
 	else {
 		// There are two ways to contact a phone, by its channel or by its local 
 		// extension number.  This next session will extract both sides
 		
 		// split the Channel  SIP/11-3ef4  or Zap/4-1 into is components
-		$channel = $agivar[agi_channel];
+		$channel = $agivar['agi_channel'];
 		if ($parm_debug_on) fputs( $stdlog, "channel: ".$channel."\n\n" );
 		if (preg_match('.^([a-zA-Z]+)/([0-9]+)([0-9a-zA-Z-]*).', $channel, $match) )
 		{
 			$sta = trim($match[2]);
-			$chan = trim($match[1]);
+			# This is the called number
 			$cidn = $sta;		# LD added
-		if ($parm_debug_on) fputs( $stdlog, "sta: $sta  chan: $chan\n\n" );
-    }
+			$chan = trim($match[1]);
+		}
 /***** removed  LD
 		// Go Split the Caller ID into its components
 		$callerid = $agivar['agi_extension'];
@@ -84,7 +80,7 @@
 ************ end removed ***/
 	}
 	
-	if ($parm_debug_on) fputs( $stdlog, "Caller ID: ".$cidn."\n\n" );
+	if ($parm_debug_on) fputs( $stdlog, "Called number: ".$cidn."\n\n" );
 	
 	//=========================================================================
 	// This is where we interact with the caller.  Answer the phone and so on
@@ -118,7 +114,7 @@
 		if ( !$rc[result] ) $rc = execute_agi( "STREAM FILE minutes \"1234\" ");
 		if ( !$rc[result] ) $rc = execute_agi( "STREAM FILE press-4 \"1234\" ");
 
-		if ( !$rc[result] ) $rc = execute_agi( "WAIT FOR DIGIT 15000");
+		if ( !$rc[result] ) $rc = execute_agi( "WAIT FOR DIGIT 5000");
 
 		if ( $rc[result] != -1 )
 		{
@@ -136,10 +132,10 @@
 		}
 		$lgcount++;   // increment counter so loop will give up eventually
 	}
-# We have a valid response or the loop has expired
+	# We have a valid response or the loop has expired
 	switch( $rc[result] )
 	{
-// Pressed 1  - This is to cancel the wakeup call
+    // Pressed 1  - This is to cancel the wakeup call
 	case '49':	
 		{
         execute_agi( "EXEC background \"wakeup-call-cancelled\" ");
@@ -151,13 +147,13 @@
 				exit;
 		}
 		break;
-// Pressed 2 - Snooze for 5 minutes
+	// Pressed 2 - Snooze for 5 minutes
 	case '50':		
 		{
 			$time_wakeup = time( );
 			$time_wakeup += 300;
 
-			create_wakeup( $time_wakeup );
+			create_wakeup($time_wakeup);
 
 			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
 			execute_agi( "EXEC background \"digits/5\" ");
@@ -166,13 +162,13 @@
 			execute_agi( "EXEC background \"now\" ");
 		}
 		break;
-// Pressed 3 - Snooze for 10 minutes
+	// Pressed 3 - Snooze for 10 minutes
 	case '51':		
 		{
 			$time_wakeup = time( );
 			$time_wakeup += 600;
 
-			create_wakeup( $time_wakeup );
+			create_wakeup($time_wakeup);
 
 			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
 			execute_agi( "EXEC background \"digits/10\" ");
@@ -181,13 +177,13 @@
 			execute_agi( "EXEC background \"now\" ");
 		}
 		break;
-// Pressed 4 - Snooze for 15 minutes
+	// Pressed 4 - Snooze for 15 minutes
 	case '52':		
 		{
 			$time_wakeup = time( );
 			$time_wakeup += 900;
 
-			create_wakeup( $time_wakeup );
+			create_wakeup($time_wakeup);
 
 			execute_agi( "EXEC background \"rqsted-wakeup-for\" ");
 			execute_agi( "EXEC background \"digits/15\" ");
@@ -205,8 +201,7 @@ $rc = execute_agi( "STREAM FILE goodbye \"\" ");
 }
 
 //--------------------------------------------------
-// This function will send out the command and get 
-//	the response back
+// This function will send out the command and get the response back
 //--------------------------------------------------
 function execute_agi( $command )
 {
@@ -248,7 +243,7 @@ function execute_agi( $command )
 }
 #----------------------------------------
 #  create a new .call file
-function create_wakeup( $time_wakeup )
+function create_wakeup($time_wakeup)
 {
 	GLOBAL $parm_chan_ext, $parm_temp_dir, $parm_call_dir, $parm_debug_on, $chan, $sta, $cidn, $agivar, $parm_maxretries, $parm_retrytime, $parm_waittime, $parm_wakeupcallerid, $parm_application, $parm_data, $stdin, $stdout, $stdlog;
 
@@ -263,6 +258,10 @@ function create_wakeup( $time_wakeup )
 		callerid => $parm_wakeupcallerid,
 		application => $parm_application,
 		data => $parm_data,
+		# LD added 3 lines
+		context => $agivar['agi_context'],
+		priority => $agivar['agi_priority'],
+		extension => $agivar['agi_extension'],
 		);
 
 	hotelwakeup_gencallfile($foo);  # In function.inc.php
