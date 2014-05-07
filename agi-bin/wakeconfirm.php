@@ -245,7 +245,7 @@ function execute_agi( $command )
 #  create a new .call file
 function create_wakeup($time_wakeup)
 {
-	GLOBAL $parm_chan_ext, $parm_temp_dir, $parm_call_dir, $parm_debug_on, $chan, $sta, $cidn, $agivar, $parm_maxretries, $parm_retrytime, $parm_waittime, $parm_wakeupcallerid, $parm_application, $parm_data, $stdin, $stdout, $stdlog;
+	GLOBAL $parm_chan_ext, $parm_temp_dir, $parm_call_dir, $parm_debug_on, $chan, $sta, $cidn, $agivar, $parm_maxretries, $parm_retrytime, $parm_waittime, $parm_wakeupcallerid, $parm_application, $parm_data, $stdin, $stdout, $stdlog, $date;
 
 #	$w = getdate( $time_wakeup );   # LD Does not seem to be needed
 
