@@ -32,8 +32,7 @@
 	{
 		$temp = fgets( $stdin );
 
-		if ($parm_debug_on)
-			fputs( $stdlog, $temp );
+		if ($parm_debug_on) fputs( $stdlog, $temp );
 
 		// Strip off any new-line characters
 		$temp = str_replace( "\n", "", $temp );
@@ -46,29 +45,28 @@
 		}
 	} 
 
-
-
 	// First check to see if the extension number was passed to the AGI by argument number 1
 	// if not, attempt to determine extension from channel variables
-
-	if ($agivar['agi_arg_1']) {
-		$cidn = $agivar['agi_arg_1'];
-	} 
+	if ($parm_debug_on) fputs( $stdlog, "agivar[agi_arg_1]: ".$agivar['agi_arg_1']."\n\n" );
+	if ($agivar['agi_arg_1']) $cidn = $agivar['agi_arg_1'];
 	else {
 		// There are two ways to contact a phone, by its channel or by its local 
 		// extension number.  This next session will extract both sides
 		
 		// split the Channel  SIP/11-3ef4  or Zap/4-1 into is components
 		$channel = $agivar[agi_channel];
+		if ($parm_debug_on) fputs( $stdlog, "channel: ".$channel."\n\n" );
 		if (preg_match('.^([a-zA-Z]+)/([0-9]+)([0-9a-zA-Z-]*).', $channel, $match) )
 		{
 			$sta = trim($match[2]);
 			$chan = trim($match[1]);
-		}
-
+			$cidn = $sta;		# LD added
+		if ($parm_debug_on) fputs( $stdlog, "sta: $sta  chan: $chan\n\n" );
+    }
+/***** removed  LD
 		// Go Split the Caller ID into its components
 		$callerid = $agivar['agi_extension'];
-
+		if ($parm_debug_on) fputs( $stdlog, "callerid: $callerid\n\n" );
 		// First look for the Extension in <####> 
 		if (preg_match('/<([ 0-9]+)>/', $callerid, $match) )
 		{
@@ -83,10 +81,10 @@
 			else
 				$cidn = -1;		// I'm saying an error no caller id # found
 		}
-    }
+************ end removed ***/
+	}
 	
-	if ($parm_debug_on)
-		fputs( $stdlog, "Caller ID: ".$cidn."\n\n" );
+	if ($parm_debug_on) fputs( $stdlog, "Caller ID: ".$cidn."\n\n" );
 	
 	//=========================================================================
 	// This is where we interact with the caller.  Answer the phone and so on
@@ -96,10 +94,8 @@
 	sleep(1);	// Wait for the channel to get created and RTP packets to be sent
 					// On my system the welcome you would only hear 'elcome'  So I paused for 1 second
  
-	if ( !$rc[result] )
-		$rc = execute_agi( "STREAM FILE hello \"\" ");
-	if ( !$rc[result] )
-		$rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"\" ");
+	if ( !$rc[result] ) $rc = execute_agi( "STREAM FILE hello \"\" ");
+	if ( !$rc[result] ) $rc = execute_agi( "STREAM FILE this-is-yr-wakeup-call \"\" ");
 
 	// initialize a counter so the while loop will eventually expire
 	$lgcount = 0;
