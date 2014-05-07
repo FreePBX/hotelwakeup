@@ -259,9 +259,9 @@ function create_wakeup($time_wakeup)
 		application => $parm_application,
 		data => $parm_data,
 		# LD added 3 lines
-		context => $agivar['agi_context'],
-		priority => $agivar['agi_priority'],
-		extension => $agivar['agi_extension'],
+		extension => $date['extension'],
+		context => $date['context'],
+		priority => $date['priority'],
 		);
 
 	hotelwakeup_gencallfile($foo);  # In function.inc.php
