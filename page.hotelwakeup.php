@@ -26,8 +26,16 @@ $tabindex = 0;
 # Save the Config values if the 'Submit' button (B1) been pressed
 # The design allows for multiple config records from which the user
 # could choose.  
-# Initially, the config key 'WUC' is hard coded.
-if (isset($_POST['B1'])){hotelwakeup_saveconfig("WUC");}
+if (isset($_POST['B1'])){
+	$CFG=$_POST['idcfg'];
+	hotelwakeup_saveconfig($CFG);
+}
+#-----------------------------------------------------------------------------
+# Select different config record
+if (isset($_POST['B2'])){
+	$CFG=$_POST['selconf'];
+	$cfg_data = hotelwakeup_getconfig($CFG);  	#LD
+}
 #-----------------------------------------------------------------------------
 # ?? Temp button/code to force creation of call files that are due
 if (isset($_POST['G1'])){hotelwakeup_genalldue("");}
@@ -70,7 +78,6 @@ if(isset($_POST['SCHEDULE'])) {
 	$MON = $_POST['MON'];
 	$YYYY = $_POST['YYYY'];
 	$REPP = $_POST['thisItem'];
-
 # Validate destination (EXT), date and time format as PHP accepts anything 
 	$baddatetime = false;
 	$msg="";
@@ -115,14 +122,16 @@ if(isset($_POST['SCHEDULE'])) {
 
 # All OK: Here starts code to process the new schedule input data
 # Old code removed and moved to end of file as may be useful later (hotelwakeup_gencallfile)
-
+$CFG=$_POST['idcfg'];
+echo "CFG: $CFG <br>";
+echo "idcfg: ".$_POST['idcfg']."<br>";
 # Convert 'repeat' value to single letter code
 	if ($REPP == "NONE") {$repcode="X";}
 		elseif ($REPP == "day") {$repcode="D";}
 		elseif ($REPP == "week") {$repcode="W";}
 		elseif ($REPP == "month") {$repcode="M";}
 	# Save details in DB and return error message - if any.
-		$errmsg=hotelwakeup_saveschedule("WUC", $EXT,$timewakeup,$repcode);
+		$errmsg=hotelwakeup_saveschedule($_POST['idcfg'], $EXT,$timewakeup,$repcode);
 		if ($errmsg<>"") {
 			$tmp= explode("|", $errmsg); # split into 2 parts (err msg + sql)
 			hotelwakeup_reportsqlerror($tmp[1],$tmp[0],"I",'page.hotelwakeup.php');
@@ -142,8 +151,12 @@ if(isset($_POST['SCHEDULE'])) {
 # Displays a blank form with existing config data
 # together with the list of existing scheduled calls
 
+
+
+
 # Get module config info
-$cfg_data = hotelwakeup_getconfig("WUC");
+if (!$CFG){ $CFG = 'WUC';}					#LD
+$cfg_data = hotelwakeup_getconfig($CFG);  	#LD
 
 # Get various module properties (name, version number, etc)
 $module_local = hotelwakeup_xml2array("modules/hotelwakeup/module.xml");
@@ -157,12 +170,71 @@ if (!$YYYY){ $YYYY = $w['year'];}
 ?>
 <h1><b>Wake Up Calls</b></h1>
 <hr>
+
+
+
+<div class="rnav"><ul>
+<?php
+$wuclist = hotelwakeup_list();
+
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('WUC types').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Add new type').'</a></li>';
+
+foreach ($wuclist as $row) {
+	echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup&amp;extdisplay='.$row['id-cfg'].'" >'.$row['description'].'</a></li>';
+	//echo '<li>test'.$row['description'].'</li>';
+}
+
+?>
+</div></ul>
+
+
+
 This form has three independent sections.  The 1st is used to set up a new wakeup/reminder call.<br>
 The 2nd shows existing schedules.  The 3rd is used to configure the system.<br>
 <hr>
 Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination - internal or external.<br>
-To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.<br>
+To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.<br><br>
 
+<FORM NAME='changecfg'  ACTION='' METHOD=POST>
+<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description'])?></b><br><br>
+		<tr>
+		<td>
+		<a href=# class="info"><?php echo _("Select a different Configuration ID to use and then click the Load button:")?>
+			<span>
+				<?php echo _("Select which configuration you want to work with.")?>
+			</span>
+		</a>
+		</td>
+		<td>
+			<select onChange="selectconfig();" name="selconf" id="selconfid" tabindex="<?php echo ++$tabindex;?>">
+				<option value="$CFG"><?php echo _("(pick Config)")?></option>
+	<?php
+				$results = hotelwakeup_listconfigids();								
+				foreach ($results as $configids) {
+					echo "<option value='$configids'>$configids</option>\n";
+				}
+
+				?>
+			</select>
+		</td>
+	</tr>
+	<INPUT TYPE='SUBMIT' VALUE='Load Selected Configuration' NAME='B2'><br>
+</FORM>
+<SCRIPT>
+//#LD =============================================================================
+function selectconfig() {
+echo "selectconfig";
+	//conf = document.getElementById('selconf').value;
+
+	//if (conf != '') {
+	//	selconf.value = conf;
+	//}
+
+	// reset element
+	//document.getElementById('insdest').value = '';
+}
+</SCRIPT>
 <h2><b>Schedule a New Call:</b></h2>
 <?php
 echo "<FORM NAME='InsertFORM'  ACTION='' METHOD=POST>Destination: <INPUT TYPE='TEXTBOX' NAME='ExtBox' VALUE='$EXT' SIZE='12' MAXLENGTH='20'>";
@@ -273,12 +345,21 @@ if (count($results)) {
 <h2><b>Module Configuration:</b></h2>
 <small>A Wake-Up-Call set up by phone, will normally call back the Caller ID of the user who requests it.<br>
 When the Operator Mode is enabled, the specified extensions are enabled to request a Wake-Up-Call <br>
-for any valid internal or external destination.<br></small>
+for any valid internal or external destination.<br></small><br>
+	<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description']."</b>.  Change details below:")?><br><br>
+    <td width="155"><a href="javascript: return false;" class="info">Description:<span>Description of what this config record is used for.</span></a></td>
+    
+	<td>
+<?php
+echo "<input type='text' name='description' size='70' value='{$cfg_data['description']}' style='text-align: left'>";
+?>
+    </td>
+  </tr> 
+
 
 <table border="0" width="500" id="table1">
-
     <td width="200"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
-    <td width="129">
+    <td width="129">	
 <?php 
 echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($cfg_data[operator_mode]==0)?' checked':'').">";
 ?> 
@@ -371,19 +452,21 @@ echo "<input type=\"text\" name=\"context\" size=\"37\" value=\"{$cfg_data['cont
     <td>
 <?php
 echo "<input type=\"text\" name=\"priority\" size=\"37\" value=\"{$cfg_data['priority']}\" style=\"text-align: left\">";
+echo "<input type='hidden' name='idcfg' value='{$cfg_data['id-cfg']}'>";
 ?>
     </td>
   </tr>   
 </table>
 
-
 <br><br><input type="submit" value="Submit" name="B1">
+
 <!-- REMOVED
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-->
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="submit" value="Generate Call Files" name="G1">
 <input type="submit" value="Run Install.php" name="G3">
 <input type="submit" value="Run aatest.php" name="G4">
--->
+
 </FORM>
 
 <hr>

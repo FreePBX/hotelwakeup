@@ -37,6 +37,7 @@ if ($parm_debug_on)  {
 ### Change this section only ###################################################
 $tablename1 = "hotelwakeup";
 $cols1['id-cfg'] = "VARCHAR(6) NOT NULL PRIMARY KEY";
+$cols1['description'] = "VARCHAR(150)";
 $cols1['maxretries'] = "INT NOT NULL DEFAULT '3'";
 $cols1['waittime'] = "INT NOT NULL DEFAULT '60'";
 $cols1['retrytime'] = "INT NOT NULL DEFAULT '60'";
@@ -88,7 +89,7 @@ else if ($check['0']['COUNT(*)'] == 1) {
 	# If no WUC key then update the existing one with that key
 	if ($check['0']['COUNT(*)'] == 0) {
 	$sql ="UPDATE `$tablename1` SET `id-cfg` = 'WUC'";
-echo "sql: ".$sql."<br>";
+# echo "sql: ".$sql."<br>";
 		$check = $db->query($sql);
 		if (DB::IsError($check)) {
 				echo "cannot update primary key of $tablename1 to 'WUC' ($sql)<br>";
@@ -98,6 +99,14 @@ echo "sql: ".$sql."<br>";
 	}
 } 
 else {echo "Existing settings already exist in $tablename1 - nothing changed<br>";}
+# Set the description for the default record
+$sql ="UPDATE `$tablename1` SET `description` = 'Default Configuration - always used by the phone based call setup' WHERE `id-cfg` = 'WUC'";
+$check = $db->query($sql);
+if (DB::IsError($check)) {
+	echo "cannot update description of 'WUC' record in $tablename1 ($sql)<br>";
+	exit("Failed @ Main-4");	
+} 
+
 ### End of section #############################################################
 
 ### Change this section only ###################################################

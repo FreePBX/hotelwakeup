@@ -1,5 +1,20 @@
 <?php
 
+function hotelwakeup_list() {
+	global $db;
+	$sql = "SELECT * FROM hotelwakeup ORDER BY priority ASC";
+	$results_2d = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	$results_1d = array();
+	foreach ($results_2d[0] as $key => $value) {
+		$results_1d[$key] = $value;
+	}
+	if (isset($results_2d)) {
+		return $results_2d;
+	} else {
+		return null;
+	}
+}
+
 // this function required to make the feature code work
 function hotelwakeup_get_config($engine) {
 	$modulename = 'hotelwakeup';
@@ -54,7 +69,6 @@ function hotelwakeup_hotelwakeup($c) {
 
 function hotelwakeup_saveconfig($pkey) {
 	global $db;
-
 # Extract fields from page
 	$maxretries = $db->escapeSimple($_POST['maxretries']);
 	$waittime = $db->escapeSimple($_POST['waittime']);
@@ -64,6 +78,7 @@ function hotelwakeup_saveconfig($pkey) {
 	$cnam = $db->escapeSimple($_POST['cnam']);
 	$operator_mode = $db->escapeSimple($_POST['operator_mode']);
 	$operator_extensions = $db->escapeSimple($_POST['operator_extensions']);
+	$description = $db->escapeSimple($_POST['description']);		#ld
 //	$application = $db->escapeSimple($_POST['application']);
 //	$data = $db->escapeSimple($_POST['data']);
 	$context = $db->escapeSimple($_POST['context']);
@@ -88,6 +103,7 @@ function hotelwakeup_saveconfig($pkey) {
 	$sql .= ", `context`='{$context}'";
 	$sql .= ", `extension`='{$extension}'";
 	$sql .= ", `priority`='{$priority}'";
+	$sql .= ", `description`='{$description}'";	#LD
 	$sql .= " WHERE `id-cfg` = '{$pkey}';";
 
 	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
@@ -121,6 +137,36 @@ function hotelwakeup_listschedule($idcfg) {
 		return null;
 	}
 	return $res;	
+}
+#============================================================================
+#LD List all config ids
+function hotelwakeup_listconfigids() {
+	global $db;
+# Set debug to 1 and then use fputy for debug logging.
+$parm_debug_on=0;
+$parm_error_log =  '/var/log/asterisk/wakeup.log';
+if ($parm_debug_on)  {
+	$stdlog = fopen( $parm_error_log, 'a' );  # Add mode
+	fputy( $stdlog, "hotelwakeup_listconfigids called\n" );
+	}
+# Get all config records
+$sql = "SELECT `id-cfg` FROM `hotelwakeup`";
+$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+if(DB::IsError($res)) {
+	hotelwakeup_reportsqlerror($sql,$res,"I",'hotelwakeup_listconfigids');
+	return null;
+}
+# Return if nothing is due
+if (!isset($res)) {return null;}
+# Process each returned row
+$i=0;
+$list=array();
+foreach ($res as $cfg) {
+	# Create array of config IDs
+	$list[$i] = $cfg['id-cfg'];
+	$i=$i+1;
+	}
+return $list;
 }
 #============================================================================
 function hotelwakeup_deleterow($tablename,$pkey,$pkeyname,$mode,$OK) {
