@@ -127,6 +127,18 @@ function hotelwakeup_getconfig($id_key="WUC") {
 	return $results_1d;
 }
 #============================================================================
+function hotelwakeup_newconfig($newcode, $newdesc, $tablename, $OK) {
+	global $db;
+	$sql = "INSERT INTO `$tablename` (`id-cfg`, `description`) VALUES('$newcode', '$newdesc');";
+	$res = $db->query($sql);
+	if (DB::IsError($res)) {
+		# Report error
+		hotelwakeup_reportsqlerror($sql,$res,$mode,'hotelwakeup_newconfig');
+		$OK="NO";
+	}
+	else {$OK="YES";}
+}
+#============================================================================
 # List all schedules matching a config id
 function hotelwakeup_listschedule($idcfg) {
 	global $db;
