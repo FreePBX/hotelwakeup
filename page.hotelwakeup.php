@@ -46,13 +46,41 @@ if (isset($_POST['B3'])){
 	hotelwakeup_newconfig($ncode, $ndesc, "hotelwakeup", &$OK);
 	if ($OK=="YES") {
 		echo "<script type='text/javascript'>\n";
-		echo 'alert("OK: \n\New Config Created OK")';
+		echo 'alert("OK: \n\New Config '.$CFG.' Created OK")';
 		echo "</script>";
 	}
 	else {
 		echo "<script type='text/javascript'>\n";
-		echo 'alert("ERROR: \n\nNew Config failed to be created")';
+		echo 'alert("ERROR: \n\nNew Config '.$CFG.' failed to be created")';
 		echo "</script>";
+	}
+}
+#-----------------------------------------------------------------------------
+# Delete current config record
+if (isset($_POST['B4'])){
+	$CFG=$_POST['idcfg5'];			# Current active config
+	# Cannot delete default config
+	if ($CFG=="WUC") {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("ERROR: \n\nDefault Configuration ID ['.$CFG.'] cannot be deleted")';
+		echo "</script>";
+	}
+	else {
+		# Check if any schedule is using the config ID
+		$count = hotelwakeup_countschedules($CFG);
+		$cnt = $count[0]['cnt'];
+		if ($cnt>0) {
+			echo "<script type='text/javascript'>\n";
+			echo 'alert("ERROR: \n\nCannot delete Configuration '.$CFG.' as it is linked to '.$cnt.' existing scheduled alarm(s)")';
+			echo "</script>";
+		}
+		else {
+			hotelwakeup_deleteconfig($CFG);
+			echo "<script type='text/javascript'>\n";
+			echo 'alert("OK: \n\nConfiguration '.$CFG.' deleted")';
+			echo "</script>";
+			$CFG="";		# Force surrent config to be Default
+		}
 	}
 }
 #-----------------------------------------------------------------------------
@@ -243,9 +271,12 @@ To schedule a call, dial the feature code assigned in FreePBX Feature Codes or u
 
 	</tr>
 	<INPUT TYPE='SUBMIT' VALUE='Load' NAME='B2'><br><br>
+	
 	<b>&#149 To create a new Configuration <small> (with default values):<br></small></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enter the new code <INPUT TYPE='TEXTBOX' NAME='newcode' autocomplete='off' SIZE='2' MAXLENGTH='6' style='text-align: center'>
 	and Description <INPUT TYPE='TEXTBOX' NAME='newdesc' SIZE='22' MAXLENGTH='150'>
-	and click Create <INPUT TYPE='SUBMIT' VALUE='Create' NAME='B3'><br>	
+	and click Create <INPUT TYPE='SUBMIT' VALUE='Create' NAME='B3'><br><br>
+	
+	<b>&#149 To delete the currently selected Configuration</b>	click Delete <INPUT TYPE='SUBMIT' VALUE='DELETE' NAME='B4'><br>	
 </FORM>
 
 

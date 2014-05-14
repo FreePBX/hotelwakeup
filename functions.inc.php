@@ -151,6 +151,32 @@ function hotelwakeup_listschedule($idcfg) {
 	return $res;	
 }
 #============================================================================
+# Count all schedules matching a config id
+function hotelwakeup_countschedules($idcfg) {
+	global $db;
+	$sql = "SELECT COUNT(*) AS `cnt` FROM `hotelwakeup_calls` WHERE `id_cfg`='$idcfg'";
+	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	if(DB::IsError($res)) {
+		hotelwakeup_reportsqlerror($sql,$res,"I",'hotelwakeup_countschedules');
+		return null;
+	}
+	return $res;	
+
+}
+#============================================================================
+# Delete a config id
+function hotelwakeup_deleteconfig($idcfg) {
+	global $db;
+	$sql = "DELETE FROM `hotelwakeup` WHERE `id-cfg` ='$idcfg';";
+	$res = $db->getAll($sql, DB_FETCHMODE_ASSOC);
+	if(DB::IsError($res)) {
+		hotelwakeup_reportsqlerror($sql,$res,"I",'hotelwakeup_deleteconfig');
+		return null;
+	}
+	return $res;	
+
+}
+#============================================================================
 #LD List all config ids
 function hotelwakeup_listconfigids() {
 	global $db;
