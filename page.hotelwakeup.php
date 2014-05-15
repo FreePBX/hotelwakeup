@@ -582,7 +582,7 @@ updateTime();
 <?php
 print '<p align="center" style="font-size:11px;">Wake Up Calls Module version '.$module_local['module']['version'];
 print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a></p>';
-?>
+
 #=============================================================================
 /*************** Removed old code ***************
 	function CheckWakeUpProp($file) {
