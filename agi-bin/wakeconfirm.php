@@ -146,7 +146,7 @@
 				# as Asterisk automatically deletes the call file.
 				exit;
 		}
-		break;
+#		break;
 	// Pressed 2 - Snooze for 5 minutes
 	case '50':		
 		{
@@ -160,8 +160,11 @@
 			execute_agi( "EXEC background \"minutes\" ");
 			execute_agi( "EXEC background \"vm-from\" ");
 			execute_agi( "EXEC background \"now\" ");
-		}
-		break;
+			$rc = execute_agi( "STREAM FILE goodbye \"\" ");
+			execute_agi( "HANGUP" );
+			exit;
+			}
+#		break;
 	// Pressed 3 - Snooze for 10 minutes
 	case '51':		
 		{
@@ -175,8 +178,11 @@
 			execute_agi( "EXEC background \"minutes\" ");
 			execute_agi( "EXEC background \"vm-from\" ");
 			execute_agi( "EXEC background \"now\" ");
-		}
-		break;
+			$rc = execute_agi( "STREAM FILE goodbye \"\" ");
+			execute_agi( "HANGUP" );
+			exit;
+			}
+#		break;
 	// Pressed 4 - Snooze for 15 minutes
 	case '52':		
 		{
@@ -190,12 +196,15 @@
 			execute_agi( "EXEC background \"minutes\" ");
 			execute_agi( "EXEC background \"vm-from\" ");
 			execute_agi( "EXEC background \"now\" ");
+			$rc = execute_agi( "STREAM FILE goodbye \"\" ");
+			execute_agi( "HANGUP" );
+			exit;
 		}
-		break;
+#		break;
 	}
 # No valid option - loop has expired - just exit and delete the file
 # as the user has no intention of responding
-$rc = execute_agi( "STREAM FILE goodbye \"\" ");
+	$rc = execute_agi( "STREAM FILE goodbye \"\" ");
 	execute_agi( "HANGUP" );
 	exit;
 }
