@@ -222,13 +222,14 @@ if (!$YYYY){ $YYYY = $w['year'];}
 
 <div class="rnav"><ul>
 <?php
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Wake Up Call Config').'</a></li><br><br>';
 $wuclist = hotelwakeup_list();
 
-echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('WUC types').'</a></li>';
-echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Add new type').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup">'._('Scheduled Call types').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=new">'._('Add new type').'</a></li>';
 
 foreach ($wuclist as $row) {
-	echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup&amp;extdisplay='.$row['id-cfg'].'" >'.$row['description'].'</a></li>';
+	echo '<li><a href="config.php?display=hotelwakeup&amp;type=edit&amp;extdisplay='.$row['id-cfg'].'" >'.$row['id-cfg'].'</a></li>';
 	//echo '<li>test'.$row['description'].'</li>';
 }
 
@@ -526,6 +527,12 @@ echo "<input type='hidden' name='idcfg' value='{$cfg_data['id-cfg']}'>";
   </tr>   
 </table>
 <small>**Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
+
+<?php 
+//draw goto selects
+echo drawselects($dest,0);
+?>
+
 <br><br><input type="submit" value="Submit" name="B1">
 
 <!-- REMOVED

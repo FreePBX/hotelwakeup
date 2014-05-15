@@ -37,6 +37,7 @@ if ($parm_debug_on)  {
 ### Change this section only ###################################################
 $tablename1 = "hotelwakeup";
 $cols1['id-cfg'] = "VARCHAR(6) NOT NULL PRIMARY KEY";
+$cols1['id-cfg'] = "VARCHAR(6) NOT NULL";
 $cols1['description'] = "VARCHAR(150)";
 $cols1['maxretries'] = "INT NOT NULL DEFAULT '3'";
 $cols1['waittime'] = "INT NOT NULL DEFAULT '60'";

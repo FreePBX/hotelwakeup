@@ -1,5 +1,16 @@
 <?php
 
+
+function hotelwakeup_destinations() {
+	// return an associative array with destination and description
+	foreach (hotelwakeup_list() as $row) {
+		$extens[] = array('destination' => $row['context'].','.$row['extension'].','.$row['priority'], 'description' => $row['description'], 'category' => _("Wake Up Calls"), 'id' => 'wakeupcalls');
+	}
+	return isset($extens)?$extens:null;
+
+}
+
+
 function hotelwakeup_list() {
 	global $db;
 	$sql = "SELECT * FROM hotelwakeup ORDER BY priority ASC";
