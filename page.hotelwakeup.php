@@ -222,14 +222,13 @@ if (!$YYYY){ $YYYY = $w['year'];}
 
 <div class="rnav"><ul>
 <?php
-echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Wake Up Call Config').'</a></li><br><br>';
 $wuclist = hotelwakeup_list();
 
-echo '<li><a href="config.php?display=hotelwakeup">'._('Scheduled Call types').'</a></li>';
-echo '<li><a href="config.php?display=hotelwakeup&amp;type=new">'._('Add new type').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('WUC types').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Add new type').'</a></li>';
 
 foreach ($wuclist as $row) {
-	echo '<li><a href="config.php?display=hotelwakeup&amp;type=edit&amp;extdisplay='.$row['id-cfg'].'" >'.$row['id-cfg'].'</a></li>';
+	echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup&amp;extdisplay='.$row['id-cfg'].'" >'.$row['description'].'</a></li>';
 	//echo '<li>test'.$row['description'].'</li>';
 }
 
@@ -242,7 +241,10 @@ This form has three independent sections.  The 1st is used to set up a new wakeu
 The 2nd shows existing schedules.  The 3rd is used to configure the system.<br><br>
 
 Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination - internal or external.<br>
-To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.
+To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.<br><br>
+
+Multiple configuration templates may be set up.  Config 'WUC' is always used for alarms set up by phone.<br>
+Other configs may be set up and used to set up calls via this page.
 
 <FORM NAME='changecfg'  ACTION='' METHOD=POST>
 <p style="color:red">
@@ -257,7 +259,7 @@ To schedule a call, dial the feature code assigned in FreePBX Feature Codes or u
 		</a>
 	</td>
 	<td>
-		<select onChange="selectconfig();" name="selconf" id="selconfid" tabindex="<?php echo ++$tabindex;?>">
+		<select name="selconf" id="selconfid" tabindex="<?php echo ++$tabindex;?>">
 			<option><?php echo _("(pick Config)")?></option>
 			<?php
 				$results = hotelwakeup_listconfigids();								
@@ -280,21 +282,17 @@ To schedule a call, dial the feature code assigned in FreePBX Feature Codes or u
 	<b>&#149 To delete the currently selected Configuration</b>	click Delete <INPUT TYPE='SUBMIT' VALUE='DELETE' NAME='B4'><br>	
 </FORM>
 
-
-<SCRIPT>
-//#LD=============================================================================
+<script language="javascript">
 function selectconfig() {
-echo "selectconfig";
-	//conf = document.getElementById('selconf').value;
-
-	//if (conf != '') {
-	//	selconf.value = conf;
-	//}
-
-	// reset element
-	//document.getElementById('insdest').value = '';
+	conf = document.getElementById('selconfid').value;
+	document.write('selectconfig');
+echo "selectconfig";   #debug
+	$CFG=$_POST['selconf'];			# Current active config
+	$cfg_data = hotelwakeup_getconfig($CFG);
+	$idcfg5=$CFG;	# Save for use by B3 button
 }
-</SCRIPT>
+</script>
+
 <hr>
 <h2><b>Schedule a New Call:</b></h2>
 <?php
@@ -360,7 +358,8 @@ echo '<br>';
 $results = hotelwakeup_listschedule($CFG);
 # Empty table is not shown
 if (count($results)) {
-	echo 'The following entries were set up via the screen and are stored in the SQL database';
+	echo 'The following entries were set up via the screen and are stored in the SQL database<br>';
+	echo 'They can only be deleted via this form.';
 	# Table header
 	echo "<TABLE cellSpacing=1 cellPadding=1 width=500 border=1 >\n" ;
 	echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Repeating?</TD><TD>Delete</TD></TR>\n" ;
@@ -397,7 +396,7 @@ if (count($results)) {
 	}
 
 	echo "</TABLE>\n";
-	echo 'Use a Generate button above to generate the Call file and move the schedule on one cycle.<br>';
+	echo 'Use a Generate button above to generate the Call file and move the schedule on by one cycle.<br>';
 	echo 'You can then delete the generated file and thereby skip one cycle.';
 	if (!$count2){print "There are no scheduled calls";}
 }
@@ -411,7 +410,7 @@ if (count($results)) {
 When the Operator Mode is enabled, the specified extensions are enabled to request a Wake-Up-Call <br>
 for any valid internal or external destination.</small>
 	<p style="color:red">
-	<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description']."</b>.<br>Change details below:")?>
+	<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description']."</b>.<br>Change details for this cofiguration using the fields below and then click Submit:")?>
 	</p>
     <td width="155"><a href="javascript: return false;" class="info">Description:<span>Description of what this config record is used for.</span></a></td>
     
@@ -527,21 +526,15 @@ echo "<input type='hidden' name='idcfg' value='{$cfg_data['id-cfg']}'>";
   </tr>   
 </table>
 <small>**Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
-
-<?php 
-//draw goto selects
-echo drawselects($dest,0);
-?>
-
 <br><br><input type="submit" value="Submit" name="B1">
 
 <!-- REMOVED
--->
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="submit" value="Generate Call Files" name="G1">
 <input type="submit" value="Run Install.php" name="G3">
 <input type="submit" value="Run aatest.php" name="G4">
-
+-->
 </FORM>
 
 <hr>
@@ -589,7 +582,6 @@ updateTime();
 <?php
 print '<p align="center" style="font-size:11px;">Wake Up Calls Module version '.$module_local['module']['version'];
 print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a></p>';
-
 #=============================================================================
 /*************** Removed old code ***************
 	function CheckWakeUpProp($file) {
