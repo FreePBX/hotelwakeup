@@ -108,7 +108,7 @@ if (!$YYYY){ $YYYY = $w['year'];}
 ?>
 <h1><b>Funzione sveglia</b></h1>
 <hr><br>
-La funzione sveglia, puo' essere utilizzata per programmare un promemoria o campanello d'allarme per qualsiasi destinazione valida.<br>
+La funzione sveglia, puo' essere utilizzata per programmare un promemoria o una sveglia telefonica per qualsiasi destinazione valida.<br>
 Per pianificare una chiamata, chiamare il codice funzione specificato nei codici funzione FreePBX oppure utilizzare il
 modulo qui sotto.<br><br>
 
@@ -235,7 +235,7 @@ echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date
 
 <h2><b>Impostazioni di sistema:</b></h2>
 Per pianificare le chiamate da effettuare all'ora corretta, il fuso orario del sistema e l'ora corrente devono essere impostati correttamente.<br>
-Il sistema riporta la seguente fuso orario e l'ora:<br>
+Il sistema riporta il seguente fuso orario e ora:<br>
 <b>Fuso orario:</b>  <?php echo date_default_timezone_get() ?><br>
 <?php echo _("<b>System time:</b> ")?> <span id="idTime">00:00:00</span>
 
