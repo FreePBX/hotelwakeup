@@ -20,10 +20,8 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	
 	// If the application is having problems you can log to this file
 	$parm_error_log =  $amp_conf[ASTLOGDIR].'/wakeup.log';   
-	
 	// Set to 1 to turn on the log file
-	$parm_debug_on = 1;	  //  currently this setting is not set in the module
-	
+	$parm_debug_on = 1;	  //  currently this setting is not set in the module	
 	// This is where the Temporary WakeUp Call Files will be created
 	// $parm_temp_dir =  '/var/spool/asterisk/tmp';     // old setting
 	$parm_temp_dir =  $amp_conf[ASTSPOOLDIR].'/tmp';
@@ -49,7 +47,6 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	// Caller ID of who the wakeup call is from Change this to the extension you want to display on the phone
 	// $parm_wakeupcallerid = '"Wake Up Call" ';   // old setting
 	$parm_wakeupcallerid = $date[cnam]." <".$date[cid].">";
-
 	// Set to 1 to use the Channel
 	// Set to 0 for Caller ID,  Caller IS is assumed just a number ### or "Name Name" <##>
 	// The big difference is when using caller ID, wakeup will call ANY phone with that extension number
@@ -66,6 +63,7 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	//$parm_data = '';
 	
 	// -- Use this for the ANNOY application
+	#LD These 2 are now in the config record - should be changed
 	$parm_application = 'AGI';    // this var is not set in the module, but future versions will include it
 	$parm_data = 'wakeconfirm.php';  // this var is not set in the module, but future versions will include it
 	// ----------------------------------------------------
@@ -78,8 +76,7 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	
 	// Operator Mode, Allow an extension to key in wakeup calls for other extensions
 	//	$parm_operator_mode = 1;    // old method
-	$parm_operator_mode = $date['operator_mode'];	
-	
+	$parm_operator_mode = $date['operator_mode'];		
 	// Operator Extensions
 	// Enter any extension that is allowed to enter in operator mode - Caller ID is used to validate
 	//	$parm_operator_extensions= array(  00, 00, 00);  // old method
@@ -97,4 +94,3 @@ if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freep
 	//-------------------
 	// END CONFIG PARMS
 	//-------------------
-

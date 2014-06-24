@@ -1,4 +1,6 @@
 <?php
+if (!defined('FREEPBX_IS_AUTH')) { die("No direct script access allowed<br>"); }
+
 /*************** Wakeup Calls Module  ***************
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -12,191 +14,450 @@ GNU General Public License for more details.
 History:
 Put into module format by tshif 2/17/2009
 PHP Programming by Swordsteel 2/17/2009
+Modified by Les Desser starting 9 Apr 2014 based on version 2.11.3
 
 Currently maintained by the PBX Open Source Software Alliance
 https://github.com/POSSA/Hotel-Style-Wakeup-Calls
-Last modified Oct 15, 2012
 **********************************************************/
 
-/***** remove check for updates now that module is pushed from FreePBX repo ***
-// check to see if user has automatic updates enabled in FreePBX settings
-$cm =& cronmanager::create($db);
-$online_updates = $cm->updates_enabled() ? true : false;
+$tabindex = 0;
 
-// check dev site to see if new version of module is available
-if ($online_updates && $foo = hotelwakeup_vercheck()) {
-	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
-	}
-******************************************************************************/
-
-// Process form if button B1 is clicked
+#-----------------------------------------------------------------------------
+# Save the Config values if the 'Submit' button (B1) been pressed
+# The design allows for multiple config records from which the user
+# could choose.  
 if (isset($_POST['B1'])){
-	hotelwakeup_saveconfig();
+	$CFG=$_POST['idcfg'];	# Current active config
+	hotelwakeup_saveconfig($CFG);
+}
+#-----------------------------------------------------------------------------
+# Select different config record
+if (isset($_POST['B2'])){
+	$CFG=$_POST['selconf'];			# Current active config
+	$cfg_data = hotelwakeup_getconfig($CFG);
+	$idcfg5=$CFG;	# Save for use by B3 button
+}
+#-----------------------------------------------------------------------------
+# Create a new config record
+if (isset($_POST['B3'])){
+	$CFG=$_POST['idcfg5'];			# Current active config
+	$ncode=$_POST['newcode'];
+	$ndesc=$_POST['newdesc'];
+	hotelwakeup_newconfig($ncode, $ndesc, "hotelwakeup", &$OK);
+	if ($OK=="YES") {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("OK: \n\New Config '.$CFG.' Created OK")';
+		echo "</script>";
 	}
-
-// Process form if delete button clicked
+	else {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("ERROR: \n\nNew Config '.$CFG.' failed to be created")';
+		echo "</script>";
+	}
+}
+#-----------------------------------------------------------------------------
+# Delete current config record
+if (isset($_POST['B4'])){
+	$CFG=$_POST['idcfg5'];			# Current active config
+	# Cannot delete default config
+	if ($CFG=="WUC") {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("ERROR: \n\nDefault Configuration ID ['.$CFG.'] cannot be deleted")';
+		echo "</script>";
+	}
+	else {
+		# Check if any schedule is using the config ID
+		$count = hotelwakeup_countschedules($CFG);
+		$cnt = $count[0]['cnt'];
+		if ($cnt>0) {
+			echo "<script type='text/javascript'>\n";
+			echo 'alert("ERROR: \n\nCannot delete Configuration '.$CFG.' as it is linked to '.$cnt.' existing scheduled alarm(s)")';
+			echo "</script>";
+		}
+		else {
+			hotelwakeup_deleteconfig($CFG);
+			echo "<script type='text/javascript'>\n";
+			echo 'alert("OK: \n\nConfiguration '.$CFG.' deleted")';
+			echo "</script>";
+			$CFG="";		# Force surrent config to be Default
+		}
+	}
+}
+#-----------------------------------------------------------------------------
+# ?? Temp button/code to force creation of call files that are due
+if (isset($_POST['G1'])){hotelwakeup_genalldue("");}
+#-----------------------------------------------------------------------------
+# ?? Temp button/code to force creation of call file for 1 schedule
+if (isset($_POST['G2'])){hotelwakeup_genalldue($_POST['pkey']);}
+#-----------------------------------------------------------------------------
+# ?? Temp button/code to run special code
+if (isset($_POST['G3'])){include('install.php');}
+#-----------------------------------------------------------------------------
+# ?? Temp button/code to run special code
+if (isset($_POST['G4'])){include('aatest.php');}
+#-----------------------------------------------------------------------------
+# Delete selected alarm file if DELETE button clicked
+# This will delete the selected .call file
+# This is not relevant for schedules set up in the SQL database - see DELETE2
 if(isset($_POST['DELETE'])) {
+	$CFG=$_POST['idcfg3'];			# Current active config
 	if (file_exists($_POST['filename'])) {
 		unlink($_POST['filename']);
 	}
 }
-
-//  Process form if Schedule button clicked
+#-----------------------------------------------------------------------------
+# Delete selected SQL scheduled alarm if DELETE2 button clicked
+# This will delete the selected SQL DB record
+if(isset($_POST['DELETE2'])) {
+	$CFG=$_POST['idcfg4'];			# Current active config
+	hotelwakeup_deleterow('hotelwakeup_calls',$_POST['pkey'],'id_schedule',"I",&$OK);
+	if ($OK=="YES") {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("OK: \n\nSchedule Deleted OK")';
+		echo "</script>";
+	}
+	else {
+		echo "<script type='text/javascript'>\n";
+		echo 'alert("ERROR: \n\nSchedule failed to Delete")';
+		echo "</script>";
+	}
+}
+#-----------------------------------------------------------------------------
+# Process form if Schedule button clicked
 if(isset($_POST['SCHEDULE'])) {
 	$HH=$_POST['HH'];
 	$MM=$_POST['MM'];
-	$Ext=$_POST['ExtBox'];
+	$EXT=$_POST['ExtBox'];
 	$DD=$_POST['DD'];
 	$MON = $_POST['MON'];
 	$YYYY = $_POST['YYYY'];
-
-	//  check to prevent user from scheduling a call in the past
-	if ($MM == "") {
-		$MM = "0";
+	$REPP = $_POST['thisItem'];
+# Validate destination (EXT), date and time format as PHP accepts anything 
+	$baddatetime = false;
+	$msg="";
+	if ($EXT == "") {
+		# Set error if not already error
+		if (!$baddatetime) {
+			$msg="Destination is blank";
+			$baddatetime = true; 
+		}
 	}
-	$time_wakeup = mktime( $HH , $MM, 0, $MON, $DD, $YYYY );
+	if ($HH == "") {$HH = "0";}
+	if ($MM == "") {$MM = "0";}
+	if ($HH <= -1 || $HH > 23 || $MM <= -1 || $MM >59 ) {
+		if (!$baddatetime) {
+			$msg="Time is invalid";
+			$baddatetime = true; 
+		}
+	}
+	if (!checkdate($MON , $DD , $YYYY )) {
+		if (!$baddatetime) {
+			$msg="Date is invalid";
+			$baddatetime = true;
+		}
+	}
+# date+time must be in the future
 	$time_now = time( );
-	$badtime = false;
-	if ( $time_wakeup <= $time_now )  {
-		$badtime = true;
-	}
-
-	// check for insufficient data
-	if ($HH == "" || $Ext == "" || $DD == "" || $MON == "" || $YYYY == "" || $badtime )  {
-		// abandon .call file creation and pop up a js alert to the user
+	$timewakeup = mktime($HH , $MM, 0, $MON, $DD, $YYYY );
+	if ($timewakeup <= $time_now) {
+		if (!$baddatetime) {
+			$msg="Date/Time is in the past";
+			$baddatetime = true; 
+		}
+	}	
+	if ($baddatetime) {
+# Abandon .call file creation and pop up a js alert to the user if error
 		echo "<script type='text/javascript'>\n";
-		echo "alert('Cannot schedule the call, either due to insufficient data or the scheduled time was in the past');\n";
+		echo "alert('ERROR: \n\nCannot schedule the call due to ".$msg."')";
 		echo "</script>";
-    }
+	}
 	else
 	{
-
-	// Get module config info for writing the file $parm_application and $parm_data are used to define what the wakup call
-	// does when answered.  Currently these are not part of the module config options but need to be to allow users to choose
-	// their own destination
-	$date = hotelwakeup_getconfig();  // module config provided by user
-	$parm_application = 'AGI';
-	$parm_data = 'wakeconfirm.php';
-
-	$foo = array(
-		time  => $time_wakeup,
-		date => 'unused',
-		ext => $Ext,
-		maxretries => $date[maxretries],
-		retrytime => $date[retrytime],
-		waittime => $date[waittime],
-		callerid => $date[cnam]." <".$date[cid].">",
-		application => $parm_application,
-		data => $parm_data,
-	);
-
-	hotelwakeup_gencallfile($foo);
-	// Can't decide if I should clear the schedule variables ($HH, $MM, etc.) here to refresh schedule fields in GUI
+# All OK: Here starts code to process the new schedule input data
+	$CFG=$_POST['idcfg2'];			# Current active config
+# Convert 'repeat' value to single letter code
+	if ($REPP == "NONE") {$repcode="X";}
+		elseif ($REPP == "day") {$repcode="D";}
+		elseif ($REPP == "week") {$repcode="W";}
+		elseif ($REPP == "month") {$repcode="M";}
+	# Save details in DB and return error message - if any.
+		$errmsg=hotelwakeup_saveschedule($CFG, $EXT,$timewakeup,$repcode);
+		if ($errmsg<>"") {
+			$tmp= explode("|", $errmsg); # split into 2 parts (err msg + sql)
+			hotelwakeup_reportsqlerror($tmp[1],$tmp[0],"I",'page.hotelwakeup.php');
+		}
+		else {
+			# Confirm that it has been done
+			echo "<script type='text/javascript'>\n";
+			echo 'alert("OK: \n\nSchedule has been saved")';
+			echo "</script>";		
+		}
 	}
+# Here ends the block of code if the Schedule button is clicked 
 }
+#===============================================================================
+# All options fall through to here
+#===============================================================================
+# Displays a blank form with existing config data
+# together with the list of existing scheduled calls
 
-// Get module config info
-$date = hotelwakeup_getconfig();
-	$module_local = hotelwakeup_xml2array("modules/hotelwakeup/module.xml");
+# Get module config info
+if (!$CFG){ $CFG = 'WUC';}
+$cfg_data = hotelwakeup_getconfig($CFG);
 
-// Prepopulate date fields with current day if $_POST values unavailable
+# Get various module properties (name, version number, etc)
+$module_local = hotelwakeup_xml2array("modules/hotelwakeup/module.xml");
+
+# Pre-populate some input fields with current day if $_POST values unavailable
+# Get current date/time values into associative array
 $w = getdate();
 if (!$MON) { $MON  = $w['mon'];}
 if (!$DD)  { $DD   = $w['mday'];}
 if (!$YYYY){ $YYYY = $w['year'];}
-
 ?>
 <h1><b>Wake Up Calls</b></h1>
-<hr><br>
-Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination.<br>
-To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the<br>
-form below.<br><br>
+<hr>
 
-<h2><b>Schedule a new call:</b></h2>
 
+
+<div class="rnav"><ul>
 <?php
-echo "<FORM NAME=\"InsertFORM\"  ACTION=\"\" METHOD=POST>Destination: <INPUT TYPE=\"TEXTBOX\" NAME=\"ExtBox\" VALUE=\"$Ext\" SIZE=\"12\" MAXLENGTH=\"20\">HH:MM <INPUT TYPE=\"TEXTBOX\" NAME=\"HH\" VALUE=\"$HH\" SIZE=\"2\" MAXLENGTH=\"2\">:\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MM\" VALUE=\"$MM\" SIZE=\"2\" MAXLENGTH=\"2\">DD / MM / YYYY <INPUT TYPE=\"TEXTBOX\" NAME=\"DD\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$DD\">/\n";
-echo "<INPUT TYPE=\"TEXTBOX\" NAME=\"MON\" SIZE=\"2\" MAXLENGTH=\"2\" VALUE=\"$MON\">/<INPUT TYPE=\"TEXTBOX\" NAME=\"YYYY\" SIZE=\"4\" MAXLENGTH=\"4\" VALUE=\"$YYYY\">\n";
-echo "<INPUT TYPE=\"SUBMIT\" NAME=\"SCHEDULE\" VALUE=\"SCHEDULE\">\n";
+$wuclist = hotelwakeup_list();
+
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('WUC types').'</a></li>';
+echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup">'._('Add new type').'</a></li>';
+
+foreach ($wuclist as $row) {
+	echo '<li><a href="config.php?display=hotelwakeup&amp;type=setup&amp;extdisplay='.$row['id-cfg'].'" >'.$row['description'].'</a></li>';
+	//echo '<li>test'.$row['description'].'</li>';
+}
+
+?>
+</div></ul>
+
+
+
+This form has three independent sections.  The 1st is used to set up a new wakeup/reminder call.<br>
+The 2nd shows existing schedules.  The 3rd is used to configure the system.<br><br>
+
+Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination - internal or external.<br>
+To schedule a call, dial the feature code assigned in FreePBX Feature Codes or use the form below.<br><br>
+
+Multiple configuration templates may be set up.  Config 'WUC' is always used for alarms set up by phone.<br>
+Other configs may be set up and used to set up calls via this page.
+
+<FORM NAME='changecfg'  ACTION='' METHOD=POST>
+<p style="color:red">
+<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description']."</b>")?>
+</p>
+<tr>
+	<td>
+		<a href=# class="info"><?php echo _("<b>&#149 To Select a different Configuration ID:</b> Pick the one to use and then click the Load button:")?>
+		<span>
+			<?php echo _("Select which configuration you want to work with.")?>
+		</span>
+		</a>
+	</td>
+	<td>
+		<select name="selconf" id="selconfid" tabindex="<?php echo ++$tabindex;?>">
+			<option><?php echo _("(pick Config)")?></option>
+			<?php
+				$results = hotelwakeup_listconfigids();								
+				foreach ($results as $configids) echo "<option value='$configids'>$configids</option>\n";
+			?>
+		</select>
+	</td>
+	
+	<td>
+		<?php echo ("<INPUT TYPE='hidden' name='idcfg5' value='{$CFG}'>")?>
+	</td>
+
+	</tr>
+	<INPUT TYPE='SUBMIT' VALUE='Load' NAME='B2'><br><br>
+	
+	<b>&#149 To create a new Configuration <small> (with default values):<br></small></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enter the new code <INPUT TYPE='TEXTBOX' NAME='newcode' autocomplete='off' SIZE='2' MAXLENGTH='6' style='text-align: center'>
+	and Description <INPUT TYPE='TEXTBOX' NAME='newdesc' SIZE='22' MAXLENGTH='150'>
+	and click Create <INPUT TYPE='SUBMIT' VALUE='Create' NAME='B3'><br><br>
+	
+	<b>&#149 To delete the currently selected Configuration</b>	click Delete <INPUT TYPE='SUBMIT' VALUE='DELETE' NAME='B4'><br>	
+</FORM>
+
+<script language="javascript">
+function selectconfig() {
+	conf = document.getElementById('selconfid').value;
+	document.write('selectconfig');
+echo "selectconfig";   #debug
+	$CFG=$_POST['selconf'];			# Current active config
+	$cfg_data = hotelwakeup_getconfig($CFG);
+	$idcfg5=$CFG;	# Save for use by B3 button
+}
+</script>
+
+<hr>
+<h2><b>Schedule a New Call:</b></h2>
+<?php
+echo "<FORM NAME='InsertFORM'  ACTION='' METHOD=POST>Destination: <INPUT TYPE='TEXTBOX' NAME='ExtBox' VALUE='$EXT' SIZE='12' MAXLENGTH='20'>";
+echo "HH:MM <INPUT TYPE='number' min='0' max='23' NAME='HH' autocomplete='off' VALUE='$HH' SIZE='1' MAXLENGTH='2' style='text-align: center'>:";
+echo "<INPUT TYPE='hidden' name='idcfg2' value='{$cfg_data['id-cfg']}'>";
+echo "<INPUT TYPE='number' min='0' max='59' NAME='MM' autocomplete='off' VALUE='$MM' SIZE='1' MAXLENGTH='2' style='text-align: center'>";
+echo "DD / MM / YYYY <INPUT TYPE='number' min='1' max='31' NAME='DD' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$DD' style='text-align: center'>/";
+echo "<INPUT TYPE='number' min='1' max='12' NAME='MON' autocomplete='off' SIZE='1' MAXLENGTH='2' VALUE='$MON' style='text-align: center'>/";
+echo "<INPUT TYPE='number' min='1' max='3000' NAME='YYYY' autocomplete='off' SIZE='1' MAXLENGTH='4' VALUE='$YYYY' style='text-align: center'>";
+echo "Frequency: <SELECT id='repeat_cycle' name='thisItem' tabindex='<?php echo ++$tabindex;?>'>
+	<OPTION VALUE='NONE'>Once</option>
+	<OPTION VALUE='day' <?php if ($thisItem=='day') echo _(\"selected='selected'\"); ?>Daily</OPTION>
+	<OPTION VALUE='week' <?php if ($thisItem=='week') echo _(\"selected='selected'\"); ?>Weekly</OPTION>
+<!-- Temp removed as not implemented as cannot cope with DoMs 29-31 as must store original DoM.
+	<OPTION VALUE='month' <?php if ($thisItem=='month') echo _(\"selected='selected'\"); ?>Monthly</OPTION>
+-->
+	</SELECT>";
+echo "<INPUT TYPE='SUBMIT' NAME='SCHEDULE' VALUE='SCHEDULE'>\n";
 echo "</FORM>\n";
-
-echo "<br><h2><b>Scheduled Calls:</b></h2>\n";
-// Page is static, so add button to refresh table
-echo "<FORM NAME=\"refresh\" ACTION=\"\" METHOD=POST><INPUT NAME=\"RefreshTable\" TYPE=\"SUBMIT\" VALUE=\"Refresh Table\"></form>\n";
-echo "<TABLE cellSpacing=1 cellPadding=1 width=900 border=1 >\n" ;
+#-----------------------------------------------------------------------------
+echo "<hr>";
+###?? echo "<h2><b>Existing Schedules</b></h2>";
+# Page is static, so add button to refresh table
+echo "<FORM NAME='refresh' ACTION='' METHOD=POST><INPUT NAME='RefreshTable' TYPE='SUBMIT' VALUE='Refresh Tables'></form>\n";
+#-----------------------------------------------------------------------------
+echo "<h3><b>Schedules Accessible from Telephones:</b></h3>";
+echo 'The following entries were set up by phone or are due within the next 24 hours or so.';
+# List of existing .call files
+echo "<TABLE cellSpacing=1 cellPadding=1 width=400 border=1 >\n" ;
 echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Delete</TD></TR>\n" ;
-
-// check spool directory and create a table listing all .call files created by this module
+# Check spool directory and create a table listing all .call files created by this module
 $count = 0;
+# Include only file names starting with "WUC" and ending in ".call"
 $files = glob("/var/spool/asterisk/outgoing/wuc*.call");
 foreach($files as $file) {
-	$myresult = CheckWakeUpProp($file);
-	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file))  ; //create a date string to display from the file timestamp
-	$filetime = date(H,filemtime($file)).":".date(i,filemtime($file));   //create a time string to display from the file timestamp
-	If ($myresult <> '') {
-		$h = substr($myresult[0],0,2);
-		$m = substr($myresult[0],2,3);
-		$wucext = $myresult[1];
- 		echo "<TR><TD><FORM NAME=\"UpdateFORM\" ACTION=\"\" METHOD=POST><FONT face=verdana,sans-serif>" . $filetime . "</TD><TD>".$filedate."</TD><TD>" .$wucext ."</TD><TD><input type=\"hidden\" id=\"filename\" name=\"filename\" value=\"$file\"><INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\"></TD></FORM>\n";
+# Create a date string to display from the file timestamp = scheduled date for alarm
+	$filedate = date(M,filemtime($file))." ".date(d,filemtime($file))." ".date(Y,filemtime($file));
+# Create a time string to display from the file timestamp = scheduled time for alarm
+	$filetime = date(H,filemtime($file)).":".date(i,filemtime($file));
+# Break up file name into parts and use relevant parts
+	$filenamebits = explode(".", $file); 
+	If ($filenamebits <> '') {
+		$wucext = $filenamebits[3];  # [3] = Extension number 
+ 		echo "<TR><TD><FORM NAME='UpdateFORM' ACTION='' METHOD=POST><FONT face=verdana,sans-serif>"
+			.$filetime
+			."</TD><TD>".$filedate
+			."</TD><TD>".$wucext
+			."</TD><TD><input type='hidden' id='filename' name='filename' value='$file'>
+			<INPUT TYPE='hidden' name='idcfg3' value='{$cfg_data['id-cfg']}'>
+			<INPUT NAME=\"DELETE\" TYPE=\"SUBMIT\" VALUE=\"Delete\">
+			</TD></FORM>\n";
 	}
 	$count++;
 }
 echo "</TABLE>\n";
-if (!$count){
-	print "No scheduled calls";
-        }
-?>
-<br><br>
+if (!$count){print "There are no existing call files";}
+#-----------------------------------------------------------------------------
+# List schedule records in SQL db
+##?? # Page is static, so add button to refresh table
+##?? echo "<FORM NAME='refresh2' ACTION='' METHOD=POST><INPUT NAME='RefreshTable2' TYPE='SUBMIT' VALUE='Refresh Tables'></form>\n";
+echo '<br>';
+$results = hotelwakeup_listschedule($CFG);
+# Empty table is not shown
+if (count($results)) {
+	echo 'The following entries were set up via the screen and are stored in the SQL database<br>';
+	echo 'They can only be deleted via this form.';
+	# Table header
+	echo "<TABLE cellSpacing=1 cellPadding=1 width=500 border=1 >\n" ;
+	echo "<TD>Time</TD><TD>Date</TD><TD>Destination</TD><TD>Repeating?</TD><TD>Delete</TD></TR>\n" ;
 
+	# Fill table based on SQL table
+	$count2 = 0;
+	# Include only schedules with IDs equal to "WUC" (later enhancement will allow user to select key)
+
+	# Get all rows 
+	foreach ($results as $schedule) {
+		# Create a date string to display from the file timestamp = scheduled date for alarm
+		$stime = $schedule['time'];
+		$filedate = date(M,$stime)." ".date(d,$stime)." ".date(Y,$stime);
+		# Create a time string to display from the file timestamp = scheduled time for alarm
+		$filetime = date(H,$stime).":".date(i,$stime);
+		$idschedule=$schedule['id_schedule'];
+		# Convert 'repeat' code to text
+		$rep=$schedule['per'];
+		if ($rep == "X") {$repcode="No";}
+		elseif ($rep == "D") {$repcode="Daily";}
+		elseif ($rep == "W") {$repcode="Weekly";}
+		elseif ($rep == "M") {$repcode="Monthly";}
+		echo "<TR><TD><FORM NAME='UpdateFORM' ACTION='' METHOD=POST><FONT face=verdana,sans-serif>"
+		.$filetime
+		."</TD><TD>".$filedate
+		."</TD><TD>".$schedule['ext']
+		."</TD><TD>".$repcode
+		."</TD><TD><input type='hidden' id='pkey' name='pkey' value='$idschedule'>
+		<INPUT NAME='DELETE2' TYPE='SUBMIT' VALUE='Delete'>
+		<INPUT NAME='G2' TYPE='SUBMIT' VALUE='Generate'>
+		<INPUT TYPE='hidden' name='idcfg4' value='{$cfg_data['id-cfg']}'>
+		</TD></FORM>\n";
+		$count2++;
+	}
+
+	echo "</TABLE>\n";
+	echo 'Use a Generate button above to generate the Call file and move the schedule on by one cycle.<br>';
+	echo 'You can then delete the generated file and thereby skip one cycle.';
+	if (!$count2){print "There are no scheduled calls";}
+}
+#-----------------------------------------------------------------------------
+?>
+<br>
+<hr>
 <form NAME="SAVECONFIG" id="SAVECONFIG" method="POST" action="">
 <h2><b>Module Configuration:</b></h2>
-By default, Wake Up calls are only made back to the Caller ID of the user which requests them.<br>
-When the Operator Mode is enabled, certain extensions are identified to be able to request a <br>
-Wake Up call for any valid internal or external destination.<br><br>
-<table border="0" width="430" id="table1">
-  <tr>
-    <td width="153"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
-    <td width="129">
-<?php 
-echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($date[operator_mode]==0)?' checked':'').">\n";
-?> 
-Disabled&nbsp;</td>
-    <td>
+<small>A Wake-Up-Call set up by phone, will normally call back the Caller ID of the user who requests it.<br>
+When the Operator Mode is enabled, the specified extensions are enabled to request a Wake-Up-Call <br>
+for any valid internal or external destination.</small>
+	<p style="color:red">
+	<?php echo _("The Current Configuration ID in use is:<b> $CFG - ".$cfg_data['description']."</b>.<br>Change details for this cofiguration using the fields below and then click Submit:")?>
+	</p>
+    <td width="155"><a href="javascript: return false;" class="info">Description:<span>Description of what this config record is used for.</span></a></td>
+    
+	<td>
 <?php
-echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($date[operator_mode]==1)?' checked':'').">\n";
+echo "<input type='text' name='description' size='70' value='{$cfg_data['description']}' style='text-align: left'>";
 ?>
-&nbsp; Enabled</td>
+    </td>
+  </tr> 
+
+
+<table border="0" width="500" id="table1">
+    <td width="200"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
+    <td width="129">	
+<?php 
+echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($cfg_data[operator_mode]==0)?' checked':'').">";
+?> 
+Disabled &nbsp;
+<?php
+echo "<input type=\"radio\" value=\"1\" name=\"operator_mode\"".(($cfg_data[operator_mode]==1)?' checked':'').">";
+?>
+Enabled</td>
   </tr>
   <tr>
     <td width="180"><a href="javascript: return false;" class="info">Max Dest. Length: <span>This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers.</span></a></td>
-    <td width="129">&nbsp;
+    <td width="129">
 <?php
-echo "<input type=\"text\" name=\"extensionlength\" size=\"8\" value=\"{$date[extensionlength]}\" style=\"text-align: right\">Digits\n ";
+echo "<input type=\"text\" name=\"extensionlength\" size=\"1\" value=\"{$cfg_data[extensionlength]}\" style=\"text-align: center\">Digits ";
 ?>
 </td>
-    <td> &nbsp;</td>
+
   </tr>
   <tr>
     <td width="180"><a href="javascript: return false;" class="info">Operator Extensions: <span>Enter the Caller ID's of each telephone you wish to be recognized as an `Operator`.  Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns.</span></a></td>
     <td colspan="2">
 <?php
-echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$date[operator_extensions]}\">\n";
+echo "<input type=\"text\" name=\"operator_extensions\" size=\"37\" value=\"{$cfg_data[operator_extensions]}\"><small>(Use a comma separated list)<br></small>";
 ?>
     </td>
   </tr>
-  <tr>
-    <td width="153">&nbsp;</td>
-    <td colspan="2">(Use a comma separated list)</td>
-  </tr>
-</table>
 
-<table border="0" width="428" id="table2">
+
   <tr>
     <td width="155"><a href="javascript: return false;" class="info">Ring Time:<span>The number of seconds for the phone to ring. Consider setting lower than the voicemail threshold or the wakeup call can end up going to voicemail.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[waittime]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"waittime\" size=\"2\" value=\"{$cfg_data[waittime]}\" style=\"text-align: center\">";
 ?> Seconds
     </td>
   </tr>
@@ -204,7 +465,7 @@ echo "<input type=\"text\" name=\"waittime\" size=\"13\" value=\"{$date[waittime
     <td width="155"><a href="javascript: return false;" class="info">Retry Time:<span>The number of seconds to wait between retrys.  A 'retry' happens if the wakeup call is not answered.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[retrytime]}\" style=\"text-align: right\">\n";
+echo "<input type=\"text\" name=\"retrytime\" size=\"2\" value=\"{$cfg_data[retrytime]}\" style=\"text-align: center\">";
 ?> Seconds
     </td>
   </tr>
@@ -212,27 +473,71 @@ echo "<input type=\"text\" name=\"retrytime\" size=\"13\" value=\"{$date[retryti
     <td width="155"><a href="javascript: return false;" class="info">Max Retries:<span>The maximum number of times the system should attempt to deliver the wakeup call when there is no answer.  Zero retries means only one call will be placed.</span></a></td>
     <td>
 <?php
-echo "<input type=\"text\" name=\"maxretries\" size=\"13\" value=\"{$date[maxretries]}\" style=\"text-align: right\">\n";
+echo "<input type='text' name='maxretries' size='2' value='{$cfg_data[maxretries]}' style='text-align: center'>";
 ?> Tries
     </td>
   </tr>
 
   <tr>
-    <td width="155"><a href="javascript: return false;" class="info">Wake Up Caller ID:<span><u>First Box: </u>Enter the CNAM (Caller ID Name) to be sent by the system when placing the wakeup calls.  Enclose this string with " if required by your system.<br><u>Second Box: </u>Enter the CID (Caller ID number) of the Caller ID to be sent when the system places wake up calls.</span></a></td>
+    <td width="155">
+		<a href="javascript: return false;" class="info">Wake Up Caller ID:
+		<span><u>First Box: </u>Enter the CNAM (Caller ID Name) to be sent by the system when placing the wakeup calls.  Enclose this string with " if required by your system.<br><u>Second Box: </u>Enter the CID (Caller ID number) of the Caller ID to be sent when the system places wake up calls.</span>
+		</a>
+	</td>
     <td>
 <?php
-//echo "&quot;<input type=\"text\" name=\"calleridtext\" size=\"10\" value=\"{$date[cnam]}\" style=\"text-align: center\">&quot;\n";
-echo "<input type=\"text\" name=\"calleridtext\" size=\"13\" value=\"{$date[cnam]}\" style=\"text-align: center\">\n";
-echo "&lt;<input type=\"text\" name=\"calleridnumber\" size=\"5\" value=\"{$date[cid]}\" style=\"text-align: center\">&gt;\n";
+echo "<input type=\"text\" name=\"cnam\" size=\"13\" value=\"{$cfg_data[cnam]}\" style=\"text-align: center\"> <small>**</small>";
+echo " &lt;<input type=\"text\" name=\"cid\" size=\"5\" value=\"{$cfg_data[cid]}\" style=\"text-align: center\">&gt;<br>";
+
 ?>
     </td>
   </tr>
+    <tr>
+	<td>Wake Up Call destination:
+	</td>
+  <td>
+  <b><small>(WARNING: Do not change the fields below unless you know what you are doing)</b><br></small>
+  </td>
+  </tr>
+<tr>
+    <td width="155"><a href="javascript: return false;" class="info">Extension:<span>Valid Asterisk extension associated with the context defined above. Leave empty to set default.</span></a></td>
+    <td>
+<?php
+echo "<input type=\"text\" name=\"extension\" size=\"37\" value=\"{$cfg_data['extension']}\" style=\"text-align: left\">";
+?>
+    </td>
+  </tr>  
+ <tr>
+    <td width="155"><a href="javascript: return false;" class="info">Context:<span>Valid Asterisk context to which the wake up call will be placed. Leave empty to set default.</span></a></td>
+    <td>
+<?php
+echo "<input type=\"text\" name=\"context\" size=\"37\" value=\"{$cfg_data['context']}\" style=\"text-align: left\">";
+?>
+    </td>
+</tr>  
+<tr>
+    <td width="155"><a href="javascript: return false;" class="info">Priority:<span>Valid Asterisk priority associated with the context and extension defined above.Leave empty to set default.</span></a></td>
+    <td>
+<?php
+echo "<input type=\"text\" name=\"priority\" size=\"37\" value=\"{$cfg_data['priority']}\" style=\"text-align: left\">";
+echo "<input type='hidden' name='idcfg' value='{$cfg_data['id-cfg']}'>";
+?>
+    </td>
+  </tr>   
 </table>
-<small>*Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
+<small>**Some systems require quote marks around the textual caller ID. You may include the " " if needed by your system.</small>
+<br><br><input type="submit" value="Submit" name="B1">
 
-<br><input type="submit" value="Submit" name="B1"><br><br>
+<!-- REMOVED
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="submit" value="Generate Call Files" name="G1">
+<input type="submit" value="Run Install.php" name="G3">
+<input type="submit" value="Run aatest.php" name="G4">
+-->
 </FORM>
 
+<hr>
 <h2><b>System Settings:</b></h2>
 For scheduled calls to be delivered at the correct time, the system time zone and current time must be set properly.<br>
 The system is reporting the following time zone and time:<br>
@@ -243,7 +548,7 @@ The system is reporting the following time zone and time:<br>
 var hour = <?php $l = localtime(); echo $l[2]?>;
 var min  = <?php $l = localtime(); echo $l[1]?>;
 var sec  = <?php $l = localtime(); echo $l[0]?>;
-
+//=============================================================================
 //wakeupcalls stole this from timegroups
 //who stole this from timeconditions
 //who stole it from http://www.aspfaq.com/show.asp?id=2300
@@ -260,53 +565,55 @@ function PadDigits(n, totalDigits)
 	} 
 	return pd + n.toString(); 
 } 
-
-function updateTime()
-{
+//=============================================================================
+function updateTime() {
 	sec++;
-	if (sec==60)
-	{
-		min++;
-		sec = 0;
-	}	
-		
-	if (min==60)
-	{
-		hour++;
-		min = 0;
-	}
-
-	if (hour==24)
-	{
-		hour = 0;
-	}
+	if (sec==60) {min++; sec = 0;}	
+	if (min==60) {hour++; min = 0;}
+	if (hour==24) {hour = 0;}
 	
 	document.getElementById("idTime").innerHTML = PadDigits(hour,2)+":"+PadDigits(min,2)+":"+PadDigits(sec,2);
 	setTimeout('updateTime()',1000);
 }
 
 updateTime();
-$(document).ready(function(){
-	$(".remove_section").click(function(){
-    if (confirm('<?php echo _("This section will be removed from this time group and all current settings including changes will be updated. OK to proceed?") ?>')) {
-      $(this).parent().parent().prev().remove();
-      $(this).closest('form').submit();
-    }
-  });
-});
 </script>
 
 <?php
 print '<p align="center" style="font-size:11px;">Wake Up Calls Module version '.$module_local['module']['version'];
-print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
-
-
+print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a></p>';
+#=============================================================================
+/*************** Removed old code ***************
 	function CheckWakeUpProp($file) {
 		$myresult = '';
-		$file =basename($file);
-			$WakeUpTmp = explode(".", $file);
-			$myresult[0] = $WakeUpTmp[1];
-			$myresult[1] = $WakeUpTmp[3];
+		$file =basename($file);   #LD Extract file name without path
+			$WakeUpTmp = explode(".", $file); #LD split into parts
+			$myresult[0] = $WakeUpTmp[1]; #LD Time 
+			$myresult[1] = $WakeUpTmp[3]; #LD Extension
+      $myresult[2] = $WakeUpTmp[4]; #LD added: Repeat parameter
 		return $myresult;
    	}
-?>
+********************* End of removed code **************************/
+
+/*************** Removed old code (SCHEDULE button) ***************
+# Get module config info for writing the file
+# The design allows for multiple config records from which the user
+# could choose.  Initially, the default config key 'WUC' is hard-coded.
+# To see the layout of the config record, look at install.php 
+
+  	$cfg_data = hotelwakeup_getconfig("WUC");  // module config provided by user
+if ($REPP == "") {$REPP = "NONE";}    ## ?? Temp  
+  	$foo = array(
+  		time  => $timewakeup,
+  		ext => $EXT,
+  		maxretries => $cfg_data[maxretries],
+  		retrytime => $cfg_data[retrytime],
+  		waittime => $cfg_data[waittime],
+      	rep => $REPP,
+  		callerid => $cfg_data[cnam]." <".$cfg_data[cid].">",
+  		application => $cfg_data[application],
+  		data => $cfg_data[data],
+ 	);
+
+  	hotelwakeup_gencallfile($foo);
+********************* End of removed code **************************/
