@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-20 19:35-0500\n"
-"PO-Revision-Date: 2015-03-25 02:50+0200\n"
+"PO-Revision-Date: 2015-03-31 08:05+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
 "Language-Team: Spanish "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: page.hotelwakeup.php:240
 msgid "<b>System time:</b> "
-msgstr ""
+msgstr "<b>Hora Sistema:</b> "
 
 #: hotelwakeup.i18n.php:4
 msgid "Applications"
@@ -31,14 +31,16 @@ msgstr "Aplicaciones"
 
 #: hotelwakeup.i18n.php:5
 msgid "FreePBX module for generating reminder and wakeup calls"
-msgstr ""
+msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"
 
 #: page.hotelwakeup.php:291
 msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
 msgstr ""
+"Esta sección será eliminada de este grupo de tiempo y todos los ajustes "
+"actuales, incluyendo los cambios se actualizarán. OK para continuar?"
 
 #: hotelwakeup.i18n.php:3 hotelwakeup.i18n.php:6
 msgid "Wake Up Calls"
-msgstr ""
+msgstr "Llamadas de Despertador"
