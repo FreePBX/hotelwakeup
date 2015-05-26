@@ -9,31 +9,158 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-20 19:35-0500\n"
+"POT-Creation-Date: 2015-05-26 17:57-0400\n"
 "PO-Revision-Date: 2015-03-31 08:05+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
-"Language-Team: Spanish "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
-"Language: es_ES\n"
+"Language-Team: Spanish <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/es_ES/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.2-dev\n"
 
-#: page.hotelwakeup.php:240
+#: page.hotelwakeup.php:241
 msgid "<b>System time:</b> "
 msgstr "<b>Hora Sistema:</b> "
 
-#: hotelwakeup.i18n.php:4
-msgid "Applications"
-msgstr "Aplicaciones"
+#: views/grid.php:31
+msgid "Actions"
+msgstr ""
 
-#: hotelwakeup.i18n.php:5
-msgid "FreePBX module for generating reminder and wakeup calls"
-msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"
+#: views/grid.php:19
+msgid "Add"
+msgstr ""
 
-#: page.hotelwakeup.php:291
+#: views/grid.php:219
+msgid "Add new Wakeup Call"
+msgstr ""
+
+#: views/grid.php:12
+msgid "Call List"
+msgstr ""
+
+#: views/grid.php:207
+msgid ""
+"CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
+"also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
+"sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
+msgstr ""
+
+#: views/grid.php:290
+msgid "Close"
+msgstr ""
+
+#: views/grid.php:29
+msgid "Date"
+msgstr ""
+
+#: views/grid.php:271
+msgid "Day"
+msgstr ""
+
+#: assets/js/hotelwakeup.js:22
+msgid "Day can not be blank"
+msgstr ""
+
+#: views/grid.php:281
+msgid "Day to call"
+msgstr ""
+
+#: views/grid.php:22
+msgid "Delete"
+msgstr ""
+
+#: views/grid.php:30 views/grid.php:231
+msgid "Destination"
+msgstr ""
+
+#: assets/js/hotelwakeup.js:14
+msgid "Destination can not be blank"
+msgstr ""
+
+#: views/grid.php:241
+msgid "Destination to call"
+msgstr ""
+
+#: views/grid.php:111
+msgid ""
+"Enter the Caller IDs of each telephone you wish to be recognized as an "
+"\"Operator\".  Operator extensions are allowed to create wakeup calls for "
+"any valid destination. Numbers can be extension numbers, full caller ID "
+"numbers or Asterisk dialing patterns"
+msgstr ""
+
+#: views/grid.php:74
+msgid "Max Destination Length"
+msgstr ""
+
+#: views/grid.php:170
+msgid "Max Retries"
+msgstr ""
+
+#: views/grid.php:53
+msgid "No"
+msgstr ""
+
+#: views/grid.php:98
+msgid "Operator Extensions"
+msgstr ""
+
+#: views/grid.php:45
+msgid "Operator Mode"
+msgstr ""
+
+#: Hotelwakeup.class.php:32
+msgid "Reset"
+msgstr ""
+
+#: views/grid.php:146
+msgid "Retry Time"
+msgstr ""
+
+#: views/grid.php:122
+msgid "Ring Time"
+msgstr ""
+
+#: views/grid.php:291
+msgid "Save changes"
+msgstr ""
+
+#: views/grid.php:13
+msgid "Settings"
+msgstr ""
+
+#: Hotelwakeup.class.php:38
+msgid "Submit"
+msgstr ""
+
+#: views/grid.php:183
+msgid ""
+"The maximum number of times the system should attempt to deliver the wakeup "
+"call when there is no answer. Zero retries means only one call will be placed"
+msgstr ""
+
+#: views/grid.php:135
+msgid ""
+"The number of seconds for the phone to ring. Consider setting lower than the "
+"voicemail threshold or the wakeup call can end up going to voicemail"
+msgstr ""
+
+#: views/grid.php:159
+msgid ""
+"The number of seconds to wait between retrys.  A \"retry\" happens if the "
+"wakeup call is not answered"
+msgstr ""
+
+#: views/grid.php:87
+msgid ""
+"This controls the maximum number of digits an operator can send a wakeup "
+"call to. Set to 10 or 11 to allow wake up calls to outside numbers"
+msgstr ""
+
+#: page.hotelwakeup.php:292
 msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
@@ -41,6 +168,54 @@ msgstr ""
 "Esta sección será eliminada de este grupo de tiempo y todos los ajustes "
 "actuales, incluyendo los cambios se actualizarán. OK para continuar?"
 
-#: hotelwakeup.i18n.php:3 hotelwakeup.i18n.php:6
+#: views/grid.php:28 views/grid.php:251
+msgid "Time"
+msgstr ""
+
+#: assets/js/hotelwakeup.js:18
+msgid "Time can not be blank"
+msgstr ""
+
+#: views/grid.php:261
+msgid "Time to call"
+msgstr ""
+
+#: views/grid.php:194
+msgid "Wake Up Caller ID"
+msgstr ""
+
+#: Hotelwakeup.class.php:92
 msgid "Wake Up Calls"
 msgstr "Llamadas de Despertador"
+
+#: views/grid.php:8
+#, php-format
+msgid ""
+"Wake Up calls can be used to schedule a reminder or wakeup call to any valid "
+"destination. To schedule a call, dial %s or use the form below"
+msgstr ""
+
+#: views/main.php:11
+msgid "Wakeup Calls List"
+msgstr ""
+
+#: views/grid.php:4
+msgid "What is Hotel Style Wakeup Calls?"
+msgstr ""
+
+#: views/grid.php:63
+msgid ""
+"When Operator Mode is enabled it will allow designated extentions to create "
+"wake up calls for any valid destination. If disabled calls can only be "
+"placed back to the caller ID of the user scheduling the wakeup call"
+msgstr ""
+
+#: views/grid.php:51
+msgid "Yes"
+msgstr ""
+
+#~ msgid "Applications"
+#~ msgstr "Aplicaciones"
+
+#~ msgid "FreePBX module for generating reminder and wakeup calls"
+#~ msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"
