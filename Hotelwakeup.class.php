@@ -59,7 +59,38 @@ class Hotelwakeup implements \BMO {
 	public function ajaxHandler() {
 		switch($_REQUEST['command']) {
 			case "savecall":
-				dbug($_POST);
+				if(empty($_POST['day']) || empty($_POST['time'])) {
+					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
+				}
+				$time_wakeup = strtotime($_POST['day']." ".$_POST['time']);
+				$time_now = time();
+				$badtime = false;
+				if ( $time_wakeup === false || $time_wakeup <= $time_now )  {
+					$badtime = true;
+				}
+
+				// check for insufficient data
+				if ($badtime)  {
+					// abandon .call file creation and pop up a js alert to the user
+					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
+				} else {
+
+					$date = $this->getConfig();  // module config provided by user
+					$parm_application = 'AGI';
+					$parm_data = 'wakeconfirm.php';
+					$this->generateCallFile(array(
+						"time"  => $time_wakeup,
+						"date" => 'unused',
+						"ext" => $_POST['destination'],
+						"maxretries" => $date['maxretries'],
+						"retrytime" => $date['retrytime'],
+						"waittime" => $date['waittime'],
+						"callerid" => $date['cnam']." <".$date['cid'].">",
+						"application" => $parm_application,
+						"data" => $parm_data,
+					));
+					return array("status" => true);
+				}
 			break;
 			case "getable":
 				return $this->getAllCalls();
@@ -145,7 +176,40 @@ class Hotelwakeup implements \BMO {
 		}
 		return $calls;
 	}
+
+	public function generateCallFile($foo) {
+		if (empty($foo['tempdir'])) {
+			$path = sys_get_temp_dir();
+			$foo['tempdir'] = !empty($path) ? $path . "/" : $this->FreePBX->Config->get('ASTSPOOLDIR')."/tmp/";
+		}
+		if (empty($foo['outdir'])) {
+			$foo['outdir'] = $this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/";
+		}
+		if (empty($foo['filename'])) {
+			$foo['filename'] = "wuc.".$foo['time'].".ext.".$foo['ext'].".call";
+		}
+
+		$tempfile = $foo['tempdir'].$foo['filename'];
+		$outfile = $foo['outdir'].$foo['filename'];
+
+		// Delete any old .call file with the same name as the one we are creating.
+		if(file_exists($outfile) ) {
+			unlink($outfile);
+		}
+
+		// Create up a .call file, write and close
+		$wuc = fopen($tempfile, 'w');
+		fputs( $wuc, "channel: Local/".$foo['ext']."@from-internal\n" );
+		fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
+		fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
+		fputs( $wuc, "waittime: ".$foo['waittime']."\n");
+		fputs( $wuc, "callerid: ".$foo['callerid']."\n");
+		fputs( $wuc, "application: ".$foo['application']."\n");
+		fputs( $wuc, "data: ".$foo['data']."\n");
+		fclose( $wuc );
+
+		// set time of temp file and move to outgoing
+		touch( $tempfile, $foo['time'], $foo['time'] );
+		rename( $tempfile, $outfile );
+	}
 }
-
-
-//wuc.1435321800.ext.1001.call

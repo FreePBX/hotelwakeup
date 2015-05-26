@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>13.0.1alpha2</version>
+	<version>13.0.1alpha3</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>POSSA</publisher>
@@ -10,6 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
+		*13.0.1alpha3* Actually work
 		*13.0.1alpha2* More Visual changes
 		*13.0.1alpha1* Visual Styling Fixes
 		 *2.11.3* Fixes outstanding database issues
