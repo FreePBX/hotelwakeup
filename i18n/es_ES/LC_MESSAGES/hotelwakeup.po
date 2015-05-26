@@ -1,0 +1,46 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for hotelwakeup
+# Copyright (C) 2008-2015 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-20 19:35-0500\n"
+"PO-Revision-Date: 2015-03-31 08:05+0200\n"
+"Last-Translator: Ernesto <ecasas@sangoma.com>\n"
+"Language-Team: Spanish "
+"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.2-dev\n"
+
+#: page.hotelwakeup.php:240
+msgid "<b>System time:</b> "
+msgstr "<b>Hora Sistema:</b> "
+
+#: hotelwakeup.i18n.php:4
+msgid "Applications"
+msgstr "Aplicaciones"
+
+#: hotelwakeup.i18n.php:5
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"
+
+#: page.hotelwakeup.php:291
+msgid ""
+"This section will be removed from this time group and all current settings "
+"including changes will be updated. OK to proceed?"
+msgstr ""
+"Esta sección será eliminada de este grupo de tiempo y todos los ajustes "
+"actuales, incluyendo los cambios se actualizarán. OK para continuar?"
+
+#: hotelwakeup.i18n.php:3 hotelwakeup.i18n.php:6
+msgid "Wake Up Calls"
+msgstr "Llamadas de Despertador"
