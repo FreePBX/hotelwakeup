@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-26 17:57-0400\n"
+"POT-Creation-Date: 2015-05-26 19:10-0400\n"
 "PO-Revision-Date: 2015-03-31 08:05+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
 "Language-Team: Spanish <http://weblate.freepbx.org/projects/freepbx/"
@@ -48,6 +48,12 @@ msgid ""
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
 
+#: Hotelwakeup.class.php:63 Hotelwakeup.class.php:75
+msgid ""
+"Cannot schedule the call, either due to insufficient data or the scheduled "
+"time was in the past"
+msgstr ""
+
 #: views/grid.php:290
 msgid "Close"
 msgstr ""
@@ -60,7 +66,7 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:22
+#: assets/js/hotelwakeup.js:21
 msgid "Day can not be blank"
 msgstr ""
 
@@ -76,7 +82,7 @@ msgstr ""
 msgid "Destination"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:14
+#: assets/js/hotelwakeup.js:13
 msgid "Destination can not be blank"
 msgstr ""
 
@@ -172,7 +178,7 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:18
+#: assets/js/hotelwakeup.js:17
 msgid "Time can not be blank"
 msgstr ""
 
@@ -184,7 +190,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:92
+#: Hotelwakeup.class.php:123
 msgid "Wake Up Calls"
 msgstr "Llamadas de Despertador"
 
