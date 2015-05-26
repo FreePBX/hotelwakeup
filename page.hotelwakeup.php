@@ -28,7 +28,8 @@ if ($online_updates && $foo = hotelwakeup_vercheck()) {
 	print "<br>A <b>new version of this module is available</b> from the <a target='_blank' href='http://pbxossa.org'>PBX Open Source Software Alliance</a><br>";
 	}
 ******************************************************************************/
-
+echo FreePBX::Hotelwakeup()->showPage();
+return;
 // Process form if button B1 is clicked
 if (isset($_POST['B1'])){
 	hotelwakeup_saveconfig();
@@ -158,9 +159,9 @@ Wake Up call for any valid internal or external destination.<br><br>
   <tr>
     <td width="153"><a href="javascript: return false;" class="info">Operator Mode: <span><u>ENABLE</u> Operator Mode to allow designated extentions to create wake up calls for any valid destination.<br><u>DISABLE</u> Calls can only be placed back to the caller ID of the user scheduling the wakeup call.</span></a></td>
     <td width="129">
-<?php 
+<?php
 echo "<input type=\"radio\" value=\"0\" name=\"operator_mode\"".(($date[operator_mode]==0)?' checked':'').">\n";
-?> 
+?>
 Disabled&nbsp;</td>
     <td>
 <?php
@@ -247,19 +248,19 @@ var sec  = <?php $l = localtime(); echo $l[0]?>;
 //wakeupcalls stole this from timegroups
 //who stole this from timeconditions
 //who stole it from http://www.aspfaq.com/show.asp?id=2300
-function PadDigits(n, totalDigits) 
-{ 
-	n = n.toString(); 
-	var pd = ''; 
-	if (totalDigits > n.length) 
-	{ 
-		for (i=0; i < (totalDigits-n.length); i++) 
-		{ 
-			pd += '0'; 
-		} 
-	} 
-	return pd + n.toString(); 
-} 
+function PadDigits(n, totalDigits)
+{
+	n = n.toString();
+	var pd = '';
+	if (totalDigits > n.length)
+	{
+		for (i=0; i < (totalDigits-n.length); i++)
+		{
+			pd += '0';
+		}
+	}
+	return pd + n.toString();
+}
 
 function updateTime()
 {
@@ -268,8 +269,8 @@ function updateTime()
 	{
 		min++;
 		sec = 0;
-	}	
-		
+	}
+
 	if (min==60)
 	{
 		hour++;
@@ -280,7 +281,7 @@ function updateTime()
 	{
 		hour = 0;
 	}
-	
+
 	document.getElementById("idTime").innerHTML = PadDigits(hour,2)+":"+PadDigits(min,2)+":"+PadDigits(sec,2);
 	setTimeout('updateTime()',1000);
 }
@@ -301,12 +302,4 @@ print '<p align="center" style="font-size:11px;">Wake Up Calls Module version '.
 print '<br>The module is maintained by the developer community at the <a target="_blank" href="http://pbxossa.org"> PBX Open Source Software Alliance</a><br></p>';
 
 
-	function CheckWakeUpProp($file) {
-		$myresult = '';
-		$file =basename($file);
-			$WakeUpTmp = explode(".", $file);
-			$myresult[0] = $WakeUpTmp[1];
-			$myresult[1] = $WakeUpTmp[3];
-		return $myresult;
-   	}
 ?>

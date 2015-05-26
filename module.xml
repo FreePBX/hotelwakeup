@@ -2,13 +2,15 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>2.11.3</version>
+	<version>13.0.1alpha2</version>
 	<license>GPLv2</license>
 	<publisher>POSSA</publisher>
 	<category>Applications</category>
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
-	 <changelog>
+	<changelog>
+		*13.0.1alpha2* More Visual changes
+		*13.0.1alpha1* Visual Styling Fixes
 		 *2.11.3* Fixes outstanding database issues
 		 *2.11.2* Database abstraction layer fixes
 		 *2.11.1* #7011 fix errors in hotel wakeup
@@ -20,11 +22,9 @@
 	</menuitems>
 	<depends>
 		<module>ivr gt1.0</module>
-		<version>ge 2.9</version>
-		<engine>asterisk 1.2</engine>
 	</depends>
 	<supported>
-		<version>2.11</version>
+		<version>13.0</version>
 	</supported>
 	<location>release/2.11/hotelwakeup-2.11.1.tgz</location>
 	<md5sum>d6f25e0c000f752a27577ae14037e44c</md5sum>
