@@ -5,7 +5,7 @@
 	<version>13.0.2</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
-	<publisher>POSSA</publisher>
+	<publisher>Sangoma Technologies Corporation</publisher>
 	<category>Applications</category>
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
