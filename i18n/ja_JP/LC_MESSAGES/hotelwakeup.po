@@ -1,0 +1,44 @@
+# This file is part of FreePBX.
+#
+# For licensing information, please see the file named LICENSE located in the module directory
+#
+# FreePBX language template for hotelwakeup
+# Copyright (C) 2008-2015 Sangoma, Inc.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-20 19:35-0500\n"
+"PO-Revision-Date: 2015-07-27 09:42+0200\n"
+"Last-Translator: Kevin <kevin@qloog.com>\n"
+"Language-Team: Japanese "
+"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/ja_JP/>\n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.2-dev\n"
+
+#: page.hotelwakeup.php:240
+msgid "<b>System time:</b> "
+msgstr "<b>システム時刻:</b> "
+
+#: hotelwakeup.i18n.php:4
+msgid "Applications"
+msgstr "アプリケーション"
+
+#: hotelwakeup.i18n.php:5
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "リマインダー及びモーニングコールを設定するFreePBXモジュールです"
+
+#: page.hotelwakeup.php:291
+msgid ""
+"This section will be removed from this time group and all current settings "
+"including changes will be updated. OK to proceed?"
+msgstr "このタイムグループからセクションを削除し、現在の設定は一斉に更新します。続行してもよろしいですか？"
+
+#: hotelwakeup.i18n.php:3 hotelwakeup.i18n.php:6
+msgid "Wake Up Calls"
+msgstr "モーニングコール"
