@@ -47,9 +47,9 @@
 								</div>
 								<div class="col-md-9">
 									<span class="radioset">
-										<input id="operator_mode_yes" type="radio" value="0" name="operator_mode" <?php echo $config['operator_mode'] == "0" ? "checked" : ""?>>
+										<input id="operator_mode_yes" type="radio" value="1" name="operator_mode" <?php echo $config['operator_mode'] == "1" ? "checked" : ""?>>
 										<label for="operator_mode_yes"><?php echo _('Yes')?></label>
-										<input id="operator_mode_no" type="radio" value="1" name="operator_mode" <?php echo $config['operator_mode'] == "1" ? "checked" : ""?>>
+										<input id="operator_mode_no" type="radio" value="0" name="operator_mode" <?php echo $config['operator_mode'] == "0" ? "checked" : ""?>>
 										<label for="operator_mode_no"><?php echo _('No')?></label>
 									</span>
 								</div>
@@ -99,7 +99,7 @@
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="operator_extensions"></i>
 								</div>
 								<div class="col-md-9">
-									<textarea class="form-control" name="operator_extensions" id="operator_extensions"><?php echo $config['operator_extensions']?></textarea>
+									<textarea class="form-control autosize" name="operator_extensions" id="operator_extensions"><?php echo implode("\n",$config['operator_extensions'])?></textarea>
 								</div>
 							</div>
 						</div>

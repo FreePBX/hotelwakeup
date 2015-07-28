@@ -74,21 +74,7 @@ class Hotelwakeup implements \BMO {
 					// abandon .call file creation and pop up a js alert to the user
 					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
 				} else {
-
-					$date = $this->getConfig();  // module config provided by user
-					$parm_application = 'AGI';
-					$parm_data = 'wakeconfirm.php';
-					$this->generateCallFile(array(
-						"time"  => $time_wakeup,
-						"date" => 'unused',
-						"ext" => $_POST['destination'],
-						"maxretries" => $date['maxretries'],
-						"retrytime" => $date['retrytime'],
-						"waittime" => $date['waittime'],
-						"callerid" => $date['cnam']." <".$date['cid'].">",
-						"application" => $parm_application,
-						"data" => $parm_data,
-					));
+					$this->addWakeup($_POST['destination'],$time_wakeup);
 					return array("status" => true);
 				}
 			break;
@@ -97,6 +83,21 @@ class Hotelwakeup implements \BMO {
 			break;
 		}
 		return true;
+	}
+
+	public function addWakeup($destination, $time) {
+		$date = $this->getConfig();  // module config provided by user
+		$this->generateCallFile(array(
+			"time"  => $time,
+			"date" => 'unused',
+			"ext" => $destination,
+			"maxretries" => $date['maxretries'],
+			"retrytime" => $date['retrytime'],
+			"waittime" => $date['waittime'],
+			"callerid" => $date['cnam']." <".$date['cid'].">",
+			"application" => 'AGI',
+			"data" => 'wakeconfirm.php',
+		));
 	}
 
 	public function showPage() {
@@ -134,6 +135,10 @@ class Hotelwakeup implements \BMO {
 		$sth->execute();
 		$fa = $sth->fetch(\PDO::FETCH_ASSOC);
 		$fa['callerid'] = '"'.$fa['cnam'].'" <'.$fa['cid'].'>';
+		$fa['operator_extensions'] = explode(",",$fa['operator_extensions']);
+		foreach($fa['operator_extensions'] as &$ext) {
+			$ext = trim($ext);
+		}
 		return $fa;
 	}
 
@@ -141,6 +146,7 @@ class Hotelwakeup implements \BMO {
 		if(empty($options)) {
 			return false;
 		}
+		$options['operator_extensions'] = str_replace("\n",",",$options['operator_extensions']);
 		$sql = "UPDATE `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ? LIMIT 1";
 		$sth = $this->db->prepare($sql);
 		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions']));
@@ -158,6 +164,14 @@ class Hotelwakeup implements \BMO {
 		return $myresult;
 	}
 
+	public function removeWakeup($file) {
+		$file = basename($file);
+		if(file_exists($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/".$file)) {
+			unlink($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/".$file);
+		}
+		return true;
+	}
+
 	public function getAllCalls() {
 		$calls = array();
 		foreach(glob($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/wuc*.call") as $file) {
@@ -167,6 +181,8 @@ class Hotelwakeup implements \BMO {
 				$filetime = date('H:i',filemtime($file));   //create a time string to display from the file timestamp
 				$wucext = $res[1];
 				$calls[] = array(
+					"filename" => basename($file),
+					"timestamp" => filemtime($file),
 					"time" => $filetime,
 					"date" => $filedate,
 					"destination" => $wucext,
