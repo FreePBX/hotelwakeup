@@ -46,7 +46,13 @@ wakeupMenu($AGI, $cid['username']);
  * @param  string $number The "number" to work with
  */
 function wakeupMenu($AGI, $number) {
-	$digit = sim_background($AGI, "for-wakeup-call&press-1&list&press-2","12");
+	$lang = $AGI->request['agi_language'];
+	if($lang == 'ja') {
+		$digit = sim_background($AGI, "for-wakeup-call&press-1&list&press-2&pleasepress2","12");
+	}
+	else {
+		$digit = sim_background($AGI, "for-wakeup-call&press-1&list&press-2","12");
+	}
 	switch($digit) {
 		case 1:
 			wakeupAdd($AGI, $number);
@@ -67,7 +73,13 @@ function wakeupMenu($AGI, $number) {
  * @param  string $number The "number" to work with
  */
 function wakeupAdd($AGI, $number) {
-	$time = sim_background($AGI, "please-enter-the&time&for&your&wakeup-call","0123456789",4);
+	$lang = $AGI->request['agi_language'];
+	if($lang == 'ja') {
+		$time = sim_background($AGI, "wakeup-call&jp-no&time&please-enter-the","0123456789",4);
+	}	
+	else {
+		$time = sim_background($AGI, "please-enter-the&time&for&your&wakeup-call","0123456789",4);
+	}
 	if($time < 1300) {
 		$td = sim_background($AGI, "1-for-am-2-for-pm","12",1);
 		switch($td) {
@@ -93,7 +105,6 @@ function wakeupAdd($AGI, $number) {
 		if ($time_wakeup <= $time_now) {
 			$time_wakeup += 86400; // Add One Day on
 		}
-
 		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup);
 		sim_playback($AGI,"wakeup-call&added");
 		wakeupMenu($AGI, $number);
@@ -109,6 +120,7 @@ function wakeupAdd($AGI, $number) {
  * @param  string $number the "number" to work with
  */
 function wakeupList($AGI, $number) {
+	$lang = $AGI->request['agi_language'];
 	$calls = FreePBX::Hotelwakeup()->getAllCalls();
 	$myCalls = array();
 	foreach($calls as $call) {
@@ -116,22 +128,42 @@ function wakeupList($AGI, $number) {
 			$myCalls[] = $call;
 		}
 	}
-	sim_playback($AGI,"vm-youhave");
-	$AGI->say_digits(count($myCalls));
-	sim_playback($AGI,"wakeup-call");
+	if($lang == 'ja') {
+		if(count($myCalls) != 0) {
+			sim_playback($AGI,"wakeup-call&jp-wa");
+			$AGI->say_digits(count($myCalls));
+			sim_playback($AGI,"jp-arimasu");
+		} else {
+			sim_playback($AGI,"wakeup-call&jp-wa");
+			sim_playback($AGI,"jp-arimasen");
+			sleep(1);
+		}
+	}
+	else { //Use English as default
+		sim_playback($AGI,"vm-youhave");
+		$AGI->say_digits(count($myCalls));
+		sim_playback($AGI,"wakeup-call");
+	}
 	foreach($myCalls as $id => $call) {
 		$time = $call['timestamp'];
-		sim_playback($AGI,"wakeup-call");
-		sim_playback($AGI,"number");
-		$AGI->say_digits($id + 1);
-		sim_playback($AGI,"digits/at");
-		sim_playback($AGI,"digits/".date('g',$time));
-		sim_playback($AGI,"digits/".(int)date('i',$time));
-		sim_playback($AGI,"digits/".implode("-", str_split(date('a',$time), 1)));
-		sim_playback($AGI,"on");
-		sim_playback($AGI,"digits/".date('j',$time));
-		sim_playback($AGI,"digits/mon-".(date('n',$time)-1));
-		$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
+		if($lang == 'ja') {
+			$AGI->say_digits($id + 1);
+			sim_playback($AGI,"jp-banme&jp-no");
+			sim_playback($AGI,"wakeup-call");
+			sim_playback($AGI,"jp-wa");
+			$AGI->exec("SayUnixTime $time");
+			sleep(1);
+			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
+		}
+		else {
+			sim_playback($AGI,"wakeup-call");
+			sim_playback($AGI,"number");
+			$AGI->say_digits($id + 1);
+			sim_playback($AGI,"digits/at");
+			$AGI->say_time($time);
+			sleep(1);
+			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
+		}
 		switch($digit) {
 			case 1:
 				FreePBX::Hotelwakeup()->removeWakeup($call['filename']);
