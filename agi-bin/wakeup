@@ -80,7 +80,7 @@ function wakeupAdd($AGI, $number) {
 	else {
 		$time = sim_background($AGI, "please-enter-the&time&for&your&wakeup-call","0123456789",4);
 	}
-	if($time < 1300) {
+	if($time < 1300) { // Allow 12 hour entry
 		$td = sim_background($AGI, "1-for-am-2-for-pm","12",1);
 		switch($td) {
 			case 1:
@@ -105,11 +105,22 @@ function wakeupAdd($AGI, $number) {
 		if ($time_wakeup <= $time_now) {
 			$time_wakeup += 86400; // Add One Day on
 		}
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup);
+		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
 		sim_playback($AGI,"wakeup-call&added");
 		wakeupMenu($AGI, $number);
-	} elseif($time > 2400) {
+	} elseif($time > 2400) { // Fail on invalid times
 		sim_playback($AGI,"an-error-has-occurred");
+		wakeupMenu($AGI, $number);
+	} elseif($time > 1300) { // Allow 24 hour entry
+		$w = getdate();
+		$time_wakeup = mktime( substr( $time, 0, 2 ), substr( $time, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
+
+		$time_now = time();
+		if ($time_wakeup <= $time_now) {
+			$time_wakeup += 86400; // Add One Day on
+		}
+		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
+		sim_playback($AGI,"wakeup-call&added");
 		wakeupMenu($AGI, $number);
 	}
 }
@@ -151,7 +162,7 @@ function wakeupList($AGI, $number) {
 			sim_playback($AGI,"jp-banme&jp-no");
 			sim_playback($AGI,"wakeup-call");
 			sim_playback($AGI,"jp-wa");
-			$AGI->exec("SayUnixTime $time");
+			$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
 			sleep(1);
 			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
 		}
@@ -160,7 +171,7 @@ function wakeupList($AGI, $number) {
 			sim_playback($AGI,"number");
 			$AGI->say_digits($id + 1);
 			sim_playback($AGI,"digits/at");
-			$AGI->say_time($time);
+			$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
 			sleep(1);
 			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
 		}

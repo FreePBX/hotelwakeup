@@ -59,6 +59,11 @@ class Hotelwakeup implements \BMO {
 	public function ajaxHandler() {
 		switch($_REQUEST['command']) {
 			case "savecall":
+				if(empty($_POST['language']) {
+					$lang = 'en'; //default to English if empty
+				} else {
+					$lang = $_POST['language']; //otherwise set to the language code provided
+				}
 				if(empty($_POST['day']) || empty($_POST['time'])) {
 					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
 				}
@@ -74,7 +79,7 @@ class Hotelwakeup implements \BMO {
 					// abandon .call file creation and pop up a js alert to the user
 					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
 				} else {
-					$this->addWakeup($_POST['destination'],$time_wakeup);
+					$this->addWakeup($_POST['destination'],$time_wakeup,$lang);
 					return array("status" => true);
 				}
 			break;
@@ -85,12 +90,13 @@ class Hotelwakeup implements \BMO {
 		return true;
 	}
 
-	public function addWakeup($destination, $time) {
+	public function addWakeup($destination, $time, $lang) {
 		$date = $this->getConfig();  // module config provided by user
 		$this->generateCallFile(array(
 			"time"  => $time,
 			"date" => 'unused',
 			"ext" => $destination,
+			"language" => $lang,
 			"maxretries" => $date['maxretries'],
 			"retrytime" => $date['retrytime'],
 			"waittime" => $date['waittime'],
@@ -220,6 +226,7 @@ class Hotelwakeup implements \BMO {
 		fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
 		fputs( $wuc, "waittime: ".$foo['waittime']."\n");
 		fputs( $wuc, "callerid: ".$foo['callerid']."\n");
+		fputs( $wuc, 'set: CHANNEL(language)='.$foo['language']."\n");
 		fputs( $wuc, "application: ".$foo['application']."\n");
 		fputs( $wuc, "data: ".$foo['data']."\n");
 		fclose( $wuc );
