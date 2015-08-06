@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-27 21:20-0700\n"
+"POT-Creation-Date: 2015-08-05 18:11-0700\n"
 "PO-Revision-Date: 2015-07-27 09:42+0200\n"
 "Last-Translator: Kevin <kevin@qloog.com>\n"
 "Language-Team: Japanese <http://weblate.freepbx.org/projects/freepbx/"
@@ -48,7 +48,7 @@ msgid ""
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
 
-#: Hotelwakeup.class.php:63 Hotelwakeup.class.php:75
+#: Hotelwakeup.class.php:68 Hotelwakeup.class.php:80
 msgid ""
 "Cannot schedule the call, either due to insufficient data or the scheduled "
 "time was in the past"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:124
+#: Hotelwakeup.class.php:130
 msgid "Wake Up Calls"
 msgstr "モーニングコール"
 

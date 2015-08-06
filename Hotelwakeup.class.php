@@ -59,7 +59,7 @@ class Hotelwakeup implements \BMO {
 	public function ajaxHandler() {
 		switch($_REQUEST['command']) {
 			case "savecall":
-				if(empty($_POST['language']) {
+				if(empty($_POST['language'])) {
 					$lang = 'en'; //default to English if empty
 				} else {
 					$lang = $_POST['language']; //otherwise set to the language code provided
