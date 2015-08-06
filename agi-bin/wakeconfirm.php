@@ -19,31 +19,55 @@ error_reporting(0);
 require_once "phpagi.php";
 $AGI = new AGI();
 $AGI->answer();
-
-sim_playback($AGI, "hello&this-is-yr-wakeup-call");
+$lang = $AGI->request['agi_language'];
+if($lang == 'ja') {
+	sim_playback($AGI, "this-is-yr-wakeup-call");
+} else {
+	sim_playback($AGI, "hello&this-is-yr-wakeup-call");
+}
 $time_wakeup = time();
-$digit = sim_background($AGI, "to-cancel-wakeup&press-1&to-snooze-for&digits/5&minutes&press-2&to-snooze-for&digits/10&minutes&press-3&to-snooze-for&digits/15&minutes&press-4","1234",1);
+if($lang == 'ja') {
+	$digit = sim_background($AGI, "wakeup-menu","1234",1);
+} else { // Default back to English if channel doesn't match other languages
+	$digit = sim_background($AGI, "to-cancel-wakeup&press-1&to-snooze-for&digits/5&minutes&press-2&to-snooze-for&digits/10&minutes&press-3&to-snooze-for&digits/15&minutes&press-4","1234",1);
+}
 $number = $AGI->request['agi_extension'];
 switch($digit) {
 	case 1:
-		sim_playback($AGI, "wakeup-call-cancelled");
+		if($lang == 'ja') {
+			sim_playback($AGI, "wakeup-call-cancelled");
+		} else {
+			sim_playback($AGI, "wakeup-call-cancelled");
+		}
 	break;
 	case 2:
 		$time_wakeup += 300;
-		sim_playback($AGI, "rqsted-wakeup-for&digits/5&minutes&vm-from&now");
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup);
+		if($lang == 'ja') {
+			sim_playback($AGI, "5-minutes-from-now&rqsted-wakeup-for");
+		} else {
+			sim_playback($AGI, "rqsted-wakeup-for&digits/5&minutes&vm-from&now");
+		}
+		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
 		$AGI->hangup();
 	break;
 	case 3:
 		$time_wakeup += 600;
-		sim_playback($AGI, "rqsted-wakeup-for&digits/10&minutes&vm-from&now");
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup);
+		if($lang == 'ja') {
+			sim_playback($AGI, "10-minutes-from-now&rqsted-wakeup-for");
+		} else {
+			sim_playback($AGI, "rqsted-wakeup-for&digits/10&minutes&vm-from&now");
+		}
+		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
 		$AGI->hangup();
 	break;
 	case 4:
 		$time_wakeup += 900;
-		sim_playback($AGI, "rqsted-wakeup-for&digits/15&minutes&vm-from&now");
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup);
+		if($lang == 'ja') {
+			sim_playback($AGI, "15-minutes-from-now&rqsted-wakeup-for");
+		} else {
+			sim_playback($AGI, "rqsted-wakeup-for&digits/15&minutes&vm-from&now");
+		}
+		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
 		$AGI->hangup();
 	break;
 }
@@ -76,6 +100,7 @@ function sim_playback($AGI, $file) {
 function sim_background($AGI, $file,$digits='',$length='1',$escape='#',$timeout=15000, $maxLoops=1, $loops=0) {
 	$files = explode('&',$file);
 	$number = '';
+	$lang = $AGI->request['agi_language'];
 	foreach($files as $f) {
 		$ret = $AGI->stream_file($f,$digits);
 		if($ret['code'] == 200 && $ret['result'] != 0) {
@@ -92,7 +117,11 @@ function sim_background($AGI, $file,$digits='',$length='1',$escape='#',$timeout=
 				sim_playback($AGI, "please-try-again");
 			}
 			if($ret['code'] == 200 && $ret['result'] == 0) {
-				sim_playback($AGI, "you-entered&bad&digits");
+				if($lang == 'ja') {
+					sim_playback($AGI, "you-entered-bad-digits");
+				} else {
+					sim_playback($AGI, "you-entered&bad&digits");
+				}
 			} elseif($ret['code'] == 200) {
 				$digit = chr($ret['result']);
 				if($digit == $escape) {
@@ -102,7 +131,11 @@ function sim_background($AGI, $file,$digits='',$length='1',$escape='#',$timeout=
 					$number .= $digit;
 					continue; //dont count loops as we are good
 				} else {
-					sim_playback($AGI,"you-entered&bad&digits");
+					if($lang == 'ja') {
+						sim_playback($AGI,"you-entered-bad-digits");
+					} else {
+						sim_playback($AGI,"you-entered&bad&digits");
+					}
 				}
 			} else {
 				sim_playback($AGI,"an-error-has-occurred");
