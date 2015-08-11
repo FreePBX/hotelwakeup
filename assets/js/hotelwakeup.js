@@ -25,10 +25,14 @@ $(function() {
 
 		$("#savecall").prop("disabled",true);
 		$.post( "ajax.php", {command: "savecall", module: "hotelwakeup", destination: $("#destination").val(), time: $("#time").val(), day: $("#day").val()}, function( data ) {
-			callform.reset();
-			$("#myModal").modal("hide");
+			if(!data.status) {
+				alert(data.message);
+			} else {
+				callform.reset();
+				$("#myModal").modal("hide");
+				$('#callgrid').bootstrapTable('refresh');
+			}
 			$("#savecall").prop("disabled",false);
-			$('#callgrid').bootstrapTable('refresh');
 		});
 
 	});

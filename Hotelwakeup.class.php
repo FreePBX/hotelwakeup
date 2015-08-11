@@ -65,7 +65,7 @@ class Hotelwakeup implements \BMO {
 					$lang = $_POST['language']; //otherwise set to the language code provided
 				}
 				if(empty($_POST['day']) || empty($_POST['time'])) {
-					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
+					return array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data"));
 				}
 				$time_wakeup = strtotime($_POST['day']." ".$_POST['time']);
 				$time_now = time();
@@ -77,7 +77,7 @@ class Hotelwakeup implements \BMO {
 				// check for insufficient data
 				if ($badtime)  {
 					// abandon .call file creation and pop up a js alert to the user
-					return array("status" => false, "message" => _("Cannot schedule the call, either due to insufficient data or the scheduled time was in the past"));
+					return array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
 				} else {
 					$this->addWakeup($_POST['destination'],$time_wakeup,$lang);
 					return array("status" => true);

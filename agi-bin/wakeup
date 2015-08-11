@@ -38,6 +38,7 @@ if($config['operator_mode']) {
 		return;
 	}
 }
+//TODO: needs to use AMPUSER through macro-caller-id
 wakeupMenu($AGI, $cid['username']);
 
 /**
@@ -76,7 +77,7 @@ function wakeupAdd($AGI, $number) {
 	$lang = $AGI->request['agi_language'];
 	if($lang == 'ja') {
 		$time = sim_background($AGI, "wakeup-call&jp-no&time&please-enter-the","0123456789",4);
-	}	
+	}
 	else {
 		$time = sim_background($AGI, "please-enter-the&time&for&your&wakeup-call","0123456789",4);
 	}
