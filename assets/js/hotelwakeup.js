@@ -5,6 +5,20 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$("#submit, #reset").addClass("hidden");
 	}
 });
+
+var time = $("#servertime").data("time");
+var updateTime = function() {
+	var date = new Date(time*1000),
+			hours = date.getHours(),
+			minutes = "0" + date.getMinutes(),
+			seconds = "0" + date.getSeconds(),
+			formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+	$("#servertime span").text(formattedTime);
+	time = time + 1;
+};
+
+setInterval(updateTime,1000);
+
 $(function() {
 	$("#day").datepicker();
 	$('#time').timepicker();
