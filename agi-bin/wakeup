@@ -112,7 +112,7 @@ function wakeupAdd($AGI, $number) {
 	} elseif($time > 2400) { // Fail on invalid times
 		sim_playback($AGI,"an-error-has-occurred");
 		wakeupMenu($AGI, $number);
-	} elseif($time > 1300) { // Allow 24 hour entry
+	} elseif($time >= 1300) { // Allow 24 hour entry
 		$w = getdate();
 		$time_wakeup = mktime( substr( $time, 0, 2 ), substr( $time, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
 
