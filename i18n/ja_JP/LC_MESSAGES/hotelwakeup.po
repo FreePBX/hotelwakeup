@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 17:23-0700\n"
-"PO-Revision-Date: 2015-10-27 08:43+0200\n"
+"PO-Revision-Date: 2015-10-27 11:13+0200\n"
 "Last-Translator: Kevin <kevin@qloog.com>\n"
 "Language-Team: Japanese "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/ja_JP/>\n"
@@ -113,7 +113,7 @@ msgstr ""
 
 #: views/grid.php:54
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: views/grid.php:99
 msgid "Operator Extensions"
@@ -179,9 +179,7 @@ msgstr ""
 msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
-msgstr ""
-"このタイムグループからセクションを削除し、現在の設定は一斉に更新します。続行"
-"してもよろしいですか？"
+msgstr "このセクションを時間グループから削除し、変更した内容を含めて全ての設定を更新します。続行しますか？"
 
 #: views/grid.php:29 views/grid.php:252
 msgid "Time"
@@ -223,7 +221,7 @@ msgstr ""
 
 #: views/grid.php:52
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #~ msgid "Applications"
 #~ msgstr "アプリケーション"
