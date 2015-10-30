@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 17:23-0700\n"
-"PO-Revision-Date: 2015-10-27 12:51+0200\n"
+"PO-Revision-Date: 2015-10-30 06:49+0200\n"
 "Last-Translator: Kevin <kevin@qloog.com>\n"
 "Language-Team: Japanese "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/ja_JP/>\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: views/grid.php:291
 msgid "Close"
-msgstr ""
+msgstr "閉じる"
 
 #: views/grid.php:30
 msgid "Date"
