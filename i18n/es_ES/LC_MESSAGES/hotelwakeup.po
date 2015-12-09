@@ -113,7 +113,7 @@ msgstr ""
 
 #: views/grid.php:54
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: views/grid.php:99
 msgid "Operator Extensions"
@@ -223,7 +223,7 @@ msgstr ""
 
 #: views/grid.php:52
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #~ msgid "Applications"
 #~ msgstr "Aplicaciones"
