@@ -27,7 +27,7 @@ msgstr "<b>Hora Sistema:</b> "
 
 #: views/grid.php:32
 msgid "Actions"
-msgstr ""
+msgstr "Acciones"
 
 #: views/grid.php:19
 msgid "Add"
@@ -125,7 +125,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr ""
+msgstr "Restaura"
 
 #: views/grid.php:147
 msgid "Retry Time"
