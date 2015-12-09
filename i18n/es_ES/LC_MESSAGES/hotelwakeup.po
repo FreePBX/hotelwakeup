@@ -65,7 +65,7 @@ msgstr ""
 
 #: views/grid.php:30
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: views/grid.php:272
 msgid "Day"
@@ -81,7 +81,7 @@ msgstr ""
 
 #: views/grid.php:22
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: views/grid.php:31 views/grid.php:232
 msgid "Destination"
@@ -145,11 +145,11 @@ msgstr ""
 
 #: views/grid.php:13
 msgid "Settings"
-msgstr ""
+msgstr "Configuraciones"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: views/grid.php:184
 msgid ""
