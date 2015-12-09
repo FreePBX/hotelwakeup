@@ -85,7 +85,7 @@ msgstr "Eliminar"
 
 #: views/grid.php:31 views/grid.php:232
 msgid "Destination"
-msgstr ""
+msgstr "Destino"
 
 #: assets/js/hotelwakeup.js:27
 msgid "Destination can not be blank"
