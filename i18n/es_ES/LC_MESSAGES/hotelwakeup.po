@@ -31,7 +31,7 @@ msgstr "Acciones"
 
 #: views/grid.php:19
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: views/grid.php:220
 msgid "Add new Wakeup Call"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: views/grid.php:291
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: views/grid.php:30
 msgid "Date"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: views/grid.php:171
 msgid "Max Retries"
-msgstr ""
+msgstr "Número máximo de reintentos"
 
 #: views/grid.php:54
 msgid "No"
@@ -133,7 +133,7 @@ msgstr ""
 
 #: views/grid.php:123
 msgid "Ring Time"
-msgstr ""
+msgstr "Tiempo de Timbre"
 
 #: views/grid.php:292
 msgid "Save changes"
