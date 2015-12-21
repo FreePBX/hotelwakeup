@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>13.0.7</version>
+	<version>13.0.8</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
+		*13.0.8* FREEPBX-11088
 		*13.0.7* minor fix for 24 hour time at 1300
 		*13.0.6* FREEPBX-10101 Display system time in wakeup calls
 		*13.0.5* FREEPBX-9980 better notices when input is wrong, FREEPBX-9981 remove bootnav, not needed here

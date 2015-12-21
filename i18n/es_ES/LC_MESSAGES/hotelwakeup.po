@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 17:23-0700\n"
+"POT-Creation-Date: 2015-12-21 09:51-0800\n"
 "PO-Revision-Date: 2015-03-31 08:05+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
 "Language-Team: Spanish <http://weblate.freepbx.org/projects/freepbx/"
@@ -36,6 +36,10 @@ msgstr "Añadir"
 #: views/grid.php:220
 msgid "Add new Wakeup Call"
 msgstr ""
+
+#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
+msgid "Applications"
+msgstr "Aplicaciones"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -102,6 +106,10 @@ msgid ""
 "any valid destination. Numbers can be extension numbers, full caller ID "
 "numbers or Asterisk dialing patterns"
 msgstr ""
+
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"
 
 #: views/grid.php:75
 msgid "Max Destination Length"
@@ -199,7 +207,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:130
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
 msgstr "Llamadas de Despertador"
 
@@ -224,9 +232,3 @@ msgstr ""
 #: views/grid.php:52
 msgid "Yes"
 msgstr "Sí"
-
-#~ msgid "Applications"
-#~ msgstr "Aplicaciones"
-
-#~ msgid "FreePBX module for generating reminder and wakeup calls"
-#~ msgstr "Módulo FreePBX para generar recordatorios y llamadas de despertador"

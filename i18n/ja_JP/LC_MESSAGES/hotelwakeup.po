@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 17:23-0700\n"
+"POT-Creation-Date: 2015-12-21 09:51-0800\n"
 "PO-Revision-Date: 2015-10-30 06:49+0200\n"
 "Last-Translator: Kevin <kevin@qloog.com>\n"
-"Language-Team: Japanese "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/ja_JP/>\n"
-"Language: ja_JP\n"
+"Language-Team: Japanese <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/ja_JP/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.2-dev\n"
 
@@ -36,6 +36,10 @@ msgstr "追加"
 #: views/grid.php:220
 msgid "Add new Wakeup Call"
 msgstr ""
+
+#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
+msgid "Applications"
+msgstr "アプリケーション"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -102,6 +106,10 @@ msgid ""
 "any valid destination. Numbers can be extension numbers, full caller ID "
 "numbers or Asterisk dialing patterns"
 msgstr ""
+
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "リマインダー及びモーニングコールを設定するFreePBXモジュールです"
 
 #: views/grid.php:75
 msgid "Max Destination Length"
@@ -179,7 +187,9 @@ msgstr ""
 msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
-msgstr "このセクションを時間グループから削除し、変更した内容を含めて全ての設定を更新します。続行しますか？"
+msgstr ""
+"このセクションを時間グループから削除し、変更した内容を含めて全ての設定を更新"
+"します。続行しますか？"
 
 #: views/grid.php:29 views/grid.php:252
 msgid "Time"
@@ -197,7 +207,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:130
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
 msgstr "モーニングコール"
 
@@ -222,9 +232,3 @@ msgstr ""
 #: views/grid.php:52
 msgid "Yes"
 msgstr "はい"
-
-#~ msgid "Applications"
-#~ msgstr "アプリケーション"
-
-#~ msgid "FreePBX module for generating reminder and wakeup calls"
-#~ msgstr "リマインダー及びモーニングコールを設定するFreePBXモジュールです"
