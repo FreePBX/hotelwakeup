@@ -7,13 +7,9 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 });
 
 var time = $("#servertime").data("time");
+var timezone = $("#servertime").data("zone");
 var updateTime = function() {
-	var date = new Date(time*1000),
-			hours = date.getHours(),
-			minutes = "0" + date.getMinutes(),
-			seconds = "0" + date.getSeconds(),
-			formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-	$("#servertime span").text(formattedTime);
+	$("#servertime span").text(moment.unix(time).tz(timezone).format('HH:mm:ss z'));
 	time = time + 1;
 };
 
