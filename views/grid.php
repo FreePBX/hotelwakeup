@@ -21,7 +21,10 @@
 			<button id="remove-all" class="btn btn-danger btn-remove" data-type="extensions" disabled data-section="all">
 				<i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Delete')?></span>
 			</button>
-			<div id="servertime" data-time="<?php echo time()?>"> <?php echo _("Server Time")?>:<span></span></div>
+			<span class="btn btn-default disabled">
+				<b>Server time:</b>
+				<div id="servertime" data-time="<?php echo time()?>" data-zone="<?php echo date("e")?>" style="display: inline;"><span><?php echo _("Not received")?></span></div>
+			</span>
 		</div>
 		<table id="callgrid" data-url="ajax.php?module=hotelwakeup&amp;command=getable" data-cache="false" data-toolbar="#toolbar-all" data-maintain-selected="true" data-show-columns="true" data-show-toggle="true" data-toggle="table" data-pagination="true" data-search="true" class="table table-striped">
 			<thead>

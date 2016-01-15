@@ -3,13 +3,13 @@
 # For licensing information, please see the file named LICENSE located in the module directory
 #
 # FreePBX language template for hotelwakeup
-# Copyright (C) 2008-2015 Sangoma, Inc.
+# Copyright (C) 2008-2016 Sangoma, Inc.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 17:23-0700\n"
+"POT-Creation-Date: 2016-01-04 19:51-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "<b>System time:</b> "
 msgstr ""
 
-#: views/grid.php:32
+#: views/grid.php:35
 msgid "Actions"
 msgstr ""
 
@@ -29,15 +29,20 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: views/grid.php:220
+#: views/grid.php:223
 msgid "Add new Wakeup Call"
+msgstr ""
+
+#: hotelwakeup.i18n.php:6
+#: hotelwakeup.i18n.php:12
+msgid "Applications"
 msgstr ""
 
 #: views/grid.php:12
 msgid "Call List"
 msgstr ""
 
-#: views/grid.php:208
+#: views/grid.php:211
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -55,23 +60,23 @@ msgstr ""
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr ""
 
-#: views/grid.php:291
+#: views/grid.php:294
 msgid "Close"
 msgstr ""
 
-#: views/grid.php:30
+#: views/grid.php:33
 msgid "Date"
 msgstr ""
 
-#: views/grid.php:272
+#: views/grid.php:275
 msgid "Day"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:35
+#: assets/js/hotelwakeup.js:31
 msgid "Day can not be blank"
 msgstr ""
 
-#: views/grid.php:282
+#: views/grid.php:285
 msgid "Day to call"
 msgstr ""
 
@@ -79,20 +84,20 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: views/grid.php:31
-#: views/grid.php:232
+#: views/grid.php:34
+#: views/grid.php:235
 msgid "Destination"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:27
+#: assets/js/hotelwakeup.js:23
 msgid "Destination can not be blank"
 msgstr ""
 
-#: views/grid.php:242
+#: views/grid.php:245
 msgid "Destination to call"
 msgstr ""
 
-#: views/grid.php:112
+#: views/grid.php:115
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
 "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
@@ -100,23 +105,31 @@ msgid ""
 "numbers or Asterisk dialing patterns"
 msgstr ""
 
-#: views/grid.php:75
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr ""
+
+#: views/grid.php:78
 msgid "Max Destination Length"
 msgstr ""
 
-#: views/grid.php:171
+#: views/grid.php:174
 msgid "Max Retries"
 msgstr ""
 
-#: views/grid.php:54
+#: views/grid.php:57
 msgid "No"
 msgstr ""
 
-#: views/grid.php:99
+#: views/grid.php:26
+msgid "Not received"
+msgstr ""
+
+#: views/grid.php:102
 msgid "Operator Extensions"
 msgstr ""
 
-#: views/grid.php:46
+#: views/grid.php:49
 msgid "Operator Mode"
 msgstr ""
 
@@ -124,20 +137,16 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: views/grid.php:147
+#: views/grid.php:150
 msgid "Retry Time"
 msgstr ""
 
-#: views/grid.php:123
+#: views/grid.php:126
 msgid "Ring Time"
 msgstr ""
 
-#: views/grid.php:292
+#: views/grid.php:295
 msgid "Save changes"
-msgstr ""
-
-#: views/grid.php:24
-msgid "Server Time"
 msgstr ""
 
 #: views/grid.php:13
@@ -148,25 +157,25 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: views/grid.php:184
+#: views/grid.php:187
 msgid ""
 "The maximum number of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
 msgstr ""
 
-#: views/grid.php:136
+#: views/grid.php:139
 msgid ""
 "The number of seconds for the phone to ring. Consider setting lower than the "
 "voicemail threshold or the wakeup call can end up going to voicemail"
 msgstr ""
 
-#: views/grid.php:160
+#: views/grid.php:163
 msgid ""
 "The number of seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
 msgstr ""
 
-#: views/grid.php:88
+#: views/grid.php:91
 msgid ""
 "This controls the maximum number of digits an operator can send a wakeup "
 "call to. Set to 10 or 11 to allow wake up calls to outside numbers"
@@ -178,24 +187,26 @@ msgid ""
 "including changes will be updated. OK to proceed?"
 msgstr ""
 
-#: views/grid.php:29
-#: views/grid.php:252
+#: views/grid.php:32
+#: views/grid.php:255
 msgid "Time"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:31
+#: assets/js/hotelwakeup.js:27
 msgid "Time can not be blank"
 msgstr ""
 
-#: views/grid.php:262
+#: views/grid.php:265
 msgid "Time to call"
 msgstr ""
 
-#: views/grid.php:195
+#: views/grid.php:198
 msgid "Wake Up Caller ID"
 msgstr ""
 
 #: Hotelwakeup.class.php:130
+#: hotelwakeup.i18n.php:4
+#: hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
 msgstr ""
 
@@ -210,13 +221,13 @@ msgstr ""
 msgid "What is Hotel Style Wakeup Calls?"
 msgstr ""
 
-#: views/grid.php:64
+#: views/grid.php:67
 msgid ""
 "When Operator Mode is enabled it will allow designated extentions to create "
 "wake up calls for any valid destination. If disabled calls can only be "
 "placed back to the caller ID of the user scheduling the wakeup call"
 msgstr ""
 
-#: views/grid.php:52
+#: views/grid.php:55
 msgid "Yes"
 msgstr ""

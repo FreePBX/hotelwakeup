@@ -201,8 +201,11 @@ class Hotelwakeup implements \BMO {
 
 	public function generateCallFile($foo) {
 		if (empty($foo['tempdir'])) {
-			$path = sys_get_temp_dir();
-			$foo['tempdir'] = !empty($path) ? $path . "/" : $this->FreePBX->Config->get('ASTSPOOLDIR')."/tmp/";
+			$ast_tmp_path = $this->FreePBX->Config->get('ASTSPOOLDIR')."/tmp/";
+			if(!file_exists($ast_tmp_path)) {
+							mkdir($ast_tmp_path,0777,true);
+			}
+			$foo['tempdir'] = $ast_tmp_path;
 		}
 		if (empty($foo['outdir'])) {
 			$foo['outdir'] = $this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/";
