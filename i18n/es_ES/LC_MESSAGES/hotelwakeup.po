@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 17:23-0700\n"
-"PO-Revision-Date: 2016-01-05 00:00+0200\n"
+"PO-Revision-Date: 2016-01-14 22:56+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
 "Language-Team: Spanish "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
@@ -81,7 +81,7 @@ msgstr ""
 
 #: views/grid.php:22
 msgid "Delete"
-msgstr "Eliminar"
+msgstr "Borrar"
 
 #: views/grid.php:31 views/grid.php:232
 msgid "Destination"
