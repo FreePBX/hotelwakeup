@@ -10,37 +10,40 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-01-04 19:51-0800\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2016-01-21 18:40+0200\n"
+"Last-Translator: Nicolas <forums@riendeau.org>\n"
+"Language-Team: French "
+"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.2-dev\n"
 
 #: page.hotelwakeup.php:241
 msgid "<b>System time:</b> "
-msgstr ""
+msgstr "<b>Heure du système :</b> "
 
 #: views/grid.php:35
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 #: views/grid.php:19
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
-msgstr ""
+msgstr "Ajouter nouvel appel de réveil"
 
 #: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #: views/grid.php:12
 msgid "Call List"
-msgstr ""
+msgstr "Liste d'appel"
 
 #: views/grid.php:211
 msgid ""
@@ -48,6 +51,10 @@ msgid ""
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
+"ID Appelant pour les appels de réveil<br><br>Format: <b>&lt;#######&gt;</b>. "
+"Vous pouvez aussi utilisé le format : \"hidden\" <b>&lt;#######&gt;</b> pour "
+"cacher l'ID appelant envoyé par lignes numériques si supporté "
+"(E1/T1/J1/BRI/SIP/IAX)"
 
 #: Hotelwakeup.class.php:80
 #, php-format
@@ -62,39 +69,39 @@ msgstr ""
 
 #: views/grid.php:294
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: views/grid.php:33
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: views/grid.php:275
 msgid "Day"
-msgstr ""
+msgstr "Jour"
 
 #: assets/js/hotelwakeup.js:31
 msgid "Day can not be blank"
-msgstr ""
+msgstr "Le jour ne peut être vide"
 
 #: views/grid.php:285
 msgid "Day to call"
-msgstr ""
+msgstr "Jour d'appel"
 
 #: views/grid.php:22
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: views/grid.php:34 views/grid.php:235
 msgid "Destination"
-msgstr ""
+msgstr "Destination"
 
 #: assets/js/hotelwakeup.js:23
 msgid "Destination can not be blank"
-msgstr ""
+msgstr "La destination ne peut être vide"
 
 #: views/grid.php:245
 msgid "Destination to call"
-msgstr ""
+msgstr "Destination à appeler"
 
 #: views/grid.php:115
 msgid ""
@@ -118,7 +125,7 @@ msgstr ""
 
 #: views/grid.php:57
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: views/grid.php:26
 msgid "Not received"
