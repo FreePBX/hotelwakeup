@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-01-21 18:40+0200\n"
+"PO-Revision-Date: 2016-01-22 06:22+0200\n"
 "Last-Translator: Nicolas <forums@riendeau.org>\n"
 "Language-Team: French "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
@@ -141,7 +141,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr ""
+msgstr "Remise à 0"
 
 #: views/grid.php:150
 msgid "Retry Time"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr ""
+msgstr "Soumettre"
 
 #: views/grid.php:187
 msgid ""
@@ -233,4 +233,4 @@ msgstr ""
 
 #: views/grid.php:55
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
