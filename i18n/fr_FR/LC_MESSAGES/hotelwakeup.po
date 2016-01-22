@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-01-22 06:22+0200\n"
+"PO-Revision-Date: 2016-01-22 09:27+0200\n"
 "Last-Translator: Nicolas <forums@riendeau.org>\n"
 "Language-Team: French "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
@@ -157,7 +157,7 @@ msgstr ""
 
 #: views/grid.php:13
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: views/grid.php:32 views/grid.php:255
 msgid "Time"
-msgstr ""
+msgstr "Heure"
 
 #: assets/js/hotelwakeup.js:27
 msgid "Time can not be blank"
