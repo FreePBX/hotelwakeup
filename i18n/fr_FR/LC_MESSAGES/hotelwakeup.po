@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-01-24 07:44+0200\n"
-"Last-Translator: Nicolas <forums@riendeau.org>\n"
+"PO-Revision-Date: 2016-02-04 07:46+0200\n"
+"Last-Translator: Nicolas Riendeau <freepbx@riendeau.org>\n"
 "Language-Team: French "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
 "Language: fr_FR\n"
@@ -62,10 +62,12 @@ msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
 "[Wakeup Time: %s]"
 msgstr ""
+"L'appel ne peut être programmé, car l'heure prévue est dans le passé. [Heure "
+"actuelle : %s] [Heure de réveil : %s]"
 
 #: Hotelwakeup.class.php:68
 msgid "Cannot schedule the call, due to insufficient data"
-msgstr ""
+msgstr "L'appel ne peut être programmé du à un manque d'information"
 
 #: views/grid.php:294
 msgid "Close"
@@ -117,7 +119,7 @@ msgstr ""
 
 #: views/grid.php:78
 msgid "Max Destination Length"
-msgstr ""
+msgstr "Longueur maximale de la destination"
 
 #: views/grid.php:174
 msgid "Max Retries"
@@ -129,15 +131,15 @@ msgstr "Non"
 
 #: views/grid.php:26
 msgid "Not received"
-msgstr ""
+msgstr "Non reçu"
 
 #: views/grid.php:102
 msgid "Operator Extensions"
-msgstr ""
+msgstr "Postes de l'opérateur"
 
 #: views/grid.php:49
 msgid "Operator Mode"
-msgstr ""
+msgstr "Mode opérateur"
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
@@ -153,7 +155,7 @@ msgstr ""
 
 #: views/grid.php:295
 msgid "Save changes"
-msgstr ""
+msgstr "Sauvegarder les changements"
 
 #: views/grid.php:13
 msgid "Settings"
