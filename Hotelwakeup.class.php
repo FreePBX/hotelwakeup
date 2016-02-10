@@ -224,7 +224,7 @@ class Hotelwakeup implements \BMO {
 
 		// Create up a .call file, write and close
 		$wuc = fopen($tempfile, 'w');
-		fputs( $wuc, "channel: Local/".$foo['ext']."@from-internal\n" );
+		fputs( $wuc, "channel: Local/".$foo['ext']."@originate-skipvm\n" );
 		fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
 		fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
 		fputs( $wuc, "waittime: ".$foo['waittime']."\n");
