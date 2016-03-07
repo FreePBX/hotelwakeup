@@ -27,7 +27,7 @@ if($config['operator_mode']) {
 	if(in_array($cid['username'],$config['operator_extensions'])) {
 		$number = sim_background($AGI, "please-enter-the&number&for&your&wakeup-call&then-press-pound","0123456789",$config['extensionlength']);
 
-		if(empty($number) || strlen($number) < $config['extensionlength']) {
+		if(empty($number) || strlen($number) > $config['extensionlength']) {
 			sim_playback($AGI, "goodbye");
 			$AGI->hangup();
 		}
