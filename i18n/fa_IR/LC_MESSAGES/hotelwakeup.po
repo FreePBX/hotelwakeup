@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-04-18 18:43+0200\n"
-"Last-Translator: Media <mousavi.media@gmail.com>\n"
+"PO-Revision-Date: 2016-04-25 19:46+0200\n"
+"Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fa_IR/>\n"
 "Language: fa_IR\n"
@@ -166,7 +166,7 @@ msgstr "تنظیمات"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr "ارسال"
+msgstr "ثبت"
 
 #: views/grid.php:187
 msgid ""
