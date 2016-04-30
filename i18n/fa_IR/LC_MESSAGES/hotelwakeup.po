@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-04-25 19:46+0200\n"
+"PO-Revision-Date: 2016-04-30 15:59+0200\n"
 "Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fa_IR/>\n"
@@ -39,7 +39,7 @@ msgstr "افزودن تماس بیدارباش جدید"
 
 #: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
 msgid "Applications"
-msgstr "کاربرد ها"
+msgstr "برنامه‌ های کاربردی"
 
 #: views/grid.php:12
 msgid "Call List"
