@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-04 19:51-0800\n"
-"PO-Revision-Date: 2016-06-22 09:35+0200\n"
+"PO-Revision-Date: 2016-06-22 11:23+0200\n"
 "Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fa_IR/>\n"
@@ -134,7 +134,7 @@ msgstr "خیر"
 
 #: views/grid.php:26
 msgid "Not received"
-msgstr "نرسیده"
+msgstr "دریافت نشده"
 
 #: views/grid.php:102
 msgid "Operator Extensions"
@@ -204,9 +204,7 @@ msgstr ""
 msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
-msgstr ""
-"This section  will be removed from this time group and all current settings "
-"including changes will be updated. OK to proceed?"
+msgstr "این بخش از گروه زمانی و تمامی تنظیمات حذف می شود. ادامه می دهید؟"
 
 #: views/grid.php:32 views/grid.php:255
 msgid "Time"
