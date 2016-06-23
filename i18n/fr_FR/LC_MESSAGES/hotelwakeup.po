@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-04 19:51-0800\n"
+"POT-Creation-Date: 2016-06-23 10:39-0700\n"
 "PO-Revision-Date: 2016-02-05 09:48+0200\n"
 "Last-Translator: Nicolas Riendeau <freepbx@riendeau.org>\n"
 "Language-Team: French <http://weblate.freepbx.org/projects/freepbx/"
@@ -160,6 +160,10 @@ msgstr "Temps de sonnerie"
 #: views/grid.php:295
 msgid "Save changes"
 msgstr "Sauvegarder les changements"
+
+#: views/grid.php:25
+msgid "Server time"
+msgstr ""
 
 #: views/grid.php:13
 msgid "Settings"
