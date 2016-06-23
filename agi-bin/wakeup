@@ -88,69 +88,64 @@ function wakeupAdd($AGI, $number) {
 			$last = chr($ret['result']);
 			$last = $last != '#' ? $last : '';
 		}
-		$time = (string)($time.$last);
+		$times = (string)($time.$last);
+		$time = (int)($time.$last);
 	}
 
-	if($time < 1300) { // Allow 12 hour entry
-		$td = sim_background($AGI, "1-for-am-2-for-pm","12",1);
-		switch($td) {
-			case 1:
-				if($time > 1159) {
-					$time -= 1200;
-				}
-			break;
-			case 2:
-				if($time < 1159) {
-					$time += 1200;
-				}
-			break;
-			default:
-				sim_playback($AGI,"an-error-has-occurred");
-				$AGI->hangup();
-				return false;
-			break;
-		}
+	$times = trim($times);
+	$type = (strlen($times) == 4) ? 24 : 12;
 
-		$time_wakeup = hotelwakeup_convert_time($time);
-		if($time_wakeup === false) {
-			sim_playback($AGI,"an-error-has-occurred");
-			$AGI->hangup();
-			return false;
-		}
-
-		$time_now = time();
-		if ($time_wakeup <= $time_now) {
-			$time_wakeup += 86400; // Add One Day on
-		}
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
-		sim_playback($AGI,"wakeup-call&added&digits/at");
-		$time = $time_wakeup;
-		if($lang == 'ja') {
-			$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
-		}
-		else {
-			$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
-		}
-		wakeupMenu($AGI, $number);
-	} elseif($time > 2400) { // Fail on invalid times
+	if($time > 2400) {
 		sim_playback($AGI,"an-error-has-occurred");
 		wakeupMenu($AGI, $number);
-	} elseif($time >= 1300) { // Allow 24 hour entry
-		$time_wakeup = hotelwakeup_convert_time($time);
-		if($time_wakeup === false) {
-			sim_playback($AGI,"an-error-has-occurred");
-			$AGI->hangup();
-			return false;
-		}
-
-		$time_now = time();
-		if ($time_wakeup <= $time_now) {
-			$time_wakeup += 86400; // Add One Day on
-		}
-		FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
-		sim_playback($AGI,"wakeup-call&added");
-		wakeupMenu($AGI, $number);
 	}
+
+	switch($type) {
+		case 12:
+			$td = sim_background($AGI, "1-for-am-2-for-pm","12",1);
+			switch($td) {
+				case 1:
+					if($time > 1159) {
+						$time -= 1200;
+					}
+				break;
+				case 2:
+					if($time < 1159) {
+						$time += 1200;
+					}
+				break;
+				default:
+					sim_playback($AGI,"an-error-has-occurred");
+					$AGI->hangup();
+					return false;
+				break;
+			}
+		break;
+		case 24:
+		break;
+	}
+
+	$time_wakeup = hotelwakeup_convert_time($time);
+	if($time_wakeup === false) {
+		sim_playback($AGI,"an-error-has-occurred");
+		$AGI->hangup();
+		return false;
+	}
+
+	$time_now = time();
+	if ($time_wakeup <= $time_now) {
+		$time_wakeup += 86400; // Add One Day on
+	}
+	FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
+	sim_playback($AGI,"wakeup-call&added&digits/at");
+	$time = $time_wakeup;
+	if($lang == 'ja') {
+		$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
+	}
+	else {
+		$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
+	}
+	wakeupMenu($AGI, $number);
 }
 
 /**
