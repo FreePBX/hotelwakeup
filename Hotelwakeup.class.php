@@ -45,8 +45,6 @@ class Hotelwakeup implements \BMO {
 	}
 
 	public function ajaxRequest($req, &$setting) {
-		$setting['authenticate'] = false;
-		$setting['allowremote'] = false;
 		switch($req) {
 			case "savecall":
 			case "getable":

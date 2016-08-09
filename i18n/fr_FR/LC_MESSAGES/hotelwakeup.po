@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 10:39-0700\n"
+"POT-Creation-Date: 2016-08-09 14:10-0700\n"
 "PO-Revision-Date: 2016-02-05 09:48+0200\n"
 "Last-Translator: Nicolas Riendeau <freepbx@riendeau.org>\n"
 "Language-Team: French <http://weblate.freepbx.org/projects/freepbx/"
@@ -56,7 +56,7 @@ msgstr ""
 "cacher l'ID appelant envoyé par lignes numériques si supporté (E1/T1/J1/BRI/"
 "SIP/IAX)"
 
-#: Hotelwakeup.class.php:80
+#: Hotelwakeup.class.php:78
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -65,7 +65,7 @@ msgstr ""
 "L'appel ne peut être programmé, car l'heure prévue est dans le passé. [Heure "
 "actuelle : %s] [Heure de réveil : %s]"
 
-#: Hotelwakeup.class.php:68
+#: Hotelwakeup.class.php:66
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr "L'appel ne peut être programmé du à un manque d'information"
 
@@ -231,7 +231,7 @@ msgstr "Heure d'appel"
 msgid "Wake Up Caller ID"
 msgstr "ID appelant de l'appel de réveil"
 
-#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
 msgstr "Appels de réveil"
 
