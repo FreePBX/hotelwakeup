@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 10:39-0700\n"
+"POT-Creation-Date: 2016-08-09 14:10-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,14 +49,14 @@ msgid ""
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
 
-#: Hotelwakeup.class.php:80
+#: Hotelwakeup.class.php:78
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
 "[Wakeup Time: %s]"
 msgstr ""
 
-#: Hotelwakeup.class.php:68
+#: Hotelwakeup.class.php:66
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr ""
 
@@ -208,7 +208,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:130
+#: Hotelwakeup.class.php:128
 #: hotelwakeup.i18n.php:4
 #: hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
