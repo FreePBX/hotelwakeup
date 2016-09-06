@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>13.0.15</version>
+	<version>13.0.16</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
+		*13.0.16* More updates and fixes
 		*13.0.15* Language Updates
 		*13.0.14* FREEPBX-12093 fix setting times on wakeups
 		*13.0.13* FREEPBX-12093 FREEPBX-10877 fix issues with string time parsing
