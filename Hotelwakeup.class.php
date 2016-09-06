@@ -212,7 +212,7 @@ class Hotelwakeup implements \BMO {
 			$foo['filename'] = "wuc.".$foo['time'].".ext.".$foo['ext'].".call";
 		}
 
-		$foo['ext'] = preg_replace("/[^\d@\+]/","",$foo['ext']);
+		$foo['ext'] = preg_replace("/[^\d@\+\#]/","",$foo['ext']);
 		$foo['filename'] = basename($foo['filename']);
 
 		$tempfile = $foo['tempdir'].$foo['filename'];
