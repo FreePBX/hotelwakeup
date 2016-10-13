@@ -19,7 +19,7 @@
 		<module>ivr gt1.0</module>
 	</depends>
 	<supported>
-		<version>13.0</version>
+		<version>14.0</version>
 	</supported>
 	<location>release/2.11/hotelwakeup-2.11.1.tgz</location>
 	<md5sum>d6f25e0c000f752a27577ae14037e44c</md5sum>
