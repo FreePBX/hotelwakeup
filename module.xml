@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>13.0.16</version>
+	<version>14.0.1alpha1</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,29 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
-		*13.0.16* More updates and fixes
-		*13.0.15* Language Updates
-		*13.0.14* FREEPBX-12093 fix setting times on wakeups
-		*13.0.13* FREEPBX-12093 FREEPBX-10877 fix issues with string time parsing
-		*13.0.12* FREEPBX-11771 Fix logic for extension length
-		*13.0.11* Remove en_US Translations
-		*13.0.10* FREEPBX-9348 skip voicemail for a wakeup call
-		*13.0.9* Use moments to accurately display time
-		*13.0.8* FREEPBX-11088
-		*13.0.7* minor fix for 24 hour time at 1300
-		*13.0.6* FREEPBX-10101 Display system time in wakeup calls
-		*13.0.5* FREEPBX-9980 better notices when input is wrong, FREEPBX-9981 remove bootnav, not needed here
-		*13.0.4* FREEPBX-9912 Localize sound playback for hotelwakeup
-		*13.0.3* FREEPBX-9841 addresses problems, uses new functionality, adds ability to list and manage multiple calls
-		*13.0.2* Version bump Beta
-		*13.0.1alpha3* Actually work
-		*13.0.1alpha2* More Visual changes
-		*13.0.1alpha1* Visual Styling Fixes
-		 *2.11.3* Fixes outstanding database issues
-		 *2.11.2* Database abstraction layer fixes
-		 *2.11.1* #7011 fix errors in hotel wakeup
-		 *2.11.0.0beta2* Removed online check for updates for POSSA
-		 *2.11.0.0beta1* imported from web to online repo
+		*14.0.1alpha1* Inital Release
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
