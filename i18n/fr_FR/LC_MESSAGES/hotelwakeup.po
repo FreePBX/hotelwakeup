@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2016-02-05 09:48+0200\n"
-"Last-Translator: Nicolas Riendeau <freepbx@riendeau.org>\n"
-"Language-Team: French <http://weblate.freepbx.org/projects/freepbx/"
-"hotelwakeup/fr_FR/>\n"
+"PO-Revision-Date: 2016-11-22 22:56+0200\n"
+"Last-Translator: Pascal <pascal.noyel@ipexia.com>\n"
+"Language-Team: French "
+"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.2-dev\n"
+"X-Generator: Weblate 2.4\n"
 
 #: page.hotelwakeup.php:241
 msgid "<b>System time:</b> "
@@ -39,7 +39,7 @@ msgstr "Ajouter un nouvel appel de réveil"
 
 #: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
 msgid "Applications"
-msgstr "Applications"
+msgstr ""
 
 #: views/grid.php:12
 msgid "Call List"
@@ -147,7 +147,7 @@ msgstr "Mode téléphoniste"
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr "Réinitialiser"
+msgstr "Remise à Zero"
 
 #: views/grid.php:150
 msgid "Retry Time"
@@ -171,7 +171,7 @@ msgstr "Paramètres"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr "Soumettre"
+msgstr "Envoyer"
 
 #: views/grid.php:187
 msgid ""
