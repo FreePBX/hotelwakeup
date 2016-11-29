@@ -8,9 +8,7 @@
 // from the functions.inc.php files of all the modules.)
 //
 $restrict_mods = true;
-if (!@include_once(getenv('FREEPBX_CONF') ? getenv('FREEPBX_CONF') : '/etc/freepbx.conf')) {
-	include_once('/etc/asterisk/freepbx.conf');
-}
+include '/etc/freepbx.conf';
 set_time_limit(0);
 error_reporting(0);
 
