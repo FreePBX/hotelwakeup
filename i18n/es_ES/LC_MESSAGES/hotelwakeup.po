@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2016-12-09 08:27+0200\n"
-"Last-Translator: Ernesto <ecasas@sangoma.com>\n"
+"PO-Revision-Date: 2016-07-14 06:05+0200\n"
+"Last-Translator: The <james.finstrom@schmoozecom.com>\n"
 "Language-Team: Spanish "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
+"<http://weblate.freepbx.org/projects/freepbx/framework/es_ES/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr "Acciones"
 
 #: views/grid.php:19
 msgid "Add"
-msgstr "Agregar"
+msgstr "Añadir"
 
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
@@ -85,7 +85,7 @@ msgstr ""
 
 #: views/grid.php:22
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #: views/grid.php:34 views/grid.php:235
 msgid "Destination"
@@ -137,7 +137,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr "Reiniciar"
+msgstr "Restaura"
 
 #: views/grid.php:150
 msgid "Retry Time"
@@ -145,7 +145,7 @@ msgstr ""
 
 #: views/grid.php:126
 msgid "Ring Time"
-msgstr "Tiempo de Timbrado"
+msgstr "Tiempo de Timbre"
 
 #: views/grid.php:295
 msgid "Save changes"
@@ -157,7 +157,7 @@ msgstr ""
 
 #: views/grid.php:13
 msgid "Settings"
-msgstr "Configuración"
+msgstr "Configuraciones"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
