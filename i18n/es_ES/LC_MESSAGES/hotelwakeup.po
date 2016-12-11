@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2016-12-11 05:27+0200\n"
+"PO-Revision-Date: 2016-12-11 05:38+0200\n"
 "Last-Translator: Ernesto <ecasas@sangoma.com>\n"
 "Language-Team: Spanish "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/es_ES/>\n"
@@ -148,7 +148,7 @@ msgstr "Modo Operador"
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr "Reiniciar"
+msgstr "Reinicio"
 
 #: views/grid.php:150
 msgid "Retry Time"
