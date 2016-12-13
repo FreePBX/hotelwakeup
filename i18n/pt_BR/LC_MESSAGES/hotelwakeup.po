@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2016-12-12 04:43+0200\n"
+"PO-Revision-Date: 2016-12-12 21:58+0200\n"
 "Last-Translator: Alexander <alexander.schley@paranagua.pr.gov.br>\n"
 "Language-Team: Portuguese (Brazil) "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/pt_BR/>\n"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
 msgid "Applications"
-msgstr ""
+msgstr "Aplicações"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -85,7 +85,7 @@ msgstr ""
 
 #: views/grid.php:22
 msgid "Delete"
-msgstr ""
+msgstr "Apagar"
 
 #: views/grid.php:34 views/grid.php:235
 msgid "Destination"
@@ -121,7 +121,7 @@ msgstr ""
 
 #: views/grid.php:57
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: views/grid.php:26
 msgid "Not received"
@@ -137,7 +137,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:32
 msgid "Reset"
-msgstr ""
+msgstr "Reiniciar"
 
 #: views/grid.php:150
 msgid "Retry Time"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: views/grid.php:187
 msgid ""
@@ -233,4 +233,4 @@ msgstr ""
 
 #: views/grid.php:55
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
