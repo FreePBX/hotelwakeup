@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2017-03-03 15:42+0200\n"
+"PO-Revision-Date: 2017-03-06 02:38+0200\n"
 "Last-Translator: hammer125 <auswertung@aon.at>\n"
 "Language-Team: German "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/de_DE/>\n"
@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "AnruferID für Weckanrufe<br><br>Format: <b>&lt;#######&gt;</b>. Sie können "
 "auch über das format: \\\"hidden\\\" <b>&lt;#######&gt;</b> die AnruferID "
-"ausblenden wenn folgende Unterstützung besteht (E1/T1/J1/BRI/SIP/IAX)."
+"ausblenden wenn folgende Unterstützung besteht (E1/T1/J1/BRI/SIP/IAX)"
 
 #: Hotelwakeup.class.php:78
 #, php-format
@@ -66,7 +66,7 @@ msgstr ""
 
 #: Hotelwakeup.class.php:66
 msgid "Cannot schedule the call, due to insufficient data"
-msgstr "Kann den Anruf aufgrund unzureichender Informationen nicht planen."
+msgstr "Kann den Anruf aufgrund unzureichender Informationen nicht planen"
 
 #: views/grid.php:294
 msgid "Close"
@@ -82,7 +82,7 @@ msgstr "Tag"
 
 #: assets/js/hotelwakeup.js:31
 msgid "Day can not be blank"
-msgstr "Tag darf nicht leer sein."
+msgstr "Tag darf nicht leer sein"
 
 #: views/grid.php:285
 msgid "Day to call"
@@ -98,7 +98,7 @@ msgstr "Ziel"
 
 #: assets/js/hotelwakeup.js:23
 msgid "Destination can not be blank"
-msgstr "Ziel darf nicht leer sein."
+msgstr "Ziel darf nicht leer sein"
 
 #: views/grid.php:245
 msgid "Destination to call"
@@ -114,11 +114,11 @@ msgstr ""
 "Tragen Sie hier die Anrufernummern ein, die als \"Operator\" tätig sein "
 "sollen. Operatornebenstellen können Weckrufe für jedes gültige Ziel "
 "erstellen. Es können Nebenstellennummern, vollständige Rufnummern oder "
-"Asterisk-Wählmuster sein."
+"Asterisk-Wählmuster sein"
 
 #: hotelwakeup.i18n.php:8
 msgid "FreePBX module for generating reminder and wakeup calls"
-msgstr "FreePBX Modul zur Erzeugung von Erinnerungs- und Weckrufen."
+msgstr "FreePBX Modul zur Erzeugung von Erinnerungs- und Weckrufen"
 
 #: views/grid.php:78
 msgid "Max Destination Length"
@@ -179,7 +179,7 @@ msgid ""
 msgstr ""
 "Die maximale Anzahl, die das System den Weckruf versuchen soll, wenn er "
 "nicht angenommen wird. Bei Null Wiederholungen wird nur ein Versuch "
-"durchgeführt."
+"durchgeführt"
 
 #: views/grid.php:139
 msgid ""
@@ -188,7 +188,7 @@ msgid ""
 msgstr ""
 "Die Anzahl in Sekunden die das Telefon klingelt. Die Einstellung sollte "
 "niedriger als die Schwelle des Anrufbeantworter liegen, da sonst der Weckruf "
-"beim Anrufbeantworter endet."
+"beim Anrufbeantworter endet"
 
 #: views/grid.php:163
 msgid ""
@@ -196,7 +196,7 @@ msgid ""
 "wakeup call is not answered"
 msgstr ""
 "Die maximale Zeit in Sekunden zwischen Wiederholungen. Eine \"Wiederholung\" "
-"passiert wenn ein Weckanruf nicht angenommen wird."
+"passiert wenn ein Weckanruf nicht angenommen wird"
 
 #: views/grid.php:91
 msgid ""
@@ -205,7 +205,7 @@ msgid ""
 msgstr ""
 "Dies steuert die maximale Anzahl der Ziffern, die ein Bediener für einen "
 "Weckanruf senden kann. Stellen Sie auf 10 oder 11 ein, um Anrufe nach "
-"außerhalb ihrer Anlage zu ermöglichen."
+"außerhalb ihrer Anlage zu ermöglichen"
 
 #: page.hotelwakeup.php:292
 msgid ""
@@ -244,7 +244,7 @@ msgid ""
 msgstr ""
 "Weckrufe können verwendet werden um Erinnerungs- oder Weckrufe an ein "
 "beliebiges Ziel zu planen. Um einen Anruf zu planen, wählen Sie %s oder "
-"verwenden Sie das unten stehende Formular."
+"verwenden Sie das unten stehende Formular"
 
 #: views/grid.php:4
 msgid "What is Hotel Style Wakeup Calls?"
@@ -258,7 +258,7 @@ msgid ""
 msgstr ""
 "Wenn der Operator Modus aktiviert ist, erlaubt es bestimmten Nummern "
 "Weckanrufe für beliebige Ziele zu erstellen. Wenn der Operator deaktiviert "
-"ist, können nur Weckanrufe für die wählende Nummer erstellt werden."
+"ist, können nur Weckanrufe für die wählende Nummer erstellt werden"
 
 #: views/grid.php:55
 msgid "Yes"
