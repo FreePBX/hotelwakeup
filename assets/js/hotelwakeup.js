@@ -14,7 +14,10 @@ var updateTime = function() {
 };
 
 setInterval(updateTime,1000);
-
+function closepopups(){
+	$("ul.ui-timepicker-list").hide();
+	$("#ui-datepicker-div").hide();
+}
 $(function() {
 	$("#day").datepicker();
 	$('#time').timepicker();
@@ -35,10 +38,12 @@ $(function() {
 
 		$("#savecall").prop("disabled",true);
 		$.post( "ajax.php", {command: "savecall", module: "hotelwakeup", destination: $("#destination").val(), time: $("#time").val(), day: $("#day").val()}, function( data ) {
-			if(!data.status) {
+			if(!data.status){
 				alert(data.message);
 			} else {
 				callform.reset();
+				$("ul.ui-timepicker-list").hide();
+				$("#ui-datepicker-div").hide();
 				$("#myModal").modal("hide");
 				$('#callgrid').bootstrapTable('refresh');
 			}
