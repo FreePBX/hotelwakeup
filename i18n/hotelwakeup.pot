@@ -3,13 +3,13 @@
 # For licensing information, please see the file named LICENSE located in the module directory
 #
 # FreePBX language template for hotelwakeup
-# Copyright (C) 2008-2016 Sangoma, Inc.
+# Copyright (C) 2008-2017 Sangoma Technologies, Inc.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-12 22:07-0700\n"
+"POT-Creation-Date: 2017-06-23 17:17-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,11 +32,6 @@ msgstr ""
 
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
-msgstr ""
-
-#: hotelwakeup.i18n.php:6
-#: hotelwakeup.i18n.php:12
-msgid "Applications"
 msgstr ""
 
 #: views/grid.php:12
@@ -73,7 +68,7 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:31
+#: assets/js/hotelwakeup.js:34
 msgid "Day can not be blank"
 msgstr ""
 
@@ -90,7 +85,7 @@ msgstr ""
 msgid "Destination"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:23
+#: assets/js/hotelwakeup.js:26
 msgid "Destination can not be blank"
 msgstr ""
 
@@ -104,10 +99,6 @@ msgid ""
 "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
 "any valid destination. Numbers can be extension numbers, full caller ID "
 "numbers or Asterisk dialing patterns"
-msgstr ""
-
-#: hotelwakeup.i18n.php:8
-msgid "FreePBX module for generating reminder and wakeup calls"
 msgstr ""
 
 #: views/grid.php:78
@@ -197,7 +188,7 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: assets/js/hotelwakeup.js:27
+#: assets/js/hotelwakeup.js:30
 msgid "Time can not be blank"
 msgstr ""
 
@@ -211,7 +202,6 @@ msgstr ""
 
 #: Hotelwakeup.class.php:128
 #: hotelwakeup.i18n.php:4
-#: hotelwakeup.i18n.php:10
 msgid "Wake Up Calls"
 msgstr ""
 

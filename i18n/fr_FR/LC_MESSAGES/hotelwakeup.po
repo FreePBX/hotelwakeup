@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-12 22:07-0700\n"
+"POT-Creation-Date: 2017-06-23 17:17-0700\n"
 "PO-Revision-Date: 2016-02-05 09:48+0200\n"
 "Last-Translator: Nicolas Riendeau <freepbx@riendeau.org>\n"
-"Language-Team: French <http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
+"Language-Team: French <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/fr_FR/>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,22 +37,29 @@ msgstr "Ajouter"
 msgid "Add new Wakeup Call"
 msgstr "Ajouter un nouvel appel de réveil"
 
-#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
-msgid "Applications"
-msgstr ""
-
 #: views/grid.php:12
 msgid "Call List"
 msgstr "Liste d'appel"
 
 #: views/grid.php:211
-msgid "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
-msgstr "ID Appelant pour les appels de réveil<br><br>Format: <b>&lt;#######&gt;</b>. Vous pouvez aussi utilisé le format : \"hidden\" <b>&lt;#######&gt;</b> pour cacher l'ID appelant envoyé par lignes numériques si supporté (E1/T1/J1/BRI/SIP/IAX)"
+msgid ""
+"CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
+"also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
+"sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
+msgstr ""
+"ID Appelant pour les appels de réveil<br><br>Format: <b>&lt;#######&gt;</b>. "
+"Vous pouvez aussi utilisé le format : \"hidden\" <b>&lt;#######&gt;</b> pour "
+"cacher l'ID appelant envoyé par lignes numériques si supporté (E1/T1/J1/BRI/"
+"SIP/IAX)"
 
 #: Hotelwakeup.class.php:78
 #, php-format
-msgid "Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"
-msgstr "L'appel ne peut être programmé, car l'heure prévue est dans le passé. [Heure actuelle : %s] [Heure de réveil : %s]"
+msgid ""
+"Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
+"[Wakeup Time: %s]"
+msgstr ""
+"L'appel ne peut être programmé, car l'heure prévue est dans le passé. [Heure "
+"actuelle : %s] [Heure de réveil : %s]"
 
 #: Hotelwakeup.class.php:66
 msgid "Cannot schedule the call, due to insufficient data"
@@ -69,7 +77,7 @@ msgstr "Date"
 msgid "Day"
 msgstr "Jour"
 
-#: assets/js/hotelwakeup.js:31
+#: assets/js/hotelwakeup.js:34
 msgid "Day can not be blank"
 msgstr "Le jour ne peut être vide"
 
@@ -85,7 +93,7 @@ msgstr "Supprimer"
 msgid "Destination"
 msgstr "Destination"
 
-#: assets/js/hotelwakeup.js:23
+#: assets/js/hotelwakeup.js:26
 msgid "Destination can not be blank"
 msgstr "La destination ne peut être vide"
 
@@ -94,12 +102,16 @@ msgid "Destination to call"
 msgstr "Destination à appeler"
 
 #: views/grid.php:115
-msgid "Enter the Caller IDs of each telephone you wish to be recognized as an \"Operator\".  Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns"
-msgstr "Entrez l'ID appelant de chaque téléphone que vous désirez être reconnu comme \"téléphoniste\". Les postes de téléphoniste peuvent créer des appels pour toute destination valide. Les numéros peuvent être des numéros de poste valide, un numéro de téléphone complet ou un plan de numérotation d'Asterisk"
-
-#: hotelwakeup.i18n.php:8
-msgid "FreePBX module for generating reminder and wakeup calls"
-msgstr "Module FreePBX pour générer des appels de rappel et de réveil"
+msgid ""
+"Enter the Caller IDs of each telephone you wish to be recognized as an "
+"\"Operator\".  Operator extensions are allowed to create wakeup calls for "
+"any valid destination. Numbers can be extension numbers, full caller ID "
+"numbers or Asterisk dialing patterns"
+msgstr ""
+"Entrez l'ID appelant de chaque téléphone que vous désirez être reconnu comme "
+"\"téléphoniste\". Les postes de téléphoniste peuvent créer des appels pour "
+"toute destination valide. Les numéros peuvent être des numéros de poste "
+"valide, un numéro de téléphone complet ou un plan de numérotation d'Asterisk"
 
 #: views/grid.php:78
 msgid "Max Destination Length"
@@ -154,30 +166,52 @@ msgid "Submit"
 msgstr "Envoyer"
 
 #: views/grid.php:187
-msgid "The maximum number of times the system should attempt to deliver the wakeup call when there is no answer. Zero retries means only one call will be placed"
-msgstr "Le nombre maximal de fois que le système devrait tenter de faire l'appel de réveil s'il n'est pas répondu. Une valeur de zéro ne fera qu'un appel"
+msgid ""
+"The maximum number of times the system should attempt to deliver the wakeup "
+"call when there is no answer. Zero retries means only one call will be placed"
+msgstr ""
+"Le nombre maximal de fois que le système devrait tenter de faire l'appel de "
+"réveil s'il n'est pas répondu. Une valeur de zéro ne fera qu'un appel"
 
 #: views/grid.php:139
-msgid "The number of seconds for the phone to ring. Consider setting lower than the voicemail threshold or the wakeup call can end up going to voicemail"
-msgstr "Le nombre de secondes que le téléphone devrait sonner. Il est préférable que ce nombre soit plus bas que celui de la messagerie vocale pour éviter que les appels de réveil soient répondus par la messagerie vocale"
+msgid ""
+"The number of seconds for the phone to ring. Consider setting lower than the "
+"voicemail threshold or the wakeup call can end up going to voicemail"
+msgstr ""
+"Le nombre de secondes que le téléphone devrait sonner. Il est préférable que "
+"ce nombre soit plus bas que celui de la messagerie vocale pour éviter que "
+"les appels de réveil soient répondus par la messagerie vocale"
 
 #: views/grid.php:163
-msgid "The number of seconds to wait between retrys.  A \"retry\" happens if the wakeup call is not answered"
-msgstr "Le nombre de secondes à attendre entre chaque tentative si l'appel n'est pas répondu"
+msgid ""
+"The number of seconds to wait between retrys.  A \"retry\" happens if the "
+"wakeup call is not answered"
+msgstr ""
+"Le nombre de secondes à attendre entre chaque tentative si l'appel n'est pas "
+"répondu"
 
 #: views/grid.php:91
-msgid "This controls the maximum number of digits an operator can send a wakeup call to. Set to 10 or 11 to allow wake up calls to outside numbers"
-msgstr "Ceci contrôle le nombre maximum de chiffres pour lequel un téléphoniste peut demander un appel de réveil. Il devrait être de 10 ou 11 pour permettre d'appeler des numéros externes"
+msgid ""
+"This controls the maximum number of digits an operator can send a wakeup "
+"call to. Set to 10 or 11 to allow wake up calls to outside numbers"
+msgstr ""
+"Ceci contrôle le nombre maximum de chiffres pour lequel un téléphoniste peut "
+"demander un appel de réveil. Il devrait être de 10 ou 11 pour permettre "
+"d'appeler des numéros externes"
 
 #: page.hotelwakeup.php:292
-msgid "This section will be removed from this time group and all current settings including changes will be updated. OK to proceed?"
-msgstr "Cette section sera supprimée de ce groupe de temps et tous les paramètres actuels incluant les changements seront mis à jour. Voulez-vous procéder ?"
+msgid ""
+"This section will be removed from this time group and all current settings "
+"including changes will be updated. OK to proceed?"
+msgstr ""
+"Cette section sera supprimée de ce groupe de temps et tous les paramètres "
+"actuels incluant les changements seront mis à jour. Voulez-vous procéder ?"
 
 #: views/grid.php:32 views/grid.php:255
 msgid "Time"
 msgstr "Heure"
 
-#: assets/js/hotelwakeup.js:27
+#: assets/js/hotelwakeup.js:30
 msgid "Time can not be blank"
 msgstr "L'heure ne peut être vide"
 
@@ -189,23 +223,38 @@ msgstr "Heure d'appel"
 msgid "Wake Up Caller ID"
 msgstr "ID appelant de l'appel de réveil"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4
 msgid "Wake Up Calls"
 msgstr "Appels de réveil"
 
 #: views/grid.php:8
 #, php-format
-msgid "Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination. To schedule a call, dial %s or use the form below"
-msgstr "Le module d'appel de réveil peut être utilisé pour planifier un appel de rappel ou de réveil pour toute destination valide. Pour planifier un appel, appelez %s ou utiliser le formulaire ci-dessous"
+msgid ""
+"Wake Up calls can be used to schedule a reminder or wakeup call to any valid "
+"destination. To schedule a call, dial %s or use the form below"
+msgstr ""
+"Le module d'appel de réveil peut être utilisé pour planifier un appel de "
+"rappel ou de réveil pour toute destination valide. Pour planifier un appel, "
+"appelez %s ou utiliser le formulaire ci-dessous"
 
 #: views/grid.php:4
 msgid "What is Hotel Style Wakeup Calls?"
 msgstr "Qu'est-ce que les appels de réveil de style hôtel ?"
 
 #: views/grid.php:67
-msgid "When Operator Mode is enabled it will allow designated extentions to create wake up calls for any valid destination. If disabled calls can only be placed back to the caller ID of the user scheduling the wakeup call"
-msgstr "Lorsque le mode téléphoniste est activé, celui-ci permet à des postes désignés de créer des appels de réveil pour toute destination valide. Si celui-ci est désactivé, les appels ne peuvent être faits qu'au poste téléphonique qui planifie l'appel"
+msgid ""
+"When Operator Mode is enabled it will allow designated extentions to create "
+"wake up calls for any valid destination. If disabled calls can only be "
+"placed back to the caller ID of the user scheduling the wakeup call"
+msgstr ""
+"Lorsque le mode téléphoniste est activé, celui-ci permet à des postes "
+"désignés de créer des appels de réveil pour toute destination valide. Si "
+"celui-ci est désactivé, les appels ne peuvent être faits qu'au poste "
+"téléphonique qui planifie l'appel"
 
 #: views/grid.php:55
 msgid "Yes"
 msgstr "Oui"
+
+#~ msgid "FreePBX module for generating reminder and wakeup calls"
+#~ msgstr "Module FreePBX pour générer des appels de rappel et de réveil"

@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>14.0.1.1</version>
+	<version>14.0.1.2</version>
 	<license>GPLv2</license>
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
+		*14.0.1.2* FREEPBX-15057 Java script fails randomly under Wakeup Call module
 		*14.0.1alpha1* Inital Release
 	</changelog>
 	<menuitems>
