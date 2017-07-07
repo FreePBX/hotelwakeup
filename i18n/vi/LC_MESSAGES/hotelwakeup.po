@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-09 14:10-0700\n"
-"PO-Revision-Date: 2017-07-07 09:54+0200\n"
+"PO-Revision-Date: 2017-07-07 10:09+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/vi/>\n"
@@ -151,7 +151,7 @@ msgstr "Cài đặt lại"
 
 #: views/grid.php:150
 msgid "Retry Time"
-msgstr ""
+msgstr "Thời gian thử lại"
 
 #: views/grid.php:126
 msgid "Ring Time"
@@ -254,7 +254,11 @@ msgid ""
 "wake up calls for any valid destination. If disabled calls can only be "
 "placed back to the caller ID of the user scheduling the wakeup call"
 msgstr ""
+"Khi chế độ điều hành được kích hoạt nó sẽ cho phép các máy nhánh được chỉ "
+"định tạo các cuộc gọi đánh thức cho bất kỳ điểm đích hợp lệ nào. Nếu bị vô "
+"hiệu các cuộc gọi có thể chỉ được đặt trở lại tới Caller ID của người dùng "
+"đang lập cuộc gọi đánh thức"
 
 #: views/grid.php:55
 msgid "Yes"
-msgstr ""
+msgstr "Có"
