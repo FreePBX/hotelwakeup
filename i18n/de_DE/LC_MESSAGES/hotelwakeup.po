@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 14:10-0700\n"
+"POT-Creation-Date: 2017-07-12 16:59-0400\n"
 "PO-Revision-Date: 2017-03-06 02:38+0200\n"
 "Last-Translator: hammer125 <auswertung@aon.at>\n"
-"Language-Team: German "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/de_DE/>\n"
-"Language: de_DE\n"
+"Language-Team: German <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/de_DE/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.4\n"
 
@@ -37,7 +37,7 @@ msgstr "Hinzufügen"
 msgid "Add new Wakeup Call"
 msgstr "Neuen Weckruf Hinzufügen"
 
-#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
+#: hotelwakeup.i18n.php:6
 msgid "Applications"
 msgstr "Anwendungen"
 
@@ -232,7 +232,8 @@ msgstr "Uhrzeit des Anruf"
 msgid "Wake Up Caller ID"
 msgstr "Weckanrufer ID"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Weckrufe"
 

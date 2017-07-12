@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 14:10-0700\n"
+"POT-Creation-Date: 2017-07-12 16:59-0400\n"
 "PO-Revision-Date: 2017-07-11 15:59+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
-"Language-Team: Vietnamese "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/vi/>\n"
-"Language: vi\n"
+"Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/vi/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.4\n"
 
@@ -37,7 +37,7 @@ msgstr "Thêm"
 msgid "Add new Wakeup Call"
 msgstr "Thêm một cuộc gọi đánh thức mới"
 
-#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
+#: hotelwakeup.i18n.php:6
 msgid "Applications"
 msgstr "Các ứng dụng"
 
@@ -51,10 +51,10 @@ msgid ""
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
-"Caller ID cho các cuộc gọi đánh thức <br><br> Định dạng  "
-"<b>&lt;#######&gt;</b>. Bạn cũng có thể sử dụng định dạng này: \"hidden\" "
-"<b>&lt;#######&gt;</b> để ẩn các Caller ID được gửi ra khỏi đường dây kỹ "
-"thuật số nếu được hỗ trợ (E1/T1/J1/BRI/SIP/IAX)"
+"Caller ID cho các cuộc gọi đánh thức <br><br> Định dạng  <b>&lt;#######&gt;</"
+"b>. Bạn cũng có thể sử dụng định dạng này: \"hidden\" <b>&lt;#######&gt;</b> "
+"để ẩn các Caller ID được gửi ra khỏi đường dây kỹ thuật số nếu được hỗ trợ "
+"(E1/T1/J1/BRI/SIP/IAX)"
 
 #: Hotelwakeup.class.php:78
 #, php-format
@@ -112,10 +112,10 @@ msgid ""
 "any valid destination. Numbers can be extension numbers, full caller ID "
 "numbers or Asterisk dialing patterns"
 msgstr ""
-"Nhập Caller ID của mỗi điện thoại bạn muốn công nhận như một \" Máy điều "
-"hành\". Máy nhánh điều hành cho phép được tạo cá cuộc gọi đánh thức cho các "
-"điểm đến hợp lệ. Các số điện thoại có thể là các số máy nhánh, các số Caller "
-"ID đầy đủ hoặc là các mẫu (patterns) quay số Asterisk"
+"Nhập Caller ID của mỗi điện thoại bạn muốn công nhận như một \" Máy điều hành"
+"\". Máy nhánh điều hành cho phép được tạo cá cuộc gọi đánh thức cho các điểm "
+"đến hợp lệ. Các số điện thoại có thể là các số máy nhánh, các số Caller ID "
+"đầy đủ hoặc là các mẫu (patterns) quay số Asterisk"
 
 #: hotelwakeup.i18n.php:8
 msgid "FreePBX module for generating reminder and wakeup calls"
@@ -230,7 +230,8 @@ msgstr "Thời gian để gọi"
 msgid "Wake Up Caller ID"
 msgstr "Caller ID của cuộc gọi đánh thức"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Các cuộc gọi đánh thức"
 

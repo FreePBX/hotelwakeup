@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 14:10-0700\n"
+"POT-Creation-Date: 2017-07-12 16:59-0400\n"
 "PO-Revision-Date: 2017-03-08 21:01+0200\n"
 "Last-Translator: Kingvoice <suporte@kingvoice.com.br>\n"
-"Language-Team: Portuguese (Brazil) "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/pt_BR/>\n"
-"Language: pt_BR\n"
+"Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
+"freepbx/hotelwakeup/pt_BR/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.4\n"
 
@@ -37,7 +37,7 @@ msgstr "Adicionar"
 msgid "Add new Wakeup Call"
 msgstr "Adicionar nova Chamada de Despertador"
 
-#: hotelwakeup.i18n.php:6 hotelwakeup.i18n.php:12
+#: hotelwakeup.i18n.php:6
 msgid "Applications"
 msgstr "Aplicações"
 
@@ -51,10 +51,10 @@ msgid ""
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
-"ID Chamador para chamadas de despertar <br><br> Formato: <b>& "
-"lt;#######&gt;</b>. Você também pode usar o formato \"ocultado\" "
-"<b>&lt;#######&gt;</b> para ocultar o ID Chamador enviado por linhas "
-"digitais, se suportado (E1/T1/J1/BRI/SIP/IAX)"
+"ID Chamador para chamadas de despertar <br><br> Formato: <b>& lt;#######&gt;"
+"</b>. Você também pode usar o formato \"ocultado\" <b>&lt;#######&gt;</b> "
+"para ocultar o ID Chamador enviado por linhas digitais, se suportado (E1/T1/"
+"J1/BRI/SIP/IAX)"
 
 #: Hotelwakeup.class.php:78
 #, php-format
@@ -62,8 +62,8 @@ msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
 "[Wakeup Time: %s]"
 msgstr ""
-"Não é possível programar a chamada, a hora programada está no passado. ["
-"Tempo agora: %s] [Tempo de despertar: %s]"
+"Não é possível programar a chamada, a hora programada está no passado. "
+"[Tempo agora: %s] [Tempo de despertar: %s]"
 
 #: Hotelwakeup.class.php:66
 msgid "Cannot schedule the call, due to insufficient data"
@@ -233,7 +233,8 @@ msgstr "Hora para chamar"
 msgid "Wake Up Caller ID"
 msgstr "ID de chamada da chamada de despertar"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Chamadas de Despertar"
 
