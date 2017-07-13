@@ -101,6 +101,8 @@ class Hotelwakeup implements \BMO {
 			"callerid" => $date['cnam']." <".$date['cid'].">",
 			"application" => 'AGI',
 			"data" => 'wakeconfirm.php',
+			"AlwaysDelete" => "Yes",
+			"Archive" => "Yes"
 		));
 	}
 
@@ -168,6 +170,14 @@ class Hotelwakeup implements \BMO {
 		return $myresult;
 	}
 
+	public function removeWakeup_done($file) {
+		$file = basename($file);
+		if(file_exists($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing_done/".$file)) {
+			unlink($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing_done/".$file);
+		}
+		return true;
+	}
+
 	public function removeWakeup($file) {
 		$file = basename($file);
 		if(file_exists($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/".$file)) {
@@ -205,6 +215,7 @@ class Hotelwakeup implements \BMO {
 			}
 			$foo['tempdir'] = $ast_tmp_path;
 		}
+
 		if (empty($foo['outdir'])) {
 			$foo['outdir'] = $this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/";
 		}
@@ -234,6 +245,8 @@ class Hotelwakeup implements \BMO {
 		fputs( $wuc, 'set: CHANNEL(language)='.$foo['language']."\n");
 		fputs( $wuc, "application: ".$foo['application']."\n");
 		fputs( $wuc, "data: ".$foo['data']."\n");
+		fputs( $wuc, "AlwaysDelete: ".$foo['AlwaysDelete']."\n");
+		fputs( $wuc, "Archive: ".$foo['Archive']."\n");
 		fclose( $wuc );
 
 		// set time of temp file and move to outgoing
