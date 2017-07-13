@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 17:17-0700\n"
+"POT-Creation-Date: 2017-07-13 08:30-0700\n"
 "PO-Revision-Date: 2016-10-08 12:16+0200\n"
 "Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) <http://weblate.freepbx.org/projects/freepbx/"
@@ -36,6 +36,10 @@ msgstr "افزودن"
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
 msgstr "افزودن تماس بیدارباش جدید"
+
+#: hotelwakeup.i18n.php:6
+msgid "Applications"
+msgstr "برنامه ها"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -111,6 +115,10 @@ msgstr ""
 "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
 "any valid destination. Numbers can be extension numbers, full caller ID "
 "numbers or Asterisk dialing patterns"
+
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "ماژول FreePBX برای ایجاد تماسهای بیدارباش و یادآوری"
 
 #: views/grid.php:78
 msgid "Max Destination Length"
@@ -218,7 +226,8 @@ msgstr "ساعت تماس"
 msgid "Wake Up Caller ID"
 msgstr "شناسه تماس گیرنده بیدارباش"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "تماسهای بیدارباش"
 
@@ -248,9 +257,3 @@ msgstr ""
 #: views/grid.php:55
 msgid "Yes"
 msgstr "بله"
-
-#~ msgid "Applications"
-#~ msgstr "برنامه ها"
-
-#~ msgid "FreePBX module for generating reminder and wakeup calls"
-#~ msgstr "ماژول FreePBX برای ایجاد تماسهای بیدارباش و یادآوری"

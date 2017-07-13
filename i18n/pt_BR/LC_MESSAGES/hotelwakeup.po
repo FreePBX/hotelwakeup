@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 17:17-0700\n"
+"POT-Creation-Date: 2017-07-13 08:30-0700\n"
 "PO-Revision-Date: 2017-03-08 21:01+0200\n"
 "Last-Translator: Kingvoice <suporte@kingvoice.com.br>\n"
 "Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
@@ -36,6 +36,10 @@ msgstr "Adicionar"
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
 msgstr "Adicionar nova Chamada de Despertador"
+
+#: hotelwakeup.i18n.php:6
+msgid "Applications"
+msgstr "Aplicações"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -113,6 +117,10 @@ msgstr ""
 "despertar para qualquer destino válido. Os números podem ser números de "
 "ramal, números completos de identificação de chamadas ou padrões de discagem "
 "Asterisk"
+
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "Módulo FreePBX para gerar lembretes e chamadas de despertar"
 
 #: views/grid.php:78
 msgid "Max Destination Length"
@@ -225,7 +233,8 @@ msgstr "Hora para chamar"
 msgid "Wake Up Caller ID"
 msgstr "ID de chamada da chamada de despertar"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Chamadas de Despertar"
 
@@ -257,9 +266,3 @@ msgstr ""
 #: views/grid.php:55
 msgid "Yes"
 msgstr "Sim"
-
-#~ msgid "Applications"
-#~ msgstr "Aplicações"
-
-#~ msgid "FreePBX module for generating reminder and wakeup calls"
-#~ msgstr "Módulo FreePBX para gerar lembretes e chamadas de despertar"

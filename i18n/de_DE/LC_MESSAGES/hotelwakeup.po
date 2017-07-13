@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 17:17-0700\n"
+"POT-Creation-Date: 2017-07-13 08:30-0700\n"
 "PO-Revision-Date: 2017-03-06 02:38+0200\n"
 "Last-Translator: hammer125 <auswertung@aon.at>\n"
 "Language-Team: German <http://weblate.freepbx.org/projects/freepbx/"
@@ -36,6 +36,10 @@ msgstr "Hinzufügen"
 #: views/grid.php:223
 msgid "Add new Wakeup Call"
 msgstr "Neuen Weckruf Hinzufügen"
+
+#: hotelwakeup.i18n.php:6
+msgid "Applications"
+msgstr "Anwendungen"
 
 #: views/grid.php:12
 msgid "Call List"
@@ -111,6 +115,10 @@ msgstr ""
 "sollen. Operatornebenstellen können Weckrufe für jedes gültige Ziel "
 "erstellen. Es können Nebenstellennummern, vollständige Rufnummern oder "
 "Asterisk-Wählmuster sein"
+
+#: hotelwakeup.i18n.php:8
+msgid "FreePBX module for generating reminder and wakeup calls"
+msgstr "FreePBX Modul zur Erzeugung von Erinnerungs- und Weckrufen"
 
 #: views/grid.php:78
 msgid "Max Destination Length"
@@ -224,7 +232,8 @@ msgstr "Uhrzeit des Anruf"
 msgid "Wake Up Caller ID"
 msgstr "Weckanrufer ID"
 
-#: Hotelwakeup.class.php:128 hotelwakeup.i18n.php:4
+#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Weckrufe"
 
@@ -255,9 +264,3 @@ msgstr ""
 #: views/grid.php:55
 msgid "Yes"
 msgstr "Ja"
-
-#~ msgid "Applications"
-#~ msgstr "Anwendungen"
-
-#~ msgid "FreePBX module for generating reminder and wakeup calls"
-#~ msgstr "FreePBX Modul zur Erzeugung von Erinnerungs- und Weckrufen"
