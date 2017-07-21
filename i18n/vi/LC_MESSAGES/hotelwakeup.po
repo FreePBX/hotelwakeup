@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-12 16:59-0400\n"
-"PO-Revision-Date: 2017-07-21 10:16+0200\n"
+"PO-Revision-Date: 2017-07-21 16:31+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/vi/>\n"
@@ -155,7 +155,7 @@ msgstr "Thời gian thử lại"
 
 #: views/grid.php:126
 msgid "Ring Time"
-msgstr "Thời gian rung chuông"
+msgstr "Thời gian đổ chuông"
 
 #: views/grid.php:295
 msgid "Save changes"
