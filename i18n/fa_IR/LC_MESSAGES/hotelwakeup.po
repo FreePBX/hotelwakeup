@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-12 16:59-0400\n"
+"POT-Creation-Date: 2017-08-07 15:31-0400\n"
 "PO-Revision-Date: 2016-10-08 12:16+0200\n"
 "Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) <http://weblate.freepbx.org/projects/freepbx/"
@@ -80,7 +80,7 @@ msgstr "تاریخ"
 msgid "Day"
 msgstr "روز"
 
-#: assets/js/hotelwakeup.js:31
+#: assets/js/hotelwakeup.js:34
 msgid "Day can not be blank"
 msgstr "روز نمیتواند خالی باشد"
 
@@ -96,7 +96,7 @@ msgstr "حذف"
 msgid "Destination"
 msgstr "مقصد"
 
-#: assets/js/hotelwakeup.js:23
+#: assets/js/hotelwakeup.js:26
 msgid "Destination can not be blank"
 msgstr "مقصد نمیتواند خالی باشد"
 
@@ -214,7 +214,7 @@ msgstr "این بخش از گروه زمانی و تمامی تنظیمات حذ
 msgid "Time"
 msgstr "ساعت"
 
-#: assets/js/hotelwakeup.js:27
+#: assets/js/hotelwakeup.js:30
 msgid "Time can not be blank"
 msgstr "زمان نمیتواند خالی باشد"
 
