@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-07 15:31-0400\n"
-"PO-Revision-Date: 2017-12-01 22:41+0200\n"
+"PO-Revision-Date: 2017-12-01 23:43+0200\n"
 "Last-Translator: CATTAN Jérémie <jeremie@famillecattan.com>\n"
 "Language-Team: French "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/fr_FR/>\n"
@@ -171,7 +171,7 @@ msgstr "Paramètres"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr "Soumettre"
+msgstr "Valider"
 
 #: views/grid.php:187
 msgid ""
