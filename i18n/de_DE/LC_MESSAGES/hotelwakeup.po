@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-07 15:31-0400\n"
-"PO-Revision-Date: 2017-10-15 22:08+0200\n"
-"Last-Translator: hammer125 <auswertung@aon.at>\n"
+"PO-Revision-Date: 2018-02-16 16:47+0200\n"
+"Last-Translator: Nils <Nils@heckenkamp.info>\n"
 "Language-Team: German "
 "<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/de_DE/>\n"
 "Language: de_DE\n"
@@ -166,11 +166,11 @@ msgstr "Serverzeit"
 
 #: views/grid.php:13
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr "Einstellung"
 
 #: Hotelwakeup.class.php:38
 msgid "Submit"
-msgstr "Senden"
+msgstr "Bestätigen"
 
 #: views/grid.php:187
 msgid ""
