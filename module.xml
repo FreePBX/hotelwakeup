@@ -2,27 +2,52 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>14.0.1.4</version>
+	<version>15.0.1</version>
 	<license>GPLv2</license>
-	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
+	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
 	<category>Applications</category>
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
-		*14.0.1.3* Bump from 13
-		*14.0.1.2* FREEPBX-15057 Java script fails randomly under Wakeup Call module
-		*14.0.1alpha1* Inital Release
+		*15.0.1* Add Backup 15.0
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
 	</menuitems>
+    <database>
+        <table name="hotelwakeup">
+            <field name="maxretries" type="integer" primarykey="true"/>
+            <field name="waittime" type="integer"/>
+            <field name="retrytime" type="integer"/>
+            <field name="extensionlength" type="integer"/>
+            <field name="cid" type="string" length="30" notnull="false"/>
+            <field name="cnam" type="string" length="30" notnull="false"/>
+            <field name="operator_mode" type="integer"/>
+            <field name="operator_extensions" type="string" length="30" notnull="false"/>
+            <field name="application" type="string" length="30" notnull="false"/>
+            <field name="data" type="string" length="30" notnull="false"/>
+        </table>
+        <table name="hotelwakeup_calls">
+            <field name="time" type="integer" primarykey="true"/>
+            <field name="ext" type="integer"/>
+            <field name="maxretries" type="integer"/>
+            <field name="retrytime" type="integer"/>
+            <field name="waittime" type="integer"/>
+            <field name="cid" type="string" length="30" notnull="false"/>
+            <field name="cnam" type="string" length="30" notnull="false"/>
+            <field name="application" type="string" length="30" notnull="false"/>
+            <field name="data" type="string" length="30" notnull="false"/>
+            <field name="tempdir" type="string" length="100" notnull="false"/>
+            <field name="outdir" type="string" length="100" notnull="false"/>
+            <field name="filename" type="string" length="100" notnull="false"/>
+            <field name="frequency" type="integer"/>
+        </table>
+    </database>
 	<depends>
 		<module>ivr gt1.0</module>
 	</depends>
 	<supported>
-		<version>14.0</version>
+		<version>15.0</version>
 	</supported>
-	<location>release/2.11/hotelwakeup-2.11.1.tgz</location>
-	<md5sum>d6f25e0c000f752a27577ae14037e44c</md5sum>
 </module>

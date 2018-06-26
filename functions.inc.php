@@ -7,27 +7,23 @@ function hotelwakeup_get_config($engine) {
 	// This generates the dialplan
 	global $ext;
 	global $asterisk_conf;
-	switch($engine) {
-		case "asterisk":
-			if (is_array($featurelist = featurecodes_getModuleFeatures($modulename))) {
-				foreach($featurelist as $item) {
-					$featurename = $item['featurename'];
-					$fname = $modulename.'_'.$featurename;
-					if (function_exists($fname)) {
-						$fcc = new featurecode($modulename, $featurename);
-						$fc = $fcc->getCodeActive();
-						unset($fcc);
+    if (is_array($featurelist = featurecodes_getModuleFeatures($modulename))) {
+        foreach($featurelist as $item) {
+            $featurename = $item['featurename'];
+            $fname = $modulename.'_'.$featurename;
+            if (function_exists($fname)) {
+                $fcc = new featurecode($modulename, $featurename);
+                $fc = $fcc->getCodeActive();
+                unset($fcc);
 
-						if ($fc != '') {
-							$fname($fc);
-						}
-					} else {
-						$ext->add('from-internal-additional', 'debug', '', new ext_noop($modulename.": No func $fname"));
-					}
-				}
-			}
-		break;
-	}
+                if ($fc != '') {
+                    $fname($fc);
+                }
+            } else {
+                $ext->add('from-internal-additional', 'debug', '', new ext_noop($modulename.": No func $fname"));
+            }
+        }
+    }
 }
 
 // this function required to make the feature code work

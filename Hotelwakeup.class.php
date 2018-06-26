@@ -1,24 +1,45 @@
 <?php
 namespace FreePBX\modules;
-/*
- * Class stub for BMO Module class
- * In _Construct you may remove the database line if you don't use it
- * In getActionbar change "modulename" to the display value for the page
- * In getActionbar change extdisplay to align with whatever variable you use to decide if the page is in edit mode.
- *
- */
-class Hotelwakeup implements \BMO {
-	public function __construct($freepbx = null) {
-		if ($freepbx == null) {
-			throw new Exception("Not given a FreePBX Object");
-		}
-		$this->FreePBX = $freepbx;
-		$this->db = $freepbx->Database;
-	}
-	public function install() {}
+use BMO;
+use FreePBX_Helpers;
+use PDO;
+
+class Hotelwakeup extends FreePBX_Helpers implements BMO {
+    public static $defaultConfig = [
+        'maxretries' => 3, 
+        'waittime' => 60, 
+        'retrytime' => 60, 
+        'cnam' => 'Wake Up Calls', 
+        'cid' => '*68', 
+        'operator_mode' => '1', 
+        'operator_extensions' => ['00','01'], 
+        'extensionlength' => '4', 
+        'application' => 'AGI', 
+        'data' => 'wakeupconfirm.php',
+    ];
+	public function install() {
+        $fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
+        $fcc->setDescription('Wake Up Calls');
+        $fcc->setDefault('*68');
+        $fcc->update();
+        unset($fcc);
+        $currentConfig = $this->getConfig();
+        sort($currentConfig);
+        unset($currentConfig['callerid']);
+        $tmp = self::$defaultConfig;
+        $tmp = sort($tmp);
+        if(!empty($currentConfig) && $currentConfig != $tmp){
+            $tmp['operator_extension'] = implode(',', $tmp['operator_extension']);
+            foreach($tmp as $key => $value){
+                $tmp[':'.$key] = $key;
+                unset($tmp[$key]);
+            }
+            $sql = 'INSERT INTO wakeupcalls ('.implode(',', array_values($tmp)).') VALUES ('.implode(',', array_keys($tmp)).')';
+            $this->FreePBX->Database->query($sql);
+        }
+        
+    }
 	public function uninstall() {}
-	public function backup() {}
-	public function restore($backup) {}
 	public function doConfigPageInit($page) {}
 
 	public function getActionBar($request) {
@@ -136,10 +157,11 @@ class Hotelwakeup implements \BMO {
 	}
 
 	public function getConfig() {
+        /** TODO: This is a whole database for 1 row Convert this to KVSTORE */
 		$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-		$sth = $this->db->prepare($sql);
+		$sth = $this->FreePBX->Database->prepare($sql);
 		$sth->execute();
-		$fa = $sth->fetch(\PDO::FETCH_ASSOC);
+		$fa = $sth->fetch(PDO::FETCH_ASSOC);
 		$fa['callerid'] = '"'.$fa['cnam'].'" <'.$fa['cid'].'>';
 		$fa['operator_extensions'] = explode(",",$fa['operator_extensions']);
 		foreach($fa['operator_extensions'] as &$ext) {
@@ -153,10 +175,10 @@ class Hotelwakeup implements \BMO {
 			return false;
 		}
 		$sql = "DELETE FROM `hotelwakeup`";
-		$sth = $this->db->prepare($sql);
+		$sth = $this->FreePBX->Database->prepare($sql);
 		$sth->execute();
 		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?";
-		$sth = $this->db->prepare($sql);
+		$sth = $this->FreePBX->Database->prepare($sql);
 		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions']));
 	}
 
