@@ -17,7 +17,7 @@ error_reporting(0);
 require_once "phpagi.php";
 $AGI = new AGI();
 $AGI->answer();
-$config = FreePBX::Hotelwakeup()->getConfig();
+$config = FreePBX::Hotelwakeup()->getSetting();
 usleep(500);
 $cid = $AGI->parse_callerid();
 

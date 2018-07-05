@@ -23,7 +23,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         $fcc->setDefault('*68');
         $fcc->update();
         unset($fcc);
-        $currentConfig = $this->getConfig();
+        $currentConfig = $this->getSetting();
         sort($currentConfig);
         unset($currentConfig['callerid']);
         $tmp = self::$defaultConfig;
@@ -110,7 +110,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 	public function addWakeup($destination, $time, $lang) {
-		$date = $this->getConfig();  // module config provided by user
+		$date = $this->getSetting();  // module config provided by user
 		$this->generateCallFile(array(
 			"time"  => $time,
 			"date" => 'unused',
@@ -152,11 +152,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				));
 			break;
 		}
-		$content = load_view(__DIR__."/views/grid.php", array("code" => $code, "config" => $this->getConfig()));
+		$content = load_view(__DIR__."/views/grid.php", array("code" => $code, "config" => $this->getSetting()));
 		return load_view(__DIR__."/views/main.php",array("pageContent" => $content));
 	}
 
-	public function getConfig() {
+	public function getSetting() {
         /** TODO: This is a whole database for 1 row Convert this to KVSTORE */
 		$sql = "SELECT * FROM hotelwakeup LIMIT 1";
 		$sth = $this->FreePBX->Database->prepare($sql);
@@ -170,7 +170,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $fa;
 	}
 
-	public function saveConfig($options) {
+	public function saveSetting($options) {
 		if(empty($options)) {
 			return false;
 		}
