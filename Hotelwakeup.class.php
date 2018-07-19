@@ -152,8 +152,10 @@ class Hotelwakeup implements \BMO {
 		if(empty($options)) {
 			return false;
 		}
-		$options['operator_extensions'] = str_replace("\n",",",$options['operator_extensions']);
-		$sql = "UPDATE `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ? LIMIT 1";
+		$sql = "DELETE FROM `hotelwakeup`";
+		$sth = $this->db->prepare($sql);
+		$sth->execute();
+		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?";
 		$sth = $this->db->prepare($sql);
 		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions']));
 	}
