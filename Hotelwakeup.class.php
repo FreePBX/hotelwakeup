@@ -16,7 +16,18 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'extensionlength' => '4', 
         'application' => 'AGI', 
         'data' => 'wakeupconfirm.php',
-    ];
+	];
+	public function setDatabase($database){
+		$this->Database = $database;
+
+		return $this;
+	}
+
+	public function resetDatabase(){
+		$this->Database = $this->FreePBX->Database;
+		return $this;
+	}
+
 	public function install() {
         $fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
         $fcc->setDescription('Wake Up Calls');
@@ -35,7 +46,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
                 unset($tmp[$key]);
             }
             $sql = 'INSERT INTO wakeupcalls ('.implode(',', array_values($tmp)).') VALUES ('.implode(',', array_keys($tmp)).')';
-            $this->FreePBX->Database->query($sql);
+            $this->Database->query($sql);
         }
         
     }
@@ -159,7 +170,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function getSetting() {
         /** TODO: This is a whole database for 1 row Convert this to KVSTORE */
 		$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-		$sth = $this->FreePBX->Database->prepare($sql);
+		$sth = $this->Database->prepare($sql);
 		$sth->execute();
 		$fa = $sth->fetch(PDO::FETCH_ASSOC);
 		$fa['callerid'] = '"'.$fa['cnam'].'" <'.$fa['cid'].'>';
@@ -175,10 +186,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			return false;
 		}
 		$sql = "DELETE FROM `hotelwakeup`";
-		$sth = $this->FreePBX->Database->prepare($sql);
+		$sth = $this->Database->prepare($sql);
 		$sth->execute();
 		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?";
-		$sth = $this->FreePBX->Database->prepare($sql);
+		$sth = $this->Database->prepare($sql);
 		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions']));
 	}
 
