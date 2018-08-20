@@ -9,11 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-07 15:31-0400\n"
+"POT-Creation-Date: 2018-08-20 12:49-0400\n"
 "PO-Revision-Date: 2018-02-16 20:01+0200\n"
 "Last-Translator: Nils <Nils@heckenkamp.info>\n"
-"Language-Team: German "
-"<http://weblate.freepbx.org/projects/freepbx/hotelwakeup/de_DE/>\n"
+"Language-Team: German <http://weblate.freepbx.org/projects/freepbx/"
+"hotelwakeup/de_DE/>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr ""
 "auch über das format: \\\"hidden\\\" <b>&lt;#######&gt;</b> die AnruferID "
 "ausblenden wenn folgende Unterstützung besteht (E1/T1/J1/BRI/SIP/IAX)"
 
-#: Hotelwakeup.class.php:78
+#: Hotelwakeup.class.php:110
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -64,7 +64,7 @@ msgstr ""
 "Kann den Anruf nicht planen, da er in der Vergangenheit liegt. [Aktuelle "
 "Uhrzeit: %s] [Weckzeit: %s]"
 
-#: Hotelwakeup.class.php:66
+#: Hotelwakeup.class.php:98
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr "Kann den Anruf aufgrund unzureichender Informationen nicht planen"
 
@@ -144,7 +144,7 @@ msgstr "Operatornebenstellen"
 msgid "Operator Mode"
 msgstr "Operator Modus"
 
-#: Hotelwakeup.class.php:32
+#: Hotelwakeup.class.php:64
 msgid "Reset"
 msgstr "Zurücksetzen"
 
@@ -168,7 +168,7 @@ msgstr "Serverzeit"
 msgid "Settings"
 msgstr "Einstellung"
 
-#: Hotelwakeup.class.php:38
+#: Hotelwakeup.class.php:70
 msgid "Submit"
 msgstr "Absenden"
 
@@ -232,7 +232,7 @@ msgstr "Uhrzeit des Anruf"
 msgid "Wake Up Caller ID"
 msgstr "Weckanrufer ID"
 
-#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:162 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
 #: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Weckrufe"

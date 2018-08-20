@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-07 15:31-0400\n"
+"POT-Creation-Date: 2018-08-20 12:49-0400\n"
 "PO-Revision-Date: 2017-07-25 21:58+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
 "hotelwakeup/vi/>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.4\n"
 
@@ -56,7 +56,7 @@ msgstr ""
 "để ẩn các Caller ID được gửi ra khỏi đường dây kỹ thuật số nếu được hỗ trợ "
 "(E1/T1/J1/BRI/SIP/IAX)"
 
-#: Hotelwakeup.class.php:78
+#: Hotelwakeup.class.php:110
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -65,7 +65,7 @@ msgstr ""
 "Không thể tạo lịch cuộc gọi theo như thời gian đã lập trước đó. [Thời gian "
 "hiện tại: %s]  [Thời gian đánh thức: %s]"
 
-#: Hotelwakeup.class.php:66
+#: Hotelwakeup.class.php:98
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr "Không thể tạo lịch cuộc gọi, do thiếu dữ liệu"
 
@@ -145,7 +145,7 @@ msgstr "Máy nhánh điều hành"
 msgid "Operator Mode"
 msgstr "Chế độ điều hành"
 
-#: Hotelwakeup.class.php:32
+#: Hotelwakeup.class.php:64
 msgid "Reset"
 msgstr "Cài đặt lại"
 
@@ -169,7 +169,7 @@ msgstr "Thời gian máy chủ"
 msgid "Settings"
 msgstr "Các cài đặt"
 
-#: Hotelwakeup.class.php:38
+#: Hotelwakeup.class.php:70
 msgid "Submit"
 msgstr "Gửi đi"
 
@@ -230,7 +230,7 @@ msgstr "Thời gian để gọi"
 msgid "Wake Up Caller ID"
 msgstr "Caller ID của cuộc gọi đánh thức"
 
-#: Hotelwakeup.class.php:130 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
+#: Hotelwakeup.class.php:162 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
 #: hotelwakeup.i18n.php:12
 msgid "Wake Up Calls"
 msgstr "Các cuộc gọi đánh thức"

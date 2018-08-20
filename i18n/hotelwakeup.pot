@@ -3,16 +3,17 @@
 # For licensing information, please see the file named LICENSE located in the module directory
 #
 # FreePBX language template for hotelwakeup
-# Copyright (C) 2008-2017 Sangoma Technologies, Inc.
+# Copyright (C) 2008-2018 Sangoma Technologies, Inc.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-07 15:31-0400\n"
+"POT-Creation-Date: 2018-08-20 12:49-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -48,14 +49,14 @@ msgid ""
 "sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 msgstr ""
 
-#: Hotelwakeup.class.php:78
+#: Hotelwakeup.class.php:110
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
 "[Wakeup Time: %s]"
 msgstr ""
 
-#: Hotelwakeup.class.php:66
+#: Hotelwakeup.class.php:98
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr ""
 
@@ -132,7 +133,7 @@ msgstr ""
 msgid "Operator Mode"
 msgstr ""
 
-#: Hotelwakeup.class.php:32
+#: Hotelwakeup.class.php:64
 msgid "Reset"
 msgstr ""
 
@@ -156,7 +157,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: Hotelwakeup.class.php:38
+#: Hotelwakeup.class.php:70
 msgid "Submit"
 msgstr ""
 
@@ -207,7 +208,7 @@ msgstr ""
 msgid "Wake Up Caller ID"
 msgstr ""
 
-#: Hotelwakeup.class.php:130
+#: Hotelwakeup.class.php:162
 #: hotelwakeup.i18n.php:4
 #: hotelwakeup.i18n.php:10
 #: hotelwakeup.i18n.php:12
