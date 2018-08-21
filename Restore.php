@@ -4,7 +4,7 @@ use FreePBX\modules\Backup as Base;
 class Restore Extends Base\RestoreBase{
   public function runRestore($jobid){
     $configs = reset($this->getConfigs());
-    $this->processConfig($configs);
+    $this->processConfigs($configs);
   }
   public function processLegacy($pdo, $data, $tables, $unknownTables, $tmpfiledir){
     $tables = array_flip($tables + $unknownTables);
@@ -18,7 +18,7 @@ class Restore Extends Base\RestoreBase{
       'calls' => $cb->getAllCalls(),
     ];
     $cb->resetDatabase();
-    $this->processConfig($configs);
+    $this->processConfigs($configs);
     return $this;
   }
   public function processConfigs($configs){
