@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-20 12:49-0400\n"
+"POT-Creation-Date: 2018-10-17 11:13+0530\n"
 "PO-Revision-Date: 2017-03-08 21:01+0200\n"
 "Last-Translator: Kingvoice <suporte@kingvoice.com.br>\n"
 "Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "<b>System time:</b> "
 msgstr "<b>Hora do Sistema:</b> "
 
-#: views/grid.php:35
+#: views/grid.php:32
 msgid "Actions"
 msgstr "Ações"
 
@@ -33,7 +33,7 @@ msgstr "Ações"
 msgid "Add"
 msgstr "Adicionar"
 
-#: views/grid.php:223
+#: views/grid.php:220
 msgid "Add new Wakeup Call"
 msgstr "Adicionar nova Chamada de Despertador"
 
@@ -45,7 +45,7 @@ msgstr "Aplicações"
 msgid "Call List"
 msgstr "Lista de Chamadas"
 
-#: views/grid.php:211
+#: views/grid.php:208
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -69,15 +69,15 @@ msgstr ""
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr "Não é possível programar a chamada, devido a dados insuficientes"
 
-#: views/grid.php:294
+#: views/grid.php:291
 msgid "Close"
 msgstr "Fechar"
 
-#: views/grid.php:33
+#: views/grid.php:30
 msgid "Date"
 msgstr "Data"
 
-#: views/grid.php:275
+#: views/grid.php:272
 msgid "Day"
 msgstr "Dia"
 
@@ -85,15 +85,11 @@ msgstr "Dia"
 msgid "Day can not be blank"
 msgstr "Dia não pode estar em branco"
 
-#: views/grid.php:285
+#: views/grid.php:282
 msgid "Day to call"
 msgstr "Dia para chamar"
 
-#: views/grid.php:22
-msgid "Delete"
-msgstr "Apagar"
-
-#: views/grid.php:34 views/grid.php:235
+#: views/grid.php:31 views/grid.php:232
 msgid "Destination"
 msgstr "Destino"
 
@@ -101,11 +97,11 @@ msgstr "Destino"
 msgid "Destination can not be blank"
 msgstr "Destino não pode estar em branco"
 
-#: views/grid.php:245
+#: views/grid.php:242
 msgid "Destination to call"
 msgstr "Destino para chamar"
 
-#: views/grid.php:115
+#: views/grid.php:112
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
 "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
@@ -122,27 +118,27 @@ msgstr ""
 msgid "FreePBX module for generating reminder and wakeup calls"
 msgstr "Módulo FreePBX para gerar lembretes e chamadas de despertar"
 
-#: views/grid.php:78
+#: views/grid.php:75
 msgid "Max Destination Length"
 msgstr "Comprimento Máximo do Destino"
 
-#: views/grid.php:174
+#: views/grid.php:171
 msgid "Max Retries"
 msgstr "Máximo de Tentativas"
 
-#: views/grid.php:57
+#: views/grid.php:54
 msgid "No"
 msgstr "Não"
 
-#: views/grid.php:26
+#: views/grid.php:23
 msgid "Not received"
 msgstr "Não recebido"
 
-#: views/grid.php:102
+#: views/grid.php:99
 msgid "Operator Extensions"
 msgstr "Ramais de Operador"
 
-#: views/grid.php:49
+#: views/grid.php:46
 msgid "Operator Mode"
 msgstr "Modo Operador"
 
@@ -150,19 +146,19 @@ msgstr "Modo Operador"
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: views/grid.php:150
+#: views/grid.php:147
 msgid "Retry Time"
 msgstr "Tempo da Tentativa"
 
-#: views/grid.php:126
+#: views/grid.php:123
 msgid "Ring Time"
 msgstr "Duração de Toque"
 
-#: views/grid.php:295
+#: views/grid.php:292
 msgid "Save changes"
 msgstr "Salvar Mudanças"
 
-#: views/grid.php:25
+#: views/grid.php:22
 msgid "Server time"
 msgstr "Hora do Servidor"
 
@@ -174,7 +170,7 @@ msgstr "Configurações"
 msgid "Submit"
 msgstr "Enviar"
 
-#: views/grid.php:187
+#: views/grid.php:184
 msgid ""
 "The maximum number of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
@@ -183,7 +179,7 @@ msgstr ""
 "despertar quando não há resposta. Zero tentativas significa que apenas uma "
 "chamada será efetuada"
 
-#: views/grid.php:139
+#: views/grid.php:136
 msgid ""
 "The number of seconds for the phone to ring. Consider setting lower than the "
 "voicemail threshold or the wakeup call can end up going to voicemail"
@@ -192,7 +188,7 @@ msgstr ""
 "ao limite do correio de voz ou a chamada de ativação pode acabar indo para o "
 "correio de voz"
 
-#: views/grid.php:163
+#: views/grid.php:160
 msgid ""
 "The number of seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
@@ -200,7 +196,7 @@ msgstr ""
 "O número de segundos para esperar entre novas tentativas. A \"tentativa\" "
 "acontece se a chamada de despertar não for atendida"
 
-#: views/grid.php:91
+#: views/grid.php:88
 msgid ""
 "This controls the maximum number of digits an operator can send a wakeup "
 "call to. Set to 10 or 11 to allow wake up calls to outside numbers"
@@ -217,7 +213,7 @@ msgstr ""
 "Esta seção será removida deste grupo de horários e todas as configurações "
 "atuais, incluindo as alterações, serão atualizadas. OK para prosseguir?"
 
-#: views/grid.php:32 views/grid.php:255
+#: views/grid.php:29 views/grid.php:252
 msgid "Time"
 msgstr "Horas"
 
@@ -225,11 +221,11 @@ msgstr "Horas"
 msgid "Time can not be blank"
 msgstr "A hora não pode estar em branco"
 
-#: views/grid.php:265
+#: views/grid.php:262
 msgid "Time to call"
 msgstr "Hora para chamar"
 
-#: views/grid.php:198
+#: views/grid.php:195
 msgid "Wake Up Caller ID"
 msgstr "ID de chamada da chamada de despertar"
 
@@ -252,7 +248,7 @@ msgstr ""
 msgid "What is Hotel Style Wakeup Calls?"
 msgstr "O que são Chamadas de Despertar em Estilo Hotel?"
 
-#: views/grid.php:67
+#: views/grid.php:64
 msgid ""
 "When Operator Mode is enabled it will allow designated extentions to create "
 "wake up calls for any valid destination. If disabled calls can only be "
@@ -263,6 +259,9 @@ msgstr ""
 "estiverem desativadas, só poderão ser devolvidas para o identificador de "
 "chamadas do usuário programando a chamada de despertador"
 
-#: views/grid.php:55
+#: views/grid.php:52
 msgid "Yes"
 msgstr "Sim"
+
+#~ msgid "Delete"
+#~ msgstr "Apagar"
