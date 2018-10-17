@@ -18,9 +18,6 @@
 			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 				<i class="fa fa-plus"></i> <?php echo _('Add')?>
 			</button>
-			<button id="remove-all" class="btn btn-danger btn-remove" data-type="extensions" disabled data-section="all">
-				<i class="glyphicon glyphicon-remove"></i> <span><?php echo _('Delete')?></span>
-			</button>
 			<span class="btn btn-time disabled">
 				<b><?php echo _("Server time")?>:</b>
 				<div id="servertime" data-time="<?php echo time()?>" data-zone="<?php echo date("e")?>" style="display: inline;"><span><?php echo _("Not received")?></span></div>
