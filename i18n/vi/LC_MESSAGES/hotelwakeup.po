@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-13 08:30-0700\n"
-"PO-Revision-Date: 2017-07-13 16:13+0200\n"
+"POT-Creation-Date: 2018-10-17 11:10+0530\n"
+"PO-Revision-Date: 2017-07-25 21:58+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
 "hotelwakeup/vi/>\n"
@@ -25,15 +25,15 @@ msgstr ""
 msgid "<b>System time:</b> "
 msgstr "<b>Thời gian hệ thống:</b> "
 
-#: views/grid.php:35
+#: views/grid.php:32
 msgid "Actions"
-msgstr "Các tháo tác"
+msgstr "Các thao tác"
 
 #: views/grid.php:19
 msgid "Add"
 msgstr "Thêm"
 
-#: views/grid.php:223
+#: views/grid.php:220
 msgid "Add new Wakeup Call"
 msgstr "Thêm một cuộc gọi đánh thức mới"
 
@@ -45,7 +45,7 @@ msgstr "Các ứng dụng"
 msgid "Call List"
 msgstr "Danh sách cuộc gọi"
 
-#: views/grid.php:211
+#: views/grid.php:208
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -69,15 +69,15 @@ msgstr ""
 msgid "Cannot schedule the call, due to insufficient data"
 msgstr "Không thể tạo lịch cuộc gọi, do thiếu dữ liệu"
 
-#: views/grid.php:294
+#: views/grid.php:291
 msgid "Close"
 msgstr "Đóng"
 
-#: views/grid.php:33
+#: views/grid.php:30
 msgid "Date"
 msgstr "Ngày"
 
-#: views/grid.php:275
+#: views/grid.php:272
 msgid "Day"
 msgstr "Ngày"
 
@@ -85,15 +85,11 @@ msgstr "Ngày"
 msgid "Day can not be blank"
 msgstr "Không để trống mục Ngày"
 
-#: views/grid.php:285
+#: views/grid.php:282
 msgid "Day to call"
 msgstr "Ngày gọi"
 
-#: views/grid.php:22
-msgid "Delete"
-msgstr "Xóa"
-
-#: views/grid.php:34 views/grid.php:235
+#: views/grid.php:31 views/grid.php:232
 msgid "Destination"
 msgstr "Điểm đích"
 
@@ -101,11 +97,11 @@ msgstr "Điểm đích"
 msgid "Destination can not be blank"
 msgstr "Không để trống mục Điểm đích"
 
-#: views/grid.php:245
+#: views/grid.php:242
 msgid "Destination to call"
 msgstr "Điểm đích để gọi"
 
-#: views/grid.php:115
+#: views/grid.php:112
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
 "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
@@ -121,27 +117,27 @@ msgstr ""
 msgid "FreePBX module for generating reminder and wakeup calls"
 msgstr "Mô đun FreePBX cho việc tạo các cuộc gọi đánh thức hay nhắc nhở"
 
-#: views/grid.php:78
+#: views/grid.php:75
 msgid "Max Destination Length"
 msgstr "DDộ dài Điểm dịch tối đa"
 
-#: views/grid.php:174
+#: views/grid.php:171
 msgid "Max Retries"
 msgstr "Lần thử lại tối đa"
 
-#: views/grid.php:57
+#: views/grid.php:54
 msgid "No"
 msgstr "Không"
 
-#: views/grid.php:26
+#: views/grid.php:23
 msgid "Not received"
 msgstr "Không nhận được"
 
-#: views/grid.php:102
+#: views/grid.php:99
 msgid "Operator Extensions"
 msgstr "Máy nhánh điều hành"
 
-#: views/grid.php:49
+#: views/grid.php:46
 msgid "Operator Mode"
 msgstr "Chế độ điều hành"
 
@@ -149,19 +145,19 @@ msgstr "Chế độ điều hành"
 msgid "Reset"
 msgstr "Cài đặt lại"
 
-#: views/grid.php:150
+#: views/grid.php:147
 msgid "Retry Time"
 msgstr "Thời gian thử lại"
 
-#: views/grid.php:126
+#: views/grid.php:123
 msgid "Ring Time"
-msgstr "Thời gian thử lại"
+msgstr "Thời gian đổ chuông"
 
-#: views/grid.php:295
+#: views/grid.php:292
 msgid "Save changes"
 msgstr "Lưu các thay đổi"
 
-#: views/grid.php:25
+#: views/grid.php:22
 msgid "Server time"
 msgstr "Thời gian máy chủ"
 
@@ -173,7 +169,7 @@ msgstr "Các cài đặt"
 msgid "Submit"
 msgstr "Gửi đi"
 
-#: views/grid.php:187
+#: views/grid.php:184
 msgid ""
 "The maximum number of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
@@ -181,7 +177,7 @@ msgstr ""
 "Thời lượng tối đa mà hệ thống cố để chuyển cuộc gọi khi không có trả lời. Số "
 "lần thử lại là 0 nghĩa là chỉ có một cuộc gọi được đặt"
 
-#: views/grid.php:139
+#: views/grid.php:136
 msgid ""
 "The number of seconds for the phone to ring. Consider setting lower than the "
 "voicemail threshold or the wakeup call can end up going to voicemail"
@@ -189,7 +185,7 @@ msgstr ""
 "Số giây điện thoại đổ chuông. Cần lưu ý việc cài đặt số giấy ít hơn ngưỡng "
 "của thư thoại hoặc cuộc gọi đánh thức có thể kết thúc thư thoại đang tới"
 
-#: views/grid.php:163
+#: views/grid.php:160
 msgid ""
 "The number of seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
@@ -197,7 +193,7 @@ msgstr ""
 "Số giây đợi giữa các lần thử. Một \"lần thử\" xảy ra nếu cuộc gọi đánh thức "
 "không được trả lời"
 
-#: views/grid.php:91
+#: views/grid.php:88
 msgid ""
 "This controls the maximum number of digits an operator can send a wakeup "
 "call to. Set to 10 or 11 to allow wake up calls to outside numbers"
@@ -211,10 +207,10 @@ msgid ""
 "This section will be removed from this time group and all current settings "
 "including changes will be updated. OK to proceed?"
 msgstr ""
-"Phần này sẽ được xóa khỏi nhóm thời gian và tất cả các cài đặt hiện tại bao "
-"gồm các thay đổi sẽ được cập nhật. Nhấn OK để thực hiện?"
+"Phần này sẽ được xóa khỏi Nhóm thời gian và tất cả các cuộc gọi hiện tại bao "
+"gồm các thay đổi sẽ được cập nhật. Nhấn Ok để tiếp tục?"
 
-#: views/grid.php:32 views/grid.php:255
+#: views/grid.php:29 views/grid.php:252
 msgid "Time"
 msgstr "Thời gian"
 
@@ -222,11 +218,11 @@ msgstr "Thời gian"
 msgid "Time can not be blank"
 msgstr "Không để trống mục thời gian"
 
-#: views/grid.php:265
+#: views/grid.php:262
 msgid "Time to call"
 msgstr "Thời gian để gọi"
 
-#: views/grid.php:198
+#: views/grid.php:195
 msgid "Wake Up Caller ID"
 msgstr "Caller ID của cuộc gọi đánh thức"
 
@@ -249,7 +245,7 @@ msgstr ""
 msgid "What is Hotel Style Wakeup Calls?"
 msgstr "Các cuộc gọi đánh thức kiểu khách sạn là gì?"
 
-#: views/grid.php:67
+#: views/grid.php:64
 msgid ""
 "When Operator Mode is enabled it will allow designated extentions to create "
 "wake up calls for any valid destination. If disabled calls can only be "
@@ -260,6 +256,9 @@ msgstr ""
 "hiệu các cuộc gọi có thể chỉ được đặt trở lại tới Caller ID của người dùng "
 "đang lập cuộc gọi đánh thức"
 
-#: views/grid.php:55
+#: views/grid.php:52
 msgid "Yes"
 msgstr "Có"
+
+#~ msgid "Delete"
+#~ msgstr "Xóa"
