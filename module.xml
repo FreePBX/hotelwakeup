@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>15.0.3</version>
+	<version>15.0.4</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 		<description>FreePBX module for generating reminder and wakeup calls</description>
 	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
 	<changelog>
+		*15.0.4* fixing legacy restore 
 		*15.0.3* FREEPBX-18363 Removing Bulk Delete button broken under wakeup calls 
 		*15.0.2* Packaging of ver 15.0.2
 		*15.0.1* Add Backup 15.0
