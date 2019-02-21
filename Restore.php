@@ -6,7 +6,7 @@ class Restore Extends Base\RestoreBase{
 		$configs = $this->getConfigs();
 		$this->processConfigs($configs);
 	}
-	public function processLegacy($pdo, $data, $tables, $unknownTables, $tmpfiledir){
+	public function processLegacy($pdo, $data, $tables, $unknownTables){
 		$this->restoreLegacyDatabase($pdo);
 	}
 	public function processConfigs($configs){
