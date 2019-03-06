@@ -8,8 +8,10 @@ class Restore Extends Base\RestoreBase{
 	}
 	public function processLegacy($pdo, $data, $tables, $unknownTables){
 		$this->restoreLegacyDatabase($pdo);
+		$this->restoreLegacyFeatureCodes($pdo);
 	}
 	public function processConfigs($configs){
+		$this->importFeatureCodes($configs['features']);
 		$this->FreePBX->Hotelwakeup->saveSetting($configs['config']);
 		foreach ($configs['calls'] as $call) {
 			$this->FreePBX->Hotelwakeup->addWakeup($call['destination'], $call['time'], $call['lang']);
