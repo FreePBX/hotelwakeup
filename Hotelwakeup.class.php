@@ -151,7 +151,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		switch($action) {
 			case "settings":
 				preg_match('/"(.*)" <(.*)>/',$_POST['callerid'],$matches);
-				$this->saveConfig(array(
+				$this->saveSetting(array(
 					"operator_mode" => $_POST['operator_mode'],
 					"extensionlength" => $_POST['extensionlength'],
 					"operator_extensions" => $_POST['operator_extensions'],
