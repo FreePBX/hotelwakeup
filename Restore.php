@@ -14,7 +14,8 @@ class Restore Extends Base\RestoreBase{
 		$this->importFeatureCodes($configs['features']);
 		$this->FreePBX->Hotelwakeup->saveSetting($configs['config']);
 		foreach ($configs['calls'] as $call) {
-			$this->FreePBX->Hotelwakeup->addWakeup($call['destination'], $call['time'], $call['lang']);
+			out(sprintf(_("Restoring destination : %s"),$call['destination']));
+			$this->FreePBX->Hotelwakeup->addWakeup($call['destination'], $call['timestamp'], $call['lang']);
 		}
 	}
 }
