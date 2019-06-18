@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-17 11:13+0530\n"
+"POT-Creation-Date: 2019-06-18 11:25+0530\n"
 "PO-Revision-Date: 2015-10-30 06:49+0200\n"
 "Last-Translator: Kevin <kevin@qloog.com>\n"
 "Language-Team: Japanese <http://weblate.freepbx.org/projects/freepbx/"
@@ -134,6 +134,11 @@ msgstr ""
 #: Hotelwakeup.class.php:64
 msgid "Reset"
 msgstr "リセット"
+
+#: Restore.php:17
+#, php-format
+msgid "Restoring destination : %s"
+msgstr ""
 
 #: views/grid.php:147
 msgid "Retry Time"

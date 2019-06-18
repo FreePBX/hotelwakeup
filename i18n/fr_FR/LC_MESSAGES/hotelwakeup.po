@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-17 11:13+0530\n"
+"POT-Creation-Date: 2019-06-18 11:25+0530\n"
 "PO-Revision-Date: 2017-12-11 22:57+0200\n"
 "Last-Translator: JCattan <jeremie@famillecattan.com>\n"
 "Language-Team: French <http://weblate.freepbx.org/projects/freepbx/"
@@ -144,6 +144,11 @@ msgstr "Mode téléphoniste"
 #: Hotelwakeup.class.php:64
 msgid "Reset"
 msgstr "Reset"
+
+#: Restore.php:17
+#, php-format
+msgid "Restoring destination : %s"
+msgstr ""
 
 #: views/grid.php:147
 msgid "Retry Time"
