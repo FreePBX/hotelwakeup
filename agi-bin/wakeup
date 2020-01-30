@@ -138,10 +138,10 @@ function wakeupAdd($AGI, $number) {
 	sim_playback($AGI,"wakeup-call&added&digits/at");
 	$time = $time_wakeup;
 	if($lang == 'ja') {
-		$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
+		$AGI->exec("SayUnixTime \"$time,,BdApIM\"", "");
 	}
 	else {
-		$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
+		$AGI->exec("SayUnixTime \"$time,,IMpABd\"", "");
 	}
 	wakeupMenu($AGI, $number);
 }
@@ -183,7 +183,7 @@ function wakeupList($AGI, $number) {
 			sim_playback($AGI,"jp-banme&jp-no");
 			sim_playback($AGI,"wakeup-call");
 			sim_playback($AGI,"jp-wa");
-			$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
+			$AGI->exec("SayUnixTime \"$time,,BdApIM\"", "");
 			sleep(1);
 			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
 		}
@@ -192,7 +192,7 @@ function wakeupList($AGI, $number) {
 			sim_playback($AGI,"number");
 			$AGI->say_digits($id + 1);
 			sim_playback($AGI,"digits/at");
-			$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
+			$AGI->exec("SayUnixTime \"$time,,IMpABd\"", "");
 			sleep(1);
 			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
 		}
