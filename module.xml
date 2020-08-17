@@ -7,8 +7,8 @@
 	<licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
 	<category>Applications</category>
-		<description>FreePBX module for generating reminder and wakeup calls</description>
-	<info>https://github.com/POSSA/Hotel-Style-Wakeup-Calls</info>
+	<description>FreePBX module for generating reminder and wakeup calls</description>
+	<more-info>https://wiki.freepbx.org/display/F2/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
 		*13.0.17.2* FREEPBX-18363 Removing Bulk Delete button broken under wakeup calls 
 		*13.0.17.1* FREEPBX-15057 Java script fails randomly under Wakeup Call module
