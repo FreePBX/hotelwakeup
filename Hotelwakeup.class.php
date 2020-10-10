@@ -52,34 +52,22 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
     }
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
-
-	public function getActionBar($request) {
-		$buttons = array();
-		switch($request['display']) {
-			case 'hotelwakeup':
-				$buttons = array(
-					'reset' => array(
-						'name' => 'reset',
-						'id' => 'reset',
-						'value' => _('Reset'),
-						'class' => 'hidden'
-					),
-					'submit' => array(
-						'name' => 'submit',
-						'id' => 'submit',
-						'value' => _('Submit'),
-						'class' => 'hidden'
-					)
-				);
-			break;
-		}
-		return $buttons;
-	}
+	public function getActionBar($request) {}
 
 	public function ajaxRequest($req, &$setting) {
-		switch($req) {
+		// ** Allow remote consultation with Postman **
+		// ********************************************
+		// $setting['authenticate'] = false;
+		// $setting['allowremote'] = true;
+		// return true;
+		// ********************************************
+		switch($req)
+		{
 			case "savecall":
 			case "getable":
+			case "removecall":
+			case "getsettings":
+			case "setsettings":
 				return true;
 			break;
 		}
@@ -90,7 +78,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		switch($_REQUEST['command']) {
 			case "savecall":
 				if(empty($_POST['language'])) {
-					$lang = 'en'; //default to English if empty
+					$lang = $this->FreePBX->Config->get("UIDEFAULTLANG");
 				} else {
 					$lang = $_POST['language']; //otherwise set to the language code provided
 				}
@@ -113,8 +101,97 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					return array("status" => true);
 				}
 			break;
+
 			case "getable":
 				return $this->getAllCalls();
+			break;
+
+			case "removecall":
+				$id  = empty($_POST['id'])  ? "" : $_POST['id'];
+				$ext = empty($_POST['ext']) ? "" : $_POST['ext'];
+				if (empty($id))
+				{
+					$data_return = array("status" => false, "message" => _("The ID parameter is missing!"));
+				}
+				elseif (empty($ext)) 
+				{
+					$data_return = array("status" => false, "message" => _("The EXT parameter is missing!"));
+				}
+				else
+				{
+					$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
+					$this->removeWakeup($file);
+					$data_return = array("status" => true);
+				}
+				return $data_return;
+			break;
+
+			case "getsettings":
+				$data_return = array(
+					"status"  => true,
+					"message" => _("Settings loaded successfully."),
+					"config"  => $this->getSetting()
+				);
+
+				$data_return['config']['operator_mode'] = ($data_return['config']['operator_mode']) ? "yes" : "no";
+				// $data_return['config']['callerid'] = htmlentities($data_return['config']['callerid']);
+				// $data_return['config']['operator_extensions'] = implode("\n", $data_return['config']['operator_extensions']);
+
+				return $data_return;
+			break;
+
+			case "setsettings":
+				$list_options = array("callerid", "operator_mode", "extensionlength", "operator_extensions", "waittime", "retrytime", "maxretries");
+				$new_options = array();
+				$missing_options = array();
+				$invalid_value = array();
+				foreach ($list_options as $value)
+				{
+					if ( empty($_POST[$value]) )
+					{
+						$missing_options[] = $value;
+						continue;
+					}
+					switch($value)
+					{
+						case "callerid":
+							preg_match('/"(.*)" <(.*)>/',$_POST[$value],$matches);
+							$new_options['cid']  = !empty($matches[2]) ? $matches[2] : $this->getCode();
+							$new_options['cnam'] = !empty($matches[1]) ? $matches[1] : self::$defaultConfig['cnam'];
+						break;
+
+						case "operator_mode":
+							$new_options[$value] = ($_POST[$value] == "yes") ? "1": "0";
+						break;
+
+						default:
+							$new_options[$value] = $_POST[$value];
+							if ($value != "operator_extensions") 
+							{
+								if ( ! is_numeric( $_POST[$value] ) ) 
+								{
+									$invalid_value[] = $value;
+								}
+							}
+					}
+				}
+				if (count($missing_options) == 0)
+				{
+					if (count($invalid_value) == 0)
+					{
+						$this->saveSetting($new_options);
+						$data_return = array("status" => true, "message" => _("Settings saved successfully."));
+					}
+					else
+					{
+						$data_return = array("status" => false, "message" => _("Save failed, invalid values!"), "options" => $invalid_value);
+					}
+				}
+				else
+				{
+					$data_return = array("status" => false, "message" => _("Save failed, missing parameters!"));
+				}
+				return $data_return;
 			break;
 		}
 		return true;
@@ -139,32 +216,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 	public function showPage() {
-		if(!empty($_REQUEST['action']) && $_REQUEST['action'] == "delete" && !empty($_REQUEST['id']) && !empty($_REQUEST['ext'])) {
-			$file = $this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/wuc.".$_REQUEST['id'].".ext.".$_REQUEST['ext'].".call";
-			if(file_exists($file)) {
-				unlink($file);
-			}
-		}
-		$action = !empty($_POST['action']) ? $_POST['action'] : '';
+		return load_view(__DIR__."/views/page.wakeup.php", array("code" => $this->getCode()));
+	}
+
+	public function getCode() {
 		$fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
 		$code = $fcc->getCode();
-		switch($action) {
-			case "settings":
-				preg_match('/"(.*)" <(.*)>/',$_POST['callerid'],$matches);
-				$this->saveSetting(array(
-					"operator_mode" => $_POST['operator_mode'],
-					"extensionlength" => $_POST['extensionlength'],
-					"operator_extensions" => $_POST['operator_extensions'],
-					"waittime" => $_POST['waittime'],
-					"retrytime" => $_POST['retrytime'],
-					"maxretries" => $_POST['maxretries'],
-					"cid" => !empty($matches[2]) ? $matches[2] : $code,
-					"cnam" => !empty($matches[1]) ? $matches[1] : _("Wake Up Calls")
-				));
-			break;
-		}
-		$content = load_view(__DIR__."/views/grid.php", array("code" => $code, "config" => $this->getSetting()));
-		return load_view(__DIR__."/views/main.php",array("pageContent" => $content));
+		return $code;
 	}
 
 	public function getSetting() {
@@ -235,7 +293,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					"time" => $filetime,
 					"date" => $filedate,
 					"destination" => $wucext,
-					"actions" => '<a href="?display=hotelwakeup&amp;action=delete&amp;id='.$res[0].'&amp;ext='.$res[1].'"><i class="fa fa-times"></i></a>'
+					"wakeup_id" => $res[0],
+					"wakeup_ext" => $res[1],
+					"actionsjs" => '<a href="#" onclick="removeWakeup('.$res[0].','.$res[1].');return false;"><i class="fa fa-trash"></i></a>',
+					// Legacy \ Next Line \ Maintain for PMS module compatibility.
+					"actions" => '<a href="?display=hotelwakeup&amp;action=delete&amp;id='.$res[0].'&amp;ext='.$res[1].'"><i class="fa fa-times"></i></a>' 
 				);
 			}
 		}
