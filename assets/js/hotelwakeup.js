@@ -172,6 +172,10 @@ function saveSettings(e)
 	$.post(window.FreePBX.ajaxurl, post_data, function(data) 
 	{
 		fpbxToast(data.message, '', (data.status ? 'success' : 'error') );
+		if (data.status) 
+		{
+			loadSettings();
+		}
 		disabledSettings(false);
 	});
 }

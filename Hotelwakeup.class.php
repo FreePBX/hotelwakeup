@@ -151,40 +151,75 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			break;
 
 			case "setsettings":
-				$list_options = array("callerid", "operator_mode", "extensionlength", "operator_extensions", "waittime", "retrytime", "maxretries", "language");
+				$list_options = array(
+					"callerid" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"operator_mode" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"extensionlength" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"operator_extensions" => array(
+						"requiered" => false,
+						"type" 		=> "string"
+					),
+					"waittime" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"retrytime" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"maxretries" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
+					"language" => array(
+						"requiered" => false,
+						"type" 		=> "string"
+					),
+				);
 				$new_options = array();
 				$missing_options = array();
 				$invalid_value = array();
-				foreach ($list_options as $value)
+
+				foreach ($list_options as $key => $value)
 				{
-					if ( empty($_POST[$value]) && ! in_array($value, array("operator_extensions", "language")) )
+					if ( empty($_POST[$key]) && $value['requiered'] )
 					{
-						$missing_options[] = $value;
+						$missing_options[] = $key;
 						continue;
 					}
-					switch($value)
+					switch($key)
 					{
 						case "callerid":
-							preg_match('/"(.*)" <(.*)>/',$_POST[$value],$matches);
+							preg_match('/"(.*)" <(.*)>/',$_POST[$key],$matches);
 							$new_options['cid']  = !empty($matches[2]) ? $matches[2] : $this->getCode();
 							$new_options['cnam'] = !empty($matches[1]) ? $matches[1] : self::$defaultConfig['cnam'];
 						break;
 
 						case "operator_mode":
-							$new_options[$value] = ($_POST[$value] == "yes") ? "1": "0";
+							$new_options[$key] = ($_POST[$key] == "yes") ? "1": "0";
 						break;
 
 						default:
-							$new_options[$value] = $_POST[$value];
-							if (! in_array($value, array("operator_extensions", "language")) )
+							$new_options[$key] = $_POST[$key];
+							if ( $value['type'] == "numeric" )
 							{
-								if ( ! is_numeric( $_POST[$value] ) ) 
+								if ( ! is_numeric( $_POST[$key] ) ) 
 								{
-									$invalid_value[] = $value;
+									$invalid_value[] = $key;
 								}
 							}
 					}
 				}
+
 				if (count($missing_options) == 0)
 				{
 					if (count($invalid_value) == 0)
