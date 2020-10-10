@@ -16,6 +16,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'extensionlength' => '4', 
         'application' => 'AGI', 
         'data' => 'wakeupconfirm.php',
+        'language' => ''
 	];
 	public function setDatabase($database){
 		$this->Database = $database;
@@ -77,11 +78,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function ajaxHandler() {
 		switch($_REQUEST['command']) {
 			case "savecall":
-				if(empty($_POST['language'])) {
-					$lang = $this->FreePBX->Config->get("UIDEFAULTLANG");
-				} else {
-					$lang = $_POST['language']; //otherwise set to the language code provided
-				}
+				$lang = empty($_POST['language']) ? '' :  $_POST['language'];
 				if(empty($_POST['day']) || empty($_POST['time'])) {
 					return array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data"));
 				}
@@ -141,13 +138,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			break;
 
 			case "setsettings":
-				$list_options = array("callerid", "operator_mode", "extensionlength", "operator_extensions", "waittime", "retrytime", "maxretries");
+				$list_options = array("callerid", "operator_mode", "extensionlength", "operator_extensions", "waittime", "retrytime", "maxretries", "language");
 				$new_options = array();
 				$missing_options = array();
 				$invalid_value = array();
 				foreach ($list_options as $value)
 				{
-					if ( empty($_POST[$value]) )
+					if ( empty($_POST[$value]) && $value != "language" )
 					{
 						$missing_options[] = $value;
 						continue;
@@ -166,7 +163,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 						default:
 							$new_options[$value] = $_POST[$value];
-							if ($value != "operator_extensions") 
+							if (! in_array($value, array("operator_extensions", "language")) )
 							{
 								if ( ! is_numeric( $_POST[$value] ) ) 
 								{
@@ -199,6 +196,15 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function addWakeup($destination, $time, $lang) {
 		$date = $this->getSetting();  // module config provided by user
+		if(empty($lang))
+		{
+			$lang = $date['language'];
+			if (empty($lang))
+			{
+				//if no language has been configured, the system language is used
+				$lang = $this->FreePBX->Config->get("UIDEFAULTLANG");
+			}
+		}
 		$this->generateCallFile(array(
 			"time"  => $time,
 			"date" => 'unused',
@@ -246,9 +252,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		$sql = "DELETE FROM `hotelwakeup`";
 		$sth = $this->Database->prepare($sql);
 		$sth->execute();
-		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?";
+		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?, `language` = ?";
 		$sth = $this->Database->prepare($sql);
-		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions']));
+		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions'], $options['language']));
 	}
 
 	public function CheckWakeUpProp($file) {

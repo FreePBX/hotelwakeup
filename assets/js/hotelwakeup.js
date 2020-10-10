@@ -35,6 +35,15 @@ $(document).ready(function()
 	$('#savecall').on("click", saveCall);
 	$('#btn_load_settings').on("click", loadSettings);
 	$('#btn_save_settings').on("click", saveSettings);
+
+
+	$("#dlgCreateCall").on('hide.bs.modal', function () {
+        $("ul.ui-timepicker-list").hide();
+		$("#ui-datepicker-div").hide();
+		$('#setlanguage').multiselect('select', '');
+		callform.reset();
+	});
+	
 });
 
 
@@ -62,16 +71,13 @@ function saveCall(e)
 		destination: $("#destination").val(),
 		time: $("#time").val(),
 		day: $("#day").val(),
-		language: $("#language").val() 
+		language: $("#setlanguage").val() 
 	};
 	$.post( window.FreePBX.ajaxurl, post_data, function( data ) {
 		if(!data.status){
 			fpbxToast(data.message, '', 'error');
 		} else {
-			callform.reset();
-			$("ul.ui-timepicker-list").hide();
-			$("#ui-datepicker-div").hide();
-			$("#myModal").modal("hide");
+			$("#dlgCreateCall").modal("hide");
 			$('#callgrid').bootstrapTable('refresh');
 		}
 		$("#savecall").prop("disabled",false);
@@ -132,6 +138,7 @@ function loadSettings(e)
 				"maxretries",
 			];
 
+			$('#language').multiselect('select', config.language);
 			$("#operator_mode_" + config.operator_mode).prop('checked', true);
 			input_list.forEach(element => $("#" + element).val(config[element]));
 			autosize.update($("#operator_extensions"));
@@ -159,6 +166,7 @@ function saveSettings(e)
 		waittime			: $("#waittime").val(),
 		retrytime			: $("#retrytime").val(),
 		maxretries			: $("#maxretries").val(),
+		language			: $("#language").val(),
 	};
 	disabledSettings(true);
 	$.post(window.FreePBX.ajaxurl, post_data, function(data) 
@@ -217,4 +225,5 @@ function disabledSettings(new_status)
 		"#maxretries",
 	];
 	input_list.forEach(element => $(element).prop("disabled", new_status));
+	$('#language').multiselect( new_status ? "disable" : "enable");	
 }

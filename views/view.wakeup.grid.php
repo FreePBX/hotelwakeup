@@ -1,5 +1,5 @@
 <div id="toolbar-all">
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#dlgCreateCall">
         <i class="fa fa-plus"></i> <?php echo _('Add')?>
     </button>
     <span class="btn btn-time disabled">
@@ -28,12 +28,11 @@
     </thead>
 </table>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="dlgCreateCall" tabindex="-1" role="dialog" aria-labelledby="dlgCreateCallLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" onclick="closepopups()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel"><?php echo _('Add new Wakeup Call')?></h4>
+				<h4 class="modal-title" id="dlgCreateCallLabel"><?php echo _('Add new Wakeup Call')?></h4>
 			</div>
 			<div class="modal-body">
 				<form id="callform">
@@ -48,7 +47,7 @@
 													<label class="control-label" for="destination"><?php echo _('Destination')?></label>
 													<i class="fa fa-question-circle fpbx-help-icon" data-for="destination"></i>
 												</div>
-												<div class="col-md-9"><input type="text" class="form-control" name="destination" id="destination"></div>
+												<div class="col-md-9"><input type="text" class="form-control" name="destination" id="destination" value=""></div>
 											</div>
 										</div>
 									</div>
@@ -68,7 +67,7 @@
 													<label class="control-label" for="time"><?php echo _('Time')?></label>
 													<i class="fa fa-question-circle fpbx-help-icon" data-for="time"></i>
 												</div>
-												<div class="col-md-9"><input type="text" class="form-control" id="time"></div>
+												<div class="col-md-9"><input type="text" class="form-control" id="time" value=""></div>
 											</div>
 										</div>
 									</div>
@@ -88,7 +87,7 @@
 													<label class="control-label" for="day"><?php echo _('Day')?></label>
 													<i class="fa fa-question-circle fpbx-help-icon" data-for="day"></i>
 												</div>
-												<div class="col-md-9"><input type="text" class="form-control" id="day"></div>
+												<div class="col-md-9"><input type="text" class="form-control" id="day" value=""></div>
 											</div>
 										</div>
 									</div>
@@ -105,11 +104,11 @@
 										<div class="row">
 											<div class="form-group">
 												<div class="col-md-3">
-													<label class="control-label" for="language"><?php echo _('Language')?></label>
-													<i class="fa fa-question-circle fpbx-help-icon" data-for="language"></i>
+													<label class="control-label" for="setlanguage"><?php echo _('Language')?></label>
+													<i class="fa fa-question-circle fpbx-help-icon" data-for="setlanguage"></i>
 												</div>
 												<div class="col-md-9">
-													<?php echo \FreePBX::View()->languageDrawSelect('language', "",_("Use System Language")); ?>
+													<?php echo \FreePBX::View()->languageDrawSelect('setlanguage', "",_("Use Default Language")); ?>
 												</div>
 											</div>
 										</div>
@@ -117,7 +116,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-12">
-										<span id="language-help" class="help-block fpbx-help-block"><?php echo _('Calling language')?></span>
+										<span id="setlanguage-help" class="help-block fpbx-help-block"><?php echo _('Calling language')?></span>
 									</div>
 								</div>
 							</div>
@@ -126,8 +125,8 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" onclick="closepopups()" class="btn btn-default" data-dismiss="modal"><?php echo _('Close')?></button>
-				<button type="button" class="btn btn-primary" id="savecall"><?php echo _('Save changes')?></button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo _('Cancel')?></button>
+				<button type="button" class="btn btn-success" id="savecall"><?php echo _('Create Call')?></button>
 			</div>
 		</div>
 	</div>

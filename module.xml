@@ -35,6 +35,7 @@
             <field name="operator_extensions" type="string" length="30" notnull="false"/>
             <field name="application" type="string" length="30" notnull="false"/>
             <field name="data" type="string" length="30" notnull="false"/>
+            <field name="language" type="string" length="5" notnull="false"/>
         </table>
         <table name="hotelwakeup_calls">
             <field name="time" type="integer" primarykey="true"/>
