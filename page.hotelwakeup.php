@@ -18,4 +18,4 @@ https://github.com/POSSA/Hotel-Style-Wakeup-Calls
 Last modified Oct 15, 2012
 **********************************************************/
 
-echo \FreePBX::Hotelwakeup()->showPage();
+echo \FreePBX::Hotelwakeup()->showPage("wakeup");

@@ -232,7 +232,7 @@
                     <div class="col-md-9">
                         <div class="btn-group special" role="group">
                             <button type="button" id="btn_save_settings" class="btn btn-lg btn-success"><i class="fa fa-floppy-o"></i> <?php echo _("Save") ?></button>
-                            <button type="button" id="btn_load_settings" class="btn btn-lg btn-danger" ><i class="fa fa-refresh" ></i> <?php echo _("Reset") ?></button>
+                            <button type="button" id="btn_load_settings" class="btn btn-lg btn-danger" ><i class="fa fa-refresh" ></i> <?php echo _("Reload") ?></button>
                         </div>
                     </div>
 

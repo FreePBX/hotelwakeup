@@ -126,7 +126,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case "getsettings":
 				$data_return = array(
 					"status"  => true,
-					"message" => _("Settings loaded successfully."),
+					"message" => _("Settings loaded successfully"),
 					"config"  => $this->getSetting()
 				);
 
@@ -177,7 +177,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					if (count($invalid_value) == 0)
 					{
 						$this->saveSetting($new_options);
-						$data_return = array("status" => true, "message" => _("Settings saved successfully."));
+						$data_return = array("status" => true, "message" => _("Settings saved successfully"));
 					}
 					else
 					{
@@ -221,8 +221,29 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		));
 	}
 
-	public function showPage() {
-		return load_view(__DIR__."/views/page.wakeup.php", array("code" => $this->getCode()));
+	public function showPage($page) {
+		switch ($page) 
+		{
+			case "wakeup":
+				$data_return = load_view(__DIR__."/views/page.wakeup.php", array("hotelwakeup" => $this));
+				break;
+
+			case "wakeup.grid":
+				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.php', array("hotelwakeup" => $this));
+				break;
+
+			case "wakeup.grid.create":
+				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.create.php', array("hotelwakeup" => $this));
+				break;
+
+			case "wakeup.settings":
+				$data_return = load_view(__DIR__.'/views/view.wakeup.settings.php', array("hotelwakeup" => $this));
+				break;
+
+			default:
+				$data_return = "";
+		}
+		return $data_return;
 	}
 
 	public function getCode() {

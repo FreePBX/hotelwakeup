@@ -12,7 +12,7 @@
 					</div>
 					<!--At some point we can probably kill this... Maybe make is a 1 time panel that may be dismissed-->
 					<div class="panel-body collapse" id="moreinfo" aria-expanded="false" style="height: 30px;">
-						<p><?php echo sprintf(_('Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination. To schedule a call, dial %s or use the form below'),$code)?></p>
+						<p><?php echo sprintf(_('Wake Up calls can be used to schedule a reminder or wakeup call to any valid destination. To schedule a call, dial %s or use the form below'), $hotelwakeup->getCode())?></p>
 					</div>
 				</div>
 
@@ -23,10 +23,10 @@
 
 				<div class="tab-content display">
 					<div id="tab1" class="tab-pane active">
-						<?php echo load_view(__DIR__."/view.wakeup.grid.php"); ?>
+						<?php echo $hotelwakeup->showPage("wakeup.grid"); ?>
 					</div>
 					<div id="tab2" class="tab-pane">
-						<?php echo load_view(__DIR__."/view.wakeup.settings.php"); ?>
+						<?php echo $hotelwakeup->showPage("wakeup.settings"); ?>
 					</div>
 				</div>
 				
