@@ -24,19 +24,6 @@
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
 	</menuitems>
     <database>
-        <table name="hotelwakeup">
-            <field name="maxretries" type="integer" primarykey="true"/>
-            <field name="waittime" type="integer"/>
-            <field name="retrytime" type="integer"/>
-            <field name="extensionlength" type="integer"/>
-            <field name="cid" type="string" length="30" notnull="false"/>
-            <field name="cnam" type="string" length="30" notnull="false"/>
-            <field name="operator_mode" type="integer"/>
-            <field name="operator_extensions" type="string" length="30" notnull="false"/>
-            <field name="application" type="string" length="30" notnull="false"/>
-            <field name="data" type="string" length="30" notnull="false"/>
-            <field name="language" type="string" length="5" notnull="false"/>
-        </table>
         <table name="hotelwakeup_calls">
             <field name="time" type="integer" primarykey="true"/>
             <field name="ext" type="integer"/>

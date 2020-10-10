@@ -29,27 +29,40 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $this;
 	}
 
-	public function install() {
+	public function install() 
+	{
         $fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
         $fcc->setDescription('Wake Up Calls');
         $fcc->setDefault('*68');
         $fcc->update();
-        unset($fcc);
-        $currentConfig = $this->getSetting();
-        sort($currentConfig);
-        unset($currentConfig['callerid']);
-        $tmp = self::$defaultConfig;
-        $tmp = sort($tmp);
-        if(!empty($currentConfig) && $currentConfig != $tmp){
-            $tmp['operator_extension'] = implode(',', $tmp['operator_extension']);
-            foreach($tmp as $key => $value){
-                $tmp[':'.$key] = $key;
-                unset($tmp[$key]);
-            }
-            $sql = 'INSERT INTO wakeupcalls ('.implode(',', array_values($tmp)).') VALUES ('.implode(',', array_keys($tmp)).')';
-            $this->Database->query($sql);
-        }
-        
+		unset($fcc);
+		
+
+		//Migrate Table > KVSTORE
+		$sql = "SHOW TABLES LIKE 'hotelwakeup'";
+		$count = $this->Database->query($sql)->rowCount();
+		if($count == 1)
+		{
+			$sql = "SELECT * FROM hotelwakeup LIMIT 1";
+			$sth = $this->Database->prepare($sql);
+			$sth->execute();
+			$fa = $sth->fetch(PDO::FETCH_ASSOC);
+			$this->saveSetting($fa);
+			unset($fa);
+			unset($sth);
+
+			$sql = "DROP TABLE IF EXISTS hotelwakeup";
+			$this->Database->query($sql);
+		}
+		unset($count);
+		unset($sql);
+		
+		//Create default values
+		$currentConfig = $this->getSetting();
+		if( empty($currentConfig) ) 
+		{
+			$this->saveSetting(self::$defaultConfig);
+		}
     }
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
@@ -144,7 +157,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				$invalid_value = array();
 				foreach ($list_options as $value)
 				{
-					if ( empty($_POST[$value]) && $value != "language" )
+					if ( empty($_POST[$value]) && ! in_array($value, array("operator_extensions", "language")) )
 					{
 						$missing_options[] = $value;
 						continue;
@@ -252,30 +265,55 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $code;
 	}
 
-	public function getSetting() {
-        /** TODO: This is a whole database for 1 row Convert this to KVSTORE */
-		$sql = "SELECT * FROM hotelwakeup LIMIT 1";
-		$sth = $this->Database->prepare($sql);
-		$sth->execute();
-		$fa = $sth->fetch(PDO::FETCH_ASSOC);
-		$fa['callerid'] = '"'.$fa['cnam'].'" <'.$fa['cid'].'>';
-		$fa['operator_extensions'] = explode(",",$fa['operator_extensions']);
-		foreach($fa['operator_extensions'] as &$ext) {
+	public function getSetting()
+	{
+		$data_return = $this->getAll("setting");
+		if (empty($data_return))
+		{
+			$data_return = self::$defaultConfig;
+		}
+
+		$data_return['callerid'] = sprintf('"%s" <%s>', $data_return['cnam'], $data_return['cid']);
+		if ( ! is_array($data_return['operator_extensions']) )
+		{
+			$data_return['operator_extensions'] = explode(",", $data_return['operator_extensions']);
+		}
+		foreach($data_return['operator_extensions'] as &$ext)
+		{
 			$ext = trim($ext);
 		}
-		return $fa;
+		return $data_return;
 	}
 
-	public function saveSetting($options) {
-		if(empty($options)) {
-			return false;
+	public function saveSetting($options)
+	{
+		// $options_list = array(
+		// 	'cid',
+		// 	'cnam',
+		// 	'extensionlength',
+		// 	'language',
+		// 	'maxretries',
+		// 	'operator_extensions',
+		// 	'operator_mode',
+		// 	'retrytime',
+		// 	'waittime',
+		// );
+
+		unset($options['callerid']);
+		if(! empty($options)) 
+		{
+			if ( ! is_array($options['operator_extensions']) )
+			{
+				$options['operator_extensions'] = explode(",", $options['operator_extensions']);
+			}
+
+			foreach($options as $key => $value)
+			{
+				$this->setConfig($key, $value, 'setting');
+			}
+			return true;
 		}
-		$sql = "DELETE FROM `hotelwakeup`";
-		$sth = $this->Database->prepare($sql);
-		$sth->execute();
-		$sql = "INSERT `hotelwakeup` SET `maxretries` = ?, `waittime` = ?, `retrytime` = ?, `extensionlength` = ?, `cnam` = ?, `cid` = ?, `operator_mode` = ?, `operator_extensions` = ?, `language` = ?";
-		$sth = $this->Database->prepare($sql);
-		return $sth->execute(array($options['maxretries'], $options['waittime'], $options['retrytime'], $options['extensionlength'], $options['cnam'], $options['cid'], $options['operator_mode'], $options['operator_extensions'], $options['language']));
+		return false;
 	}
 
 	public function CheckWakeUpProp($file) {
