@@ -18,6 +18,38 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'data' => 'wakeupconfirm.php',
         'language' => ''
 	];
+
+	public function get_path($name, $backslashend = true)
+	{
+		$data_return = $this->FreePBX->Config->get('ASTSPOOLDIR');
+		switch($name) 
+		{
+			case "outgoing":
+				$data_return .= "/outgoing";
+				break;
+
+			case "outgoing_done";
+				$data_return .= "/outgoing_done";
+				break;
+
+			case "tmp":
+				$data_return .= "/tmp";
+				break;
+			
+			default:
+				$data_return = "";
+		}
+		if (! empty($data_return)) 
+		{
+			if ($backslashend)
+			{
+				$data_return .= "/";
+			}
+
+		}
+		return $data_return;
+	}
+
 	public function setDatabase($database){
 		$this->Database = $database;
 
@@ -365,23 +397,25 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function removeWakeup_done($file) {
 		$file = basename($file);
-		if(file_exists($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing_done/".$file)) {
-			unlink($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing_done/".$file);
+		$file_full_path = $this->get_path("outgoing_done").$file;
+		if(file_exists($file_full_path)) {
+			unlink($file_full_path);
 		}
 		return true;
 	}
 
 	public function removeWakeup($file) {
 		$file = basename($file);
-		if(file_exists($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/".$file)) {
-			unlink($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/".$file);
+		$file_full_path = $this->get_path("outgoing").$file;
+		if(file_exists($file_full_path)) {
+			unlink($file_full_path);
 		}
 		return true;
 	}
 
 	public function getAllCalls() {
 		$calls = array();
-		foreach(glob($this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/wuc*.call") as $file) {
+		foreach(glob($this->get_path("outgoing")."wuc*.call") as $file) {
 			$res = $this->CheckWakeUpProp($file);
 			if(!empty($res)) {
 				$filedate = date('M d Y',filemtime($file)); //create a date string to display from the file timestamp
@@ -406,15 +440,15 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function generateCallFile($foo) {
 		if (empty($foo['tempdir'])) {
-			$ast_tmp_path = $this->FreePBX->Config->get('ASTSPOOLDIR')."/tmp/";
+			$ast_tmp_path = $this->get_path("tmp");
 			if(!file_exists($ast_tmp_path)) {
-							mkdir($ast_tmp_path,0777,true);
+				mkdir($ast_tmp_path,0777,true);
 			}
 			$foo['tempdir'] = $ast_tmp_path;
 		}
 
 		if (empty($foo['outdir'])) {
-			$foo['outdir'] = $this->FreePBX->Config->get('ASTSPOOLDIR')."/outgoing/";
+			$foo['outdir'] = $this->get_path("outgoing");
 		}
 
 		$foo['ext'] = preg_replace("/[^\d@\+\#]/","",$foo['ext']);
