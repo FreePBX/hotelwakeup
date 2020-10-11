@@ -19,7 +19,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'language' => ''
 	];
 
-	public function get_path($name, $backslashend = true)
+	public function getPath($name, $backslashend = true)
 	{
 		$data_return = $this->FreePBX->Config->get('ASTSPOOLDIR');
 		switch($name) 
@@ -37,7 +37,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				break;
 			
 			default:
-				$data_return = "";
+				throw new \Exception( sprintf(_("Path name (%s) not supported!"), $name) );
 		}
 		if (! empty($data_return)) 
 		{
@@ -397,7 +397,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function removeWakeup_done($file) {
 		$file = basename($file);
-		$file_full_path = $this->get_path("outgoing_done").$file;
+		$file_full_path = $this->getPath("outgoing_done").$file;
 		if(file_exists($file_full_path)) {
 			unlink($file_full_path);
 		}
@@ -406,7 +406,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function removeWakeup($file) {
 		$file = basename($file);
-		$file_full_path = $this->get_path("outgoing").$file;
+		$file_full_path = $this->getPath("outgoing").$file;
 		if(file_exists($file_full_path)) {
 			unlink($file_full_path);
 		}
@@ -415,7 +415,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function getAllCalls() {
 		$calls = array();
-		foreach(glob($this->get_path("outgoing")."wuc*.call") as $file) {
+		foreach(glob($this->getPath("outgoing")."wuc*.call") as $file) {
 			$res = $this->CheckWakeUpProp($file);
 			if(!empty($res)) {
 				$filedate = date('M d Y',filemtime($file)); //create a date string to display from the file timestamp
@@ -440,7 +440,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function generateCallFile($foo) {
 		if (empty($foo['tempdir'])) {
-			$ast_tmp_path = $this->get_path("tmp");
+			$ast_tmp_path = $this->getPath("tmp");
 			if(!file_exists($ast_tmp_path)) {
 				mkdir($ast_tmp_path,0777,true);
 			}
@@ -448,7 +448,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		}
 
 		if (empty($foo['outdir'])) {
-			$foo['outdir'] = $this->get_path("outgoing");
+			$foo['outdir'] = $this->getPath("outgoing");
 		}
 
 		$foo['ext'] = preg_replace("/[^\d@\+\#]/","",$foo['ext']);
