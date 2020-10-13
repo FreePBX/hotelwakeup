@@ -1,7 +1,9 @@
 <div id="toolbar-all">
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#dlgCreateCall">
-        <i class="fa fa-plus"></i> <?php echo _('Add')?>
-    </button>
+	<div class="btn-group">
+    	<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#dlgCreateCall">
+			<i class="fa fa-plus">&nbsp;</i><?php echo _('Add')?>
+    	</button>
+	</div>
     <span class="btn btn-time disabled">
         <b><?php echo _("Server time")?>:</b>
         <div id="servertime" data-time="<?php echo time()?>" data-zone="<?php echo date("e")?>" style="display: inline;"><span><?php echo _("Not received")?></span></div>

@@ -217,29 +217,4 @@
         </div>
     </div>
     <!-- Block - Language -->
-
-    <br />
-
-    <!-- Block - Buttons Actions -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="form-group">
-                
-                    <div class="col-md-3">
-                        
-                    </div>
-                    <div class="col-md-9">
-                        <div class="btn-group special" role="group">
-                            <button type="button" id="btn_save_settings" class="btn btn-lg btn-success"><i class="fa fa-floppy-o"></i> <?php echo _("Save") ?></button>
-                            <button type="button" id="btn_load_settings" class="btn btn-lg btn-danger" ><i class="fa fa-refresh" ></i> <?php echo _("Reload") ?></button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Block - Buttons Actions -->
 </form>

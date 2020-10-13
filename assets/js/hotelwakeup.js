@@ -12,17 +12,24 @@ function is_Numeric(num)
 	return !isNaN(parseFloat(num)) && isFinite(num);
 }
 
+
+$("#action-bar").addClass("hidden");
+
 $(document).ready(function()
 {
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) 
 	{
 		if(e.target.id == "settings") 
 		{
+			$("#action-bar").removeClass("hidden");
 			if (! initial_load_end) 
 			{
 				initial_load_end = true;
 				loadSettings();
 			}
+		}
+		else {
+			$("#action-bar").addClass("hidden");
 		}
 	});
 	$("#day").datepicker();

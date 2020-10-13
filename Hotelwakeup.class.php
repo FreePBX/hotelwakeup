@@ -98,7 +98,28 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
     }
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
-	public function getActionBar($request) {}
+	public function getActionBar($request)
+	{
+		$buttons = array();
+		switch($request['display'])
+		{
+			case 'hotelwakeup':
+				$buttons = array(
+					'save' => array(
+						'id' => 'btn_save_settings',
+						'value' => _("Save"),
+						'type' => 'button'
+					),
+					'reload' => array(
+						'id' => 'btn_load_settings',
+						'value' => _("Reload"),
+						'type' => 'button'
+					)
+				);
+			break;
+		}
+		return $buttons;
+	}
 
 	public function ajaxRequest($req, &$setting) {
 		// ** Allow remote consultation with Postman **
