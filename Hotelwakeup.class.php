@@ -130,7 +130,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		switch($req)
 		{
 			case "savecall":
-			case "getable":
+			case "gettable":
 			case "removecall":
 			case "getsettings":
 			case "setsettings":
@@ -152,7 +152,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				return $this->run_action("wakeup_create", $params);
 				break;
 
-			case "getable":
+			case "gettable":
 				return $this->getAllCalls();
 				break;
 

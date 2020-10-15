@@ -10,7 +10,7 @@
     </span>
 </div>
 <table id="callgrid" class="table table-striped"
-	   data-url="ajax.php?module=hotelwakeup&amp;command=getable"
+	   data-url="ajax.php?module=hotelwakeup&amp;command=gettable"
 	   data-cache="false"
 	   data-toolbar="#toolbar-all"
 	   data-maintain-selected="true"
