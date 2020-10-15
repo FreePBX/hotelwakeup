@@ -52,7 +52,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function setDatabase($database){
 		$this->Database = $database;
-
 		return $this;
 	}
 
@@ -144,52 +143,89 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function ajaxHandler() {
 		switch($_REQUEST['command']) {
 			case "savecall":
-				$lang = empty($_POST['language']) ? '' :  $_POST['language'];
-				if(empty($_POST['day']) || empty($_POST['time'])) {
-					return array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data"));
-				}
-				$time_wakeup = strtotime($_POST['day']." ".$_POST['time']);
-				$time_now = time();
-				$badtime = false;
-				if ( $time_wakeup === false || $time_wakeup <= $time_now )  {
-					$badtime = true;
-				}
-
-				// check for insufficient data
-				if ($badtime)  {
-					// abandon .call file creation and pop up a js alert to the user
-					return array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
-				} else {
-					$this->addWakeup($_POST['destination'],$time_wakeup,$lang);
-					return array("status" => true);
-				}
-			break;
+				$params = array(
+					'day' 			=> empty($_POST['day']) 		? '' : $_POST['day'],
+					'time' 			=> empty($_POST['time']) 		? '' : $_POST['time'],
+					'destination' 	=> empty($_POST['destination']) ? '' : $_POST['destination'],
+					'language' 		=> empty($_POST['language'])	? '' : $_POST['language'],
+				);
+				return $this->run_action("wakeup_create", $params);
+				break;
 
 			case "getable":
 				return $this->getAllCalls();
-			break;
+				break;
 
 			case "removecall":
-				$id  = empty($_POST['id'])  ? "" : $_POST['id'];
-				$ext = empty($_POST['ext']) ? "" : $_POST['ext'];
-				if (empty($id))
+				$params = array(
+					'id' 	=> empty($_POST['id'])  ? '' : $_POST['id'],
+					'ext' 	=> empty($_POST['ext']) ? '' : $_POST['ext'],
+				);
+				return $this->run_action("wakeup_delete", $params);
+				break;
+
+			case "getsettings":
+				return $this->run_action("settings_get");
+				break;
+
+			case "setsettings":
+				return $this->run_action("settings_set", $_POST);
+				break;
+		}
+		return true;
+	}
+
+
+	public function run_action($action, $params = array())
+	{
+		$data_return = array("status" => false, "message" => _("Invalid action!"));
+		switch($action)
+		{
+			case "wakeup_create":
+				if(empty($params['day']) || empty($params['time']) || empty($params['destination'])) 
 				{
-					$data_return = array("status" => false, "message" => _("The ID parameter is missing!"));
+					$data_return = array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data!"));
 				}
-				elseif (empty($ext)) 
+				else 
 				{
-					$data_return = array("status" => false, "message" => _("The EXT parameter is missing!"));
+					$lang = empty($params['language']) ? '' :  $params['language'];
+					$time_wakeup = strtotime($params['day']." ".$params['time']);
+					$time_now = time();
+	
+					// check for insufficient data
+					if ( $time_wakeup === false || $time_wakeup <= $time_now )
+					{
+						// abandon .call file creation and pop up a js alert to the user
+						$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
+					}
+					else
+					{
+						$this->addWakeup($params['destination'], $time_wakeup, $lang);
+						$data_return = array("status" => true);
+					}
+				}
+				break;
+
+			case "wakeup_delete":
+				if (empty($params['id']) || empty($params['ext'])) 
+				{
+					$data_return = array("status" => false, "message" => _("Cannot delete the call, due to insufficient data!"));
 				}
 				else
 				{
-					$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
-					$this->removeWakeup($file);
-					$data_return = array("status" => true);
+					if (! $this->existWakeup($params['id'], $params['ext']))
+					{
+						$data_return = array("status" => false, "message" => _("Wake up call does not exist!"));
+					}
+					else
+					{
+						$this->removeWakeupByIdExt($params['id'], $params['ext']);
+						$data_return = array("status" => true);
+					}
 				}
-				return $data_return;
-			break;
+				break;
 
-			case "getsettings":
+			case "settings_get":
 				$data_return = array(
 					"status"  => true,
 					"message" => _("Settings loaded successfully"),
@@ -199,11 +235,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				$data_return['config']['operator_mode'] = ($data_return['config']['operator_mode']) ? "yes" : "no";
 				// $data_return['config']['callerid'] = htmlentities($data_return['config']['callerid']);
 				// $data_return['config']['operator_extensions'] = implode("\n", $data_return['config']['operator_extensions']);
-
-				return $data_return;
-			break;
-
-			case "setsettings":
+				break;
+			
+			case "settings_set": 
 				$list_options = array(
 					"callerid" => array(
 						"requiered" => true,
@@ -244,7 +278,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 				foreach ($list_options as $key => $value)
 				{
-					if ( empty($_POST[$key]) && $value['requiered'] )
+					if ( empty($params[$key]) && $value['requiered'] )
 					{
 						$missing_options[] = $key;
 						continue;
@@ -252,20 +286,20 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					switch($key)
 					{
 						case "callerid":
-							preg_match('/"(.*)" <(.*)>/',$_POST[$key],$matches);
+							preg_match('/"(.*)" <(.*)>/',$params[$key],$matches);
 							$new_options['cid']  = !empty($matches[2]) ? $matches[2] : $this->getCode();
 							$new_options['cnam'] = !empty($matches[1]) ? $matches[1] : self::$defaultConfig['cnam'];
 						break;
 
 						case "operator_mode":
-							$new_options[$key] = ($_POST[$key] == "yes") ? "1": "0";
+							$new_options[$key] = ($params[$key] == "yes") ? "1": "0";
 						break;
 
 						default:
-							$new_options[$key] = $_POST[$key];
+							$new_options[$key] = $params[$key];
 							if ( $value['type'] == "numeric" )
 							{
-								if ( ! is_numeric( $_POST[$key] ) ) 
+								if ( ! is_numeric( $params[$key] ) ) 
 								{
 									$invalid_value[] = $key;
 								}
@@ -282,18 +316,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					}
 					else
 					{
-						$data_return = array("status" => false, "message" => _("Save failed, invalid values!"), "options" => $invalid_value);
+						$data_return = array("status" => false, "message" => _("Save failed, invalid values!"), "errorIn" => $invalid_value);
 					}
 				}
 				else
 				{
 					$data_return = array("status" => false, "message" => _("Save failed, missing parameters!"));
 				}
-				return $data_return;
-			break;
+				break;
+
 		}
-		return true;
+		return $data_return;
 	}
+
 
 	public function addWakeup($destination, $time, $lang) {
 		$date = $this->getSetting();  // module config provided by user
@@ -425,6 +460,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return true;
 	}
 
+	public function removeWakeupByIdExt($id, $ext) {
+		$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
+		return $this->removeWakeup($file);
+	}
+
 	public function removeWakeup($file) {
 		$file = basename($file);
 		$file_full_path = $this->getPath("outgoing").$file;
@@ -432,6 +472,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			unlink($file_full_path);
 		}
 		return true;
+	}
+
+	public function existWakeup($id, $ext)
+	{
+		$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
+		$file_full_path = $this->getPath("outgoing").$file;
+		return file_exists($file_full_path);
 	}
 
 	public function getAllCalls() {
