@@ -15,7 +15,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'operator_extensions' => ['00','01'], 
         'extensionlength' => '4', 
         'application' => 'AGI', 
-        'data' => 'wakeupconfirm.php',
+        'data' => 'wakeconfirm.php',
         'language' => ''
 	];
 
@@ -153,7 +153,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				break;
 
 			case "gettable":
-				return $this->getAllCalls();
+				$calls = $this->getAllWakeup();
+				foreach($calls as &$call)
+				{
+					//Add action column
+					$call['actions'] = sprintf('<a href="#" onclick="removeWakeup(%s,%s);return false;"><i class="fa fa-trash"></i></a>', $call['id'], $call['destination']);
+				}
+				return $calls;
 				break;
 
 			case "removecall":
@@ -202,6 +208,25 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					{
 						$this->addWakeup($params['destination'], $time_wakeup, $lang);
 						$data_return = array("status" => true);
+					}
+				}
+				break;
+
+			case "wakeup_get":
+				if(empty($params['id']) || empty($params['ext'])) 
+				{
+					$data_return = array("status" => false, "message" => _("Cannot get info the call, due to insufficient data!"));
+				}
+				else 
+				{
+					$call = $this->getWakeup($params['id'], $params['ext']);
+					if (empty($call)) 
+					{
+						$data_return = array("status" => false, "message" => _("Cannot get info the call, due to not exist the call!"));
+					} 
+					else
+					{
+						$data_return = array("status" => true, "data" => $call);
 					}
 				}
 				break;
@@ -342,18 +367,17 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			}
 		}
 		$this->generateCallFile(array(
-			"time"  => $time,
-			"date" => 'unused',
-			"ext" => $destination,
-			"language" => $lang,
-			"maxretries" => $date['maxretries'],
-			"retrytime" => $date['retrytime'],
-			"waittime" => $date['waittime'],
-			"callerid" => $date['cnam']." <".$date['cid'].">",
-			"application" => 'AGI',
-			"data" => 'wakeconfirm.php',
-			"AlwaysDelete" => "Yes",
-			"Archive" => "Yes"
+			"time"			=> $time,
+			"ext"			=> $destination,
+			"language"		=> $lang,
+			"maxretries"	=> $date['maxretries'],
+			"retrytime"		=> $date['retrytime'],
+			"waittime"		=> $date['waittime'],
+			"callerid"		=> $date['cnam']." <".$date['cid'].">",
+			"application"	=> $date['application'],
+			"data"			=> $date['data'],
+			"AlwaysDelete"	=> "Yes",
+			"Archive"		=> "Yes"
 		));
 	}
 
@@ -410,6 +434,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function saveSetting($options)
 	{
+		// Info:
 		// $options_list = array(
 		// 	'cid',
 		// 	'cnam',
@@ -476,32 +501,79 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function existWakeup($id, $ext)
 	{
+		if (empty($id) || empty($ext))
+		{
+			return false;
+		}
 		$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
 		$file_full_path = $this->getPath("outgoing").$file;
 		return file_exists($file_full_path);
 	}
 
-	public function getAllCalls() {
+	public function getWakeup($id, $ext) 
+	{
+		$data_return = array();
+		if ($this->existWakeup($id, $ext))
+		{
+			foreach($this->getAllWakeup() as $call)
+			{
+				if ($call['id'] == $id && $call['destination'] == $ext)
+				{
+					$data_return = $call;
+					break;
+				}
+			}
+		}
+		return $data_return;
+	}
+
+	public function getAllWakeup() 
+	{
 		$calls = array();
 		foreach(glob($this->getPath("outgoing")."wuc*.call") as $file) {
 			$res = $this->CheckWakeUpProp($file);
-			if(!empty($res)) {
+			if(!empty($res)) 
+			{
+				$wuclang = "";
+				foreach(file($file) as $line)
+				{
+					$data =  explode (":", $line, 2);
+					if ( strtolower(trim($data[0])) == "set")
+					{
+						$val =  explode ("=", trim($data[1]), 2);
+						if ( $val[0] == "CHANNEL(language)")
+						{
+							$wuclang = trim($val[1]);
+						}
+					}
+				}
 				$filedate = date('M d Y',filemtime($file)); //create a date string to display from the file timestamp
 				$filetime = date('H:i',filemtime($file));   //create a time string to display from the file timestamp
+				$wucid = $res[0];
 				$wucext = $res[1];
 				$calls[] = array(
-					"filename" => basename($file),
-					"timestamp" => filemtime($file),
-					"time" => $filetime,
-					"date" => $filedate,
+					"id" 		  => $wucid,
+					"filename" 	  => basename($file),
+					"timestamp"   => filemtime($file),
+					"time" 		  => $filetime,
+					"date" 		  => $filedate,
 					"destination" => $wucext,
-					"wakeup_id" => $res[0],
-					"wakeup_ext" => $res[1],
-					"actionsjs" => '<a href="#" onclick="removeWakeup('.$res[0].','.$res[1].');return false;"><i class="fa fa-trash"></i></a>',
-					// Legacy \ Next Line \ Maintain for PMS module compatibility.
-					"actions" => '<a href="?display=hotelwakeup&amp;action=delete&amp;id='.$res[0].'&amp;ext='.$res[1].'"><i class="fa fa-times"></i></a>' 
+					"language" 	  => $wuclang,
 				);
 			}
+		}
+		return $calls;
+	}
+
+
+
+	//Legacy \ Maintain for PMS module compatibility.
+	public function getAllCalls() 
+	{
+		$calls = $this->getAllWakeup();
+		foreach($calls as &$call) 
+		{
+			$call['actions'] = sprintf('<a href="?display=hotelwakeup&amp;action=delete&amp;id=%s&amp;ext=%s"><i class="fa fa-times"></i></a>', $call['id'], $call['destination']);
 		}
 		return $calls;
 	}

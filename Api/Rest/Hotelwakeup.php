@@ -27,12 +27,22 @@ class Hotelwakeup extends Base {
 		* @uri /hotelwakeup/wakeup
 		*/
 		$app->get('/wakeup', function ($request, $response, $args) {
-            $calls = $this->freepbx->Hotelwakeup->getAllCalls();
-			foreach($calls as &$call) {
-                unset($call['actions']);
-                unset($call['actionsjs']);
-			}
+            $calls = $this->freepbx->Hotelwakeup->getAllWakeup();
 			return $response->withJson($calls);
+		})->add($this->checkAllReadScopeMiddleware());
+		
+		/**
+		* @verb GET
+		* @returns - wake up call info
+		* @uri /hotelwakeup/wakeup/:id/:ext
+		*/
+		$app->get('/wakeup/{id}/{ext}', function ($request, $response, $args) {
+			$params = array(
+				'id' 	=> empty($args['id'])  ? '' : $args['id'],
+				'ext' 	=> empty($args['ext']) ? '' : $args['ext']
+			);
+			$call = $this->freepbx->Hotelwakeup->run_action("wakeup_get", $params);
+			return $response->withJson($call);
         })->add($this->checkAllReadScopeMiddleware());
 
         /**

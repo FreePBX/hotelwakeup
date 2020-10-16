@@ -25,7 +25,8 @@
             <th data-field="time"><?php echo _("Time")?></th>
             <th data-field="date"><?php echo _("Date")?></th>
             <th data-field="destination"><?php echo _("Destination")?></th>
-            <th data-field="actionsjs"><?php echo _("Actions")?></th>
+			<th data-field="language"><?php echo _("Language")?></th>
+            <th data-field="actions"><?php echo _("Actions")?></th>
         </tr>
     </thead>
 </table>
