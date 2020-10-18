@@ -16,7 +16,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'extensionlength' => '4', 
         'application' => 'AGI', 
         'data' => 'wakeconfirm.php',
-        'language' => ''
+		'language' => ''
 	];
 
 	public function getPath($name, $backslashend = true)
@@ -486,7 +486,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 	public function removeWakeupByIdExt($id, $ext) {
-		$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
+		$file = $this->getFileNameCall($id, $ext);
 		return $this->removeWakeup($file);
 	}
 
@@ -505,9 +505,14 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		{
 			return false;
 		}
-		$file = sprintf("wuc.%s.ext.%s.call", $id, $ext);
+		$file = $this->getFileNameCall($id, $ext);
 		$file_full_path = $this->getPath("outgoing").$file;
 		return file_exists($file_full_path);
+	}
+
+	public function getFileNameCall($id, $ext)
+	{
+		return sprintf("wuc.%s.ext.%s.call", $id, $ext);
 	}
 
 	public function getWakeup($id, $ext) 
@@ -565,19 +570,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $calls;
 	}
 
-
-
-	//Legacy \ Maintain for PMS module compatibility.
-	public function getAllCalls() 
-	{
-		$calls = $this->getAllWakeup();
-		foreach($calls as &$call) 
-		{
-			$call['actions'] = sprintf('<a href="?display=hotelwakeup&amp;action=delete&amp;id=%s&amp;ext=%s"><i class="fa fa-times"></i></a>', $call['id'], $call['destination']);
-		}
-		return $calls;
-	}
-
 	public function generateCallFile($foo) {
 		if (empty($foo['tempdir'])) {
 			$ast_tmp_path = $this->getPath("tmp");
@@ -593,7 +585,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 		$foo['ext'] = preg_replace("/[^\d@\+\#]/","",$foo['ext']);
 		if (empty($foo['filename'])) {
-			$foo['filename'] = "wuc.".$foo['time'].".ext.".$foo['ext'].".call";
+			$foo['filename'] = $this->getFileNameCall($foo['time'], $foo['ext']);
 		}
 
 		$foo['filename'] = basename($foo['filename']);
@@ -623,5 +615,278 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		// set time of temp file and move to outgoing
 		touch( $tempfile, $foo['time'], $foo['time'] );
 		rename( $tempfile, $outfile );
+	}
+
+	public function getMessage($msg, $params = array())
+	{
+		//TODO: Make the values configurable and be able to modify the messages without modifying the program code.
+
+		$data_return = "option-is-invalid";
+		switch($msg)
+		{
+			case "welcome":
+				//"hello&this-is-yr-wakeup-call"
+				$data_return = array(
+					"hello",
+					"this-is-yr-wakeup-call",
+					"silence|1000"
+				);
+				if ($params['lang'] == "ja")
+				{
+					//this-is-yr-wakeup-call
+					unset($data_return[0]);
+				}
+				break;
+
+			case "optionInvalid":
+				$data_return = array(
+					"option-is-invalid",
+					"silence|500"
+				);
+				break;
+
+			case "error":
+				$data_return = array(
+					"an-error-has-occurred",
+					"silence|500"
+				);
+				break;
+
+			case "invalidDialing":
+				$data_return = array(
+					"you-entered",
+					"bad",
+					"digits",
+					"silence|500"
+				);
+				break;
+
+			case "retry":
+				$data_return = array(
+					"please-try-again",
+					"silence|500"
+				);
+				break;
+
+			case "operatorSelectExt":
+				$data_return = array(
+					"please-enter-the",
+					"number",
+					"for",
+					"your",
+					"wakeup-call",
+					// "then-press-pound",
+					"silence|500",
+				);
+				break;
+			
+			case "operatorEntered":
+				$data_return = array(
+					"you-entered",
+					"d|" . $params['values']['number'],
+					"silence|500",
+				);
+				break;
+
+			case "goodbye":
+				$data_return = "goodbye&silent|500";
+				break;
+
+			case "wakeupMenu":
+				$data_return = array(
+					"for-wakeup-call",
+					"press-1",
+					"silence|400",
+					"list",
+					"press-2",
+				);
+				if ($params['lang'] == "ja")
+				{
+					$data_return[] = "pleasepress2";
+					$data_return[] = "silence|500";
+				}
+				break;
+
+			case "wakeupAdd":
+				// $data_return = "please-enter-the&time&for&your&wakeup-call";
+				$data_return = array(
+					"please-enter-the",
+					"time",
+					"for",
+					"your",
+					"wakeup-call"
+				);
+				if ($params['lang'] == "ja")
+				{
+					$data_return = "wakeup-call&jp-no&time&please-enter-the";
+				}
+				break;
+
+			case "wakeupAddType12H":
+				$data_return = "1-for-am-2-for-pm";
+				break;
+
+			case "wakeupAddOk":
+				$data_return = array(
+					"wakeup-call",
+					"added",
+					"digits/at",
+					"SayUnixTime|".$params['values']['time'],
+					"silence|500",
+				);
+				break;
+
+			case "SayUnixTime":
+				switch($params['lang'])
+				{
+					case "ja":
+						$data_return = "BdApIM";
+					break;
+
+					case "es":
+						$data_return = "IMpAdB";
+					break;
+
+					default:
+						$data_return = "IMpABd";
+					break;
+				}
+				
+				break;
+		
+			case "wakeupList":
+				$data_return = array(
+					"vm-youhave",
+					$params['values']['count'],
+					"wakeup-call",
+					"silence|500",
+				);
+				if ($params['lang'] == "ja")
+				{
+					$data_return = array("wakeup-call&jp-wa");
+					if($params['values']['count'] != 0) 
+					{
+						$data_return[] = $params['values']['count'];
+						$data_return[] = "jp-arimasu";
+					}
+					else
+					{
+						$data_return[] = "jp-arimasen";
+						$data_return[] = "silence|1000";
+					}
+				}
+				break;
+
+			case "wakeupListInfoCall":
+				$data_return = array(
+					"wakeup-call",
+					"number",
+					$params['values']['number'],
+					"digits/at",
+					"SayUnixTime|".$params['values']['time'],
+					"silence|500",
+				);
+				if ($params['lang'] == "ja")
+				{
+					$data_return = array(
+						$params['values']['number'],
+						"jp-banme",
+						"jp-no",
+						"wakeup-call",
+						"jp-wa",
+						"SayUnixTime|".$params['values']['time'],
+						"silence|1000"
+					);
+				}
+				break;
+
+			case "wakeupListActionCall":
+				$data_return = array(
+					"to-cancel-wakeup",
+					"press-1",
+					"silence|400",
+					"list",
+					"press-2",
+					"silence|400",
+					"menu",
+					"press-3",
+				);
+				break;
+
+			case "wakeupListCancelCall":
+				$data_return = array(
+					"wakeup-call-cancelled",
+					"silence|500",
+				);
+				break;
+
+			case "wakeConfirmMenu":
+				//"to-cancel-wakeup&press-1&to-snooze-for&digits/5&minutes&press-2&to-snooze-for&digits/10&minutes&press-3&to-snooze-for&digits/15&minutes&press-4"
+				$data_return = array(
+					// "to-cancel-wakeup",
+					// "press-1",
+					// "silence|400",
+
+					"to-snooze-for",
+					"5",
+					"minutes",
+					"press-1",
+					"silence|400",
+
+					"to-snooze-for",
+					"10",
+					"minutes",
+					"press-2",
+					"silence|400",
+
+					"to-snooze-for",
+					"15",
+					"minutes",
+					"press-3",
+				);
+				if ($params['lang'] == "ja")
+				{
+					//wakeup-menu
+					$data_return = "wakeup-menu";
+				}
+				break;
+			
+			case "wakeConfirmDelay":
+				// rqsted-wakeup-for&digits/5&minutes&vm-from&now
+				$data_return = array(
+					"rqsted-wakeup-for",
+					$params['values']['delay'],
+					"minutes",
+					"vm-from",
+					"now",
+					"silent|500"
+				);
+				if ($params['lang'] == "ja")
+				{
+					// 5-minutes-from-now&rqsted-wakeup-for
+					$data_return = array(
+						$params['values']['delay']."-minutes-from-now",
+						"rqsted-wakeup-for",
+						"silent|500"
+					);
+				}
+				break;
+		}
+		return $data_return;
+	}
+
+
+
+
+
+	//Legacy \ Maintain for PMS module compatibility.
+	public function getAllCalls() 
+	{
+		$calls = $this->getAllWakeup();
+		foreach($calls as &$call) 
+		{
+			$call['actions'] = sprintf('<a href="?display=hotelwakeup&amp;action=delete&amp;id=%s&amp;ext=%s"><i class="fa fa-times"></i></a>', $call['id'], $call['destination']);
+		}
+		return $calls;
 	}
 }

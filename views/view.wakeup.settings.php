@@ -203,7 +203,7 @@
                             <i class="fa fa-question-circle fpbx-help-icon" data-for="language"></i>
                         </div>
                         <div class="col-md-9">
-                            <?php echo \FreePBX::View()->languageDrawSelect('language', '',_("Use System Language")); ?>
+                            <?php echo $hotelwakeup->FreePBX->View->languageDrawSelect('language', '',_("Use System Language")); ?>
                         </div>
                     </div>
                 </div>

@@ -71,7 +71,7 @@
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="setlanguage"></i>
 								</div>
 								<div class="col-md-9">
-									<?php echo \FreePBX::View()->languageDrawSelect('setlanguage', "",_("Use Default Language")); ?>
+									<?php echo $hotelwakeup->FreePBX->View->languageDrawSelect('setlanguage', "",_("Use Default Language")); ?>
 								</div>
 							</div>
 						</div>
