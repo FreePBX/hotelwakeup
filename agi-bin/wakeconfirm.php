@@ -33,30 +33,28 @@ sim_playback($AGI, getMessage("welcome"));
 $digit = sim_background($AGI, getMessage("wakeConfirmMenu"), "0123456789", 1);
 
 $params = array(
-	'values' => array(
-		"delay" => 0,
-	)
+	"delay" => 0,
 );
 switch($digit)
 {
 	case 1: //5 minut
-		$params['values']['delay'] = 5;
+		$params['delay'] = 5;
 		break;
 
 	case 2: //10 minut
-		$params['values']['delay'] = 10;
+		$params['delay'] = 10;
 		break;
 
 	case 3: //15 minut
-		$params['values']['delay'] = 15;
+		$params['delay'] = 15;
 		break;
 }
 
 
-if ($params['values']['delay'] > 0)
+if ($params['delay'] > 0)
 {
 	$time_wakeup = time();
-	$time_wakeup += $params['values']['delay'] * 60;
+	$time_wakeup += $params['delay'] * 60;
 	$hotelwakeup->addWakeup($number, $time_wakeup, $lang);
 	sim_playback($AGI, getMessage("wakeConfirmDelay", $params));
 }

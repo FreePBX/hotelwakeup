@@ -43,9 +43,7 @@ if($config['operator_mode'])
 		}
 
 		$params = array(
-			'values' => array(
-				"number" => $number,
-			)
+			"number" => $number,
 		);
 		sim_playback($AGI, getMessage("operatorEntered", $params));
 		wakeupMenu($AGI, $number);
@@ -95,7 +93,8 @@ function wakeupAdd($AGI, $number, $retry = 0)
 	if(strlen($time) > 1)
 	{
 		$last = '';
-		if(strlen($time) < 4) {
+		if(strlen($time) < 4)
+		{
 			$ret = $AGI->wait_for_digit(1000);
 			if ($ret['result'] > 0)
 			{
@@ -127,15 +126,11 @@ function wakeupAdd($AGI, $number, $retry = 0)
 			switch($td)
 			{
 				case 1:
-					if($time > 1159) {
-						$time -= 1200;
-					}
+					if($time > 1159) { $time -= 1200; }
 				break;
 				
 				case 2:
-					if($time < 1159) {
-						$time += 1200;
-					}
+					if($time < 1159) { $time += 1200; }
 				break;
 
 				default:
@@ -178,11 +173,8 @@ function wakeupAdd($AGI, $number, $retry = 0)
 	}
 
 	$hotelwakeup->addWakeup($number, $time_wakeup, $AGI->request['agi_language']);
-	$param = array(
-		'values' => array(
-			"time" => $time_wakeup,
-		)
-	);
+	
+	$param = array("time" => $time_wakeup);
 	sim_playback($AGI, getMessage("wakeupAddOk", $param));
 
 	wakeupMenu($AGI, $number);
@@ -196,38 +188,18 @@ function wakeupAdd($AGI, $number, $retry = 0)
 function wakeupList($AGI, $number)
 {
 	global $hotelwakeup;
-	$calls = $hotelwakeup->getAllWakeup();
-
-	$myCalls = array();
-	foreach($calls as $call)
-	{
-		if($call['destination'] == $number) {
-			$myCalls[] = $call;
-		}
-	}
+	$calls = $hotelwakeup->getAllWakeup($number);
 
 	$param = array(
-		'values' => array(
-			"count" => count($myCalls)
-		)
+		"count" => count($calls)
 	);
-	if (count($myCalls) == 0)
-	{
-		sim_playback($AGI, getMessage("wakeupListEmpty", $param));
-	}
-	else
-	{
-		sim_playback($AGI, getMessage("wakeupList", $param));
-	}
+	sim_playback($AGI, getMessage($param['count'] == 0 ? "wakeupListEmpty" : "wakeupList", $param));
 
-	foreach($myCalls as $id => $call) 
+	foreach($calls as $id => $call) 
 	{
-		$time = $call['timestamp'];
 		$param = array(
-			'values' => array(
-				"number" => $id + 1,
-				"time" => $time,
-			)
+			"number" => $id + 1,
+			"time" 	 => $call['timestamp'],
 		);
 		sim_playback($AGI, getMessage("wakeupListInfoCall", $param));
 
@@ -260,32 +232,28 @@ function wakeupList($AGI, $number)
 	wakeupMenu($AGI, $number);
 }
 
-
-
-
-
 function hotelwakeup_convert_time($time)
 {
 	$w = getdate();
-	if(strlen($time) == 4)
-	{ //0130
-		$time_wakeup = mktime( substr( $time, 0, 2 ), substr( $time, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	}
-	elseif(strlen($time) == 3)
-	{ //130
-		$time_wakeup = mktime( substr( $time, 0, 1 ), substr( $time, 1, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	}
-	elseif(strlen($time) == 2)
-	{ //30. EG 0030
-		$time_wakeup = mktime( 0, substr( $time, 0, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	}
-	elseif(strlen($time) == 1)
-	{ //5. EG 0005
-		$time_wakeup = mktime( 0, substr( $time, 0, 1 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	}
-	else
+	$time = trim($time);
+	switch(strlen($time))
 	{
-		$time_wakeup = false;
+		case 4: //0130
+			$time_wakeup = mktime( substr( $time, 0, 2 ), substr( $time, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
+			break;
+
+		case 3: //130
+			$time_wakeup = mktime( substr( $time, 0, 1 ), substr( $time, 1, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
+			break;
+
+		case 2:	//30. EG 0030
+		case 1:	//5.  EG 0005
+			$time_wakeup = mktime( 0, $time, 0, $w['mon'], $w['mday'], $w['year'] );
+			break;
+
+		default:
+			$time_wakeup = false;
+			break;
 	}
 	return $time_wakeup;
 }

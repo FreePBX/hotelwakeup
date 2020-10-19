@@ -630,13 +630,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $data_return;
 	}
 
-	public function getAllWakeup() 
+	public function getAllWakeup($ext = "")
 	{
 		$calls = array();
 		foreach(glob($this->getPath("outgoing")."wuc*.call") as $file) {
 			$res = $this->CheckWakeUpProp($file);
 			if(!empty($res)) 
 			{
+				$wucext = $res[1];
+				if (! empty($ext) && $wucext != $ext ) { continue; }
+
+				$filedate = date('M d Y',filemtime($file)); //create a date string to display from the file timestamp
+				$filetime = date('H:i',filemtime($file));   //create a time string to display from the file timestamp
+				$wucid = $res[0];
 				$wuclang = "";
 				foreach(file($file) as $line)
 				{
@@ -650,10 +656,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 						}
 					}
 				}
-				$filedate = date('M d Y',filemtime($file)); //create a date string to display from the file timestamp
-				$filetime = date('H:i',filemtime($file));   //create a time string to display from the file timestamp
-				$wucid = $res[0];
-				$wucext = $res[1];
 				$calls[] = array(
 					"id" 		  => $wucid,
 					"filename" 	  => basename($file),
@@ -786,16 +788,17 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			{
 				foreach ($message as $key => &$value)
 				{
-					$new_value = "";
 					if (! in_array($value, $msg_detect)) { continue; }
-					if (! empty($params['values']))
+					
+					$new_value = "";
+					if (! empty($params))
 					{
 						preg_match($reg_find, $value, $find_value);
 						$key_find 	 = $find_value[1];	//Ex: Test
 						$key_replace = $find_value[0];	//Ex: {Test}
-						if ( array_key_exists($key_find, $params['values']) )
+						if ( array_key_exists($key_find, $params) )
 						{
-							$new_value = str_replace($key_replace, $params['values'][$key_find], $value);
+							$new_value = str_replace($key_replace, $params[$key_find], $value);
 						}
 					}
 					$value = $new_value;
