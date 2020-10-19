@@ -54,7 +54,7 @@
             en: wakeup-call&number&{number}&digits/at&SayUnixTime{time}
             ja: {number}&jp-banme&jp-no&wakeup-call&jp-wa&SayUnixTime{time}
             
-        wakeupListActionCall:
+        wakeupListMenu:
             en: to-cancel-wakeup&press-1&list&press-2&menu&press-3
 
         wakeupListCancelCall:

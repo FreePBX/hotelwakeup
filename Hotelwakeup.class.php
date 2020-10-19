@@ -56,6 +56,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		),
 
 		'wakeupList' => "vm-youhave,{count},wakeup-call,silence|500",
+		'wakeupListEmpty' => "vm-youhave,{count},wakeup-call,silence|500",
 		'wakeupListInfoCall' => array(
 			"wakeup-call",
 			"number",
@@ -64,7 +65,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			'SayUnixTime|{time}',
 			"silence|500",
 		),	
-		'wakeupListActionCall' => array(
+		'wakeupListMenu' => array(
 			"to-cancel-wakeup",
 			"press-1",
 			"silence|400",

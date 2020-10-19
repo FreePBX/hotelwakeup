@@ -211,7 +211,14 @@ function wakeupList($AGI, $number)
 			"count" => count($myCalls)
 		)
 	);
-	sim_playback($AGI, getMessage("wakeupList", $param));
+	if (count($myCalls) == 0)
+	{
+		sim_playback($AGI, getMessage("wakeupListEmpty", $param));
+	}
+	else
+	{
+		sim_playback($AGI, getMessage("wakeupList", $param));
+	}
 
 	foreach($myCalls as $id => $call) 
 	{
@@ -224,7 +231,7 @@ function wakeupList($AGI, $number)
 		);
 		sim_playback($AGI, getMessage("wakeupListInfoCall", $param));
 
-		$digit = sim_background($AGI, getMessage("wakeupListActionCall"), "0123456789", 1);
+		$digit = sim_background($AGI, getMessage("wakeupListMenu"), "0123456789", 1);
 		switch($digit)
 		{
 			case 1:

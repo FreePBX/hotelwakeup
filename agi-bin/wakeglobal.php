@@ -149,7 +149,8 @@ function find_SayUnixTime($AGI, $text)
 	{
 		if ( $find[0] == "SayUnixTime")
 		{
-			$AGI->exec( sprintf('SayUnixTime "%s,,%s"', $find[1], getMessage("SayUnixTime")) );
+			$SayUnixTimeFormat = getMessage("SayUnixTime")[0];
+			$AGI->exec( sprintf('SayUnixTime "%s,,%s"', $find[1], $SayUnixTimeFormat) );
 			return true;
 		}
 	}
