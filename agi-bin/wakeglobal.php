@@ -10,9 +10,7 @@
  */
 function sim_playback($AGI, $file)
 {
-	if (! is_array($file) ) { $files = explode('&', $file); }
-	else 					{ $files = $file; }
-	
+	$files = parseMessage($file);
 	foreach($files as $f)
 	{
 		if (strlen(trim($f)) == 0) 		{ continue; }
@@ -38,8 +36,7 @@ function sim_playback($AGI, $file)
  */
 function sim_background($AGI, $file, $digits='', $length='1', $escape='#', $timeout=15000, $maxLoops=1, $loops=0)
 {
-	if (! is_array($file) ) { $files = explode('&', $file); }
-	else 					{ $files = $file; }
+	$files = parseMessage($file);
 
 	$number = '';
 	foreach($files as $f) 
@@ -60,10 +57,7 @@ function sim_background($AGI, $file, $digits='', $length='1', $escape='#', $time
 		{
 			$ret = $AGI->stream_file($f, $digits);
 		}
-
-		// Fix as return of $ret['result'] = -1
-		// -1 is returned due to an error when executing "stream_file" which 
-		// may be for example that one of the audio files does not exist
+		
 		if($ret['code'] == 200)
 		{
 			if ($ret['result'] > 0)
@@ -93,7 +87,7 @@ function sim_background($AGI, $file, $digits='', $length='1', $escape='#', $time
 			{
 				sim_playback($AGI, getMessage("invalidDialing"));
 			}
-			elseif($ret['code'] == 200 & $ret['result'] > 0)
+			elseif($ret['code'] == 200 && $ret['result'] > 0)
 			{
 				$digit = chr($ret['result']);
 				if($digit == $escape)
@@ -189,4 +183,11 @@ function getMessage($msg, $param = array())
 	);
 	$msgParams = array_merge($defaulParams, $param);
 	return $hotelwakeup->getMessage($msg, $msgParams);
+}
+
+function parseMessage($val)
+{
+	global $hotelwakeup;
+	$val = $hotelwakeup->parseMessage($val);
+	return $val;
 }

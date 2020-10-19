@@ -19,6 +19,7 @@
 				<ul class="nav nav-tabs" role="tablist">
 					<li data-name="tab1" class="change-tab active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab" id="list"><?php echo _('Call List')?></a></li>
 					<li data-name="tab2" class="change-tab"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab" id="settings"><?php echo _('Settings')?></a></li>
+					<li data-name="tab3" class="change-tab"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab" id="message"><?php echo _('Message')?></a></li>
 				</ul>
 
 				<div class="tab-content display">
@@ -27,6 +28,9 @@
 					</div>
 					<div id="tab2" class="tab-pane">
 						<?php echo $hotelwakeup->showPage("wakeup.settings"); ?>
+					</div>
+					<div id="tab3" class="tab-pane">
+						<?php echo $hotelwakeup->showPage("wakeup.message"); ?>
 					</div>
 				</div>
 				

@@ -16,7 +16,91 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'extensionlength' => '4', 
         'application' => 'AGI', 
         'data' => 'wakeconfirm.php',
-		'language' => ''
+		'language' => '',
+	];
+
+	public static $defaultMessage = [
+		'SayUnixTime' 	 => "IMpABd",
+		'welcome' 	 	 => 'hello,this-is-yr-wakeup-call,silence|500',
+		'goodbye'		 => "goodbye,silent|500",
+		'error' 		 => "an-error-has-occurred,silence|500",
+		'retry'			 => "please-try-again,silence|500",
+		'optionInvalid'  => "option-is-invalid,silence|500",
+		'invalidDialing' =>	"you-entered,bad,digits,silence|500",
+
+		'operatorSelectExt' => array(
+			"please-enter-the",
+			"number",
+			"for",
+			"your",
+			"wakeup-call",
+			"silence|500",
+		),
+		'operatorEntered' => "you-entered,d|{number},silence|500",
+
+		'wakeupMenu' => "for-wakeup-call,press-1,silence|400,list,press-2,silence|500",
+		'wakeupAdd' => array(
+			"please-enter-the",
+			"time",
+			"for",
+			"your",
+			"wakeup-call"
+		),
+		'wakeupAddType12H' => "1-for-am-2-for-pm",
+		'wakeupAddOk' => array(
+			"wakeup-call",
+			"added",
+			"digits/at",
+			"SayUnixTime|{time}",
+			"silence|500",
+		),
+
+		'wakeupList' => "vm-youhave,{count},wakeup-call,silence|500",
+		'wakeupListInfoCall' => array(
+			"wakeup-call",
+			"number",
+			'{number}',
+			"digits/at",
+			'SayUnixTime|{time}',
+			"silence|500",
+		),	
+		'wakeupListActionCall' => array(
+			"to-cancel-wakeup",
+			"press-1",
+			"silence|400",
+			"list",
+			"press-2",
+			"silence|400",
+			"menu",
+			"press-3",
+			"silence|500",
+		),
+		'wakeupListCancelCall' => "wakeup-call-cancelled,silence|500",
+
+		'wakeConfirmMenu' => array(
+			"to-snooze-for",
+			"5",
+			"minutes",
+			"press-1",
+			"silence|400",
+			"to-snooze-for",
+			"10",
+			"minutes",
+			"press-2",
+			"silence|400",
+			"to-snooze-for",
+			"15",
+			"minutes",
+			"press-3",
+		),
+		'wakeConfirmDelay' => array(
+			"rqsted-wakeup-for",
+			"{delay}",
+			"minutes",
+			"vm-from",
+			"now",
+			"silent|500"
+		),
 	];
 
 	public function getPath($name, $backslashend = true)
@@ -63,8 +147,8 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function install() 
 	{
         $fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
-        $fcc->setDescription('Wake Up Calls');
-        $fcc->setDefault('*68');
+        $fcc->setDescription(self::$defaultConfig['cnam']);
+        $fcc->setDefault(self::$defaultConfig['cid']);
         $fcc->update();
 		unset($fcc);
 		
@@ -381,23 +465,36 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		));
 	}
 
-	public function showPage($page) {
+	public function showPage($page, $params = array())
+	{
+		$data = array(
+			"hotelwakeup" => $this
+		);
+		$data = array_merge($data, $params);
 		switch ($page) 
 		{
 			case "wakeup":
-				$data_return = load_view(__DIR__."/views/page.wakeup.php", array("hotelwakeup" => $this));
+				$data_return = load_view(__DIR__."/views/page.wakeup.php", $data);
 				break;
 
 			case "wakeup.grid":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.php', array("hotelwakeup" => $this));
+				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.php', $data);
 				break;
 
 			case "wakeup.grid.create":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.create.php', array("hotelwakeup" => $this));
+				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.create.php', $data);
 				break;
 
 			case "wakeup.settings":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.settings.php', array("hotelwakeup" => $this));
+				$data_return = load_view(__DIR__.'/views/view.wakeup.settings.php', $data);
+				break;
+
+			case "wakeup.message":
+				$data_return = load_view(__DIR__.'/views/view.wakeup.message.php', $data);
+				break;
+
+			case "wakeup.message.line":
+				$data_return = load_view(__DIR__.'/views/view.wakeup.message.line.php', $data);
 				break;
 
 			default:
@@ -617,260 +714,93 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		rename( $tempfile, $outfile );
 	}
 
+	public function parseMessage($val)
+	{
+		if (! is_array($val)) 
+		{
+			$val = explode(',', $val);
+		}
+		foreach($val as &$item)
+		{
+			$item = trim($item);
+		}
+		return $val;
+	}
+
+	public function setMessage($msg, $val)
+	{
+		$val = $this->parseMessage($val);
+		$this->setConfig($msg, $val, 'message');
+	}
+
+	public function getMessageAll()
+	{
+		$msg_all  = $this->getAll("message");
+		$msg_diff = array_diff_key(self::$defaultMessage, $msg_all);
+		if (count($msg_diff) > 0)
+		{
+			foreach($msg_diff as $key => $val)
+			{
+				if (! array_key_exists($key, $msg_all)) 
+				{
+					$msg_all[$key] = $val;
+				}
+			}
+		}
+
+		foreach($msg_all as $key => &$val)
+		{
+			$val = $this->parseMessage($val);
+		}
+		return $msg_all;
+	}
+
 	public function getMessage($msg, $params = array())
 	{
-		//TODO: Make the values configurable and be able to modify the messages without modifying the program code.
-
-		$data_return = "option-is-invalid";
-		switch($msg)
+		// TODO: Pending implement multi language support
+		$message = $this->getConfig($msg, 'message');
+		if ($message === false)
 		{
-			case "welcome":
-				//"hello&this-is-yr-wakeup-call"
-				$data_return = array(
-					"hello",
-					"this-is-yr-wakeup-call",
-					"silence|1000"
-				);
-				if ($params['lang'] == "ja")
+			//No does not exist in the database the default value is used
+			$message = "";
+			if (array_key_exists($msg, self::$defaultMessage))
+			{
+				$message = self::$defaultMessage[$msg];
+				// $this->setMessage($msg, $message);
+			}
+		}
+
+		if (empty($message))
+		{
+			//If the message is unknown
+			$data_return = "option-is-invalid";
+		}
+		else
+		{
+			$message = $this->parseMessage($message);
+			$reg_find = "/{(.*)}/";
+
+			$msg_detect = preg_grep($reg_find, $message);
+			if (count($msg_detect) > 0)
+			{
+				foreach ($message as $key => &$value)
 				{
-					//this-is-yr-wakeup-call
-					unset($data_return[0]);
-				}
-				break;
-
-			case "optionInvalid":
-				$data_return = array(
-					"option-is-invalid",
-					"silence|500"
-				);
-				break;
-
-			case "error":
-				$data_return = array(
-					"an-error-has-occurred",
-					"silence|500"
-				);
-				break;
-
-			case "invalidDialing":
-				$data_return = array(
-					"you-entered",
-					"bad",
-					"digits",
-					"silence|500"
-				);
-				break;
-
-			case "retry":
-				$data_return = array(
-					"please-try-again",
-					"silence|500"
-				);
-				break;
-
-			case "operatorSelectExt":
-				$data_return = array(
-					"please-enter-the",
-					"number",
-					"for",
-					"your",
-					"wakeup-call",
-					// "then-press-pound",
-					"silence|500",
-				);
-				break;
-			
-			case "operatorEntered":
-				$data_return = array(
-					"you-entered",
-					"d|" . $params['values']['number'],
-					"silence|500",
-				);
-				break;
-
-			case "goodbye":
-				$data_return = "goodbye&silent|500";
-				break;
-
-			case "wakeupMenu":
-				$data_return = array(
-					"for-wakeup-call",
-					"press-1",
-					"silence|400",
-					"list",
-					"press-2",
-				);
-				if ($params['lang'] == "ja")
-				{
-					$data_return[] = "pleasepress2";
-					$data_return[] = "silence|500";
-				}
-				break;
-
-			case "wakeupAdd":
-				// $data_return = "please-enter-the&time&for&your&wakeup-call";
-				$data_return = array(
-					"please-enter-the",
-					"time",
-					"for",
-					"your",
-					"wakeup-call"
-				);
-				if ($params['lang'] == "ja")
-				{
-					$data_return = "wakeup-call&jp-no&time&please-enter-the";
-				}
-				break;
-
-			case "wakeupAddType12H":
-				$data_return = "1-for-am-2-for-pm";
-				break;
-
-			case "wakeupAddOk":
-				$data_return = array(
-					"wakeup-call",
-					"added",
-					"digits/at",
-					"SayUnixTime|".$params['values']['time'],
-					"silence|500",
-				);
-				break;
-
-			case "SayUnixTime":
-				switch($params['lang'])
-				{
-					case "ja":
-						$data_return = "BdApIM";
-					break;
-
-					case "es":
-						$data_return = "IMpAdB";
-					break;
-
-					default:
-						$data_return = "IMpABd";
-					break;
-				}
-				
-				break;
-		
-			case "wakeupList":
-				$data_return = array(
-					"vm-youhave",
-					$params['values']['count'],
-					"wakeup-call",
-					"silence|500",
-				);
-				if ($params['lang'] == "ja")
-				{
-					$data_return = array("wakeup-call&jp-wa");
-					if($params['values']['count'] != 0) 
+					$new_value = "";
+					if (! in_array($value, $msg_detect)) { continue; }
+					if (! empty($params['values']))
 					{
-						$data_return[] = $params['values']['count'];
-						$data_return[] = "jp-arimasu";
+						preg_match($reg_find, $value, $find_value);
+						$key_find 	 = $find_value[1];	//Ex: Test
+						$key_replace = $find_value[0];	//Ex: {Test}
+						if ( array_key_exists($key_find, $params['values']) )
+						{
+							$new_value = str_replace($key_replace, $params['values'][$key_find], $value);
+						}
 					}
-					else
-					{
-						$data_return[] = "jp-arimasen";
-						$data_return[] = "silence|1000";
-					}
+					$value = $new_value;
 				}
-				break;
-
-			case "wakeupListInfoCall":
-				$data_return = array(
-					"wakeup-call",
-					"number",
-					$params['values']['number'],
-					"digits/at",
-					"SayUnixTime|".$params['values']['time'],
-					"silence|500",
-				);
-				if ($params['lang'] == "ja")
-				{
-					$data_return = array(
-						$params['values']['number'],
-						"jp-banme",
-						"jp-no",
-						"wakeup-call",
-						"jp-wa",
-						"SayUnixTime|".$params['values']['time'],
-						"silence|1000"
-					);
-				}
-				break;
-
-			case "wakeupListActionCall":
-				$data_return = array(
-					"to-cancel-wakeup",
-					"press-1",
-					"silence|400",
-					"list",
-					"press-2",
-					"silence|400",
-					"menu",
-					"press-3",
-				);
-				break;
-
-			case "wakeupListCancelCall":
-				$data_return = array(
-					"wakeup-call-cancelled",
-					"silence|500",
-				);
-				break;
-
-			case "wakeConfirmMenu":
-				//"to-cancel-wakeup&press-1&to-snooze-for&digits/5&minutes&press-2&to-snooze-for&digits/10&minutes&press-3&to-snooze-for&digits/15&minutes&press-4"
-				$data_return = array(
-					// "to-cancel-wakeup",
-					// "press-1",
-					// "silence|400",
-
-					"to-snooze-for",
-					"5",
-					"minutes",
-					"press-1",
-					"silence|400",
-
-					"to-snooze-for",
-					"10",
-					"minutes",
-					"press-2",
-					"silence|400",
-
-					"to-snooze-for",
-					"15",
-					"minutes",
-					"press-3",
-				);
-				if ($params['lang'] == "ja")
-				{
-					//wakeup-menu
-					$data_return = "wakeup-menu";
-				}
-				break;
-			
-			case "wakeConfirmDelay":
-				// rqsted-wakeup-for&digits/5&minutes&vm-from&now
-				$data_return = array(
-					"rqsted-wakeup-for",
-					$params['values']['delay'],
-					"minutes",
-					"vm-from",
-					"now",
-					"silent|500"
-				);
-				if ($params['lang'] == "ja")
-				{
-					// 5-minutes-from-now&rqsted-wakeup-for
-					$data_return = array(
-						$params['values']['delay']."-minutes-from-now",
-						"rqsted-wakeup-for",
-						"silent|500"
-					);
-				}
-				break;
+			}
+			$data_return = $message;
 		}
 		return $data_return;
 	}
