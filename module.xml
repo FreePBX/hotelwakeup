@@ -22,6 +22,7 @@
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
+		<settings display="hotelwakeup_settings" needsenginedb="yes" category="Settings">Wake Up Calls Settings</settings>
 	</menuitems>
     <database>
         <table name="hotelwakeup_calls">
@@ -42,6 +43,7 @@
     </database>
 	<depends>
 		<module>ivr gt1.0</module>
+		<module>soundlang</module>
 	</depends>
 	<supported>
 		<version>15.0</version>

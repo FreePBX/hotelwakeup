@@ -106,25 +106,31 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function getPath($name, $backslashend = true)
 	{
-		$data_return = $this->FreePBX->Config->get('ASTSPOOLDIR');
-		switch($name) 
+		$path_lib 	 = $this->FreePBX->Config->get("ASTVARLIBDIR");
+		$path_spool  = $this->FreePBX->Config->get('ASTSPOOLDIR');
+		$data_return = "";
+
+		switch($name)
 		{
 			case "outgoing":
-				$data_return .= "/outgoing";
+				$data_return .= $path_spool."/outgoing";
 				break;
 
 			case "outgoing_done";
-				$data_return .= "/outgoing_done";
+				$data_return .= $path_spool."/outgoing_done";
 				break;
 
 			case "tmp":
-				$data_return .= "/tmp";
+				$data_return .= $path_spool."/tmp";
 				break;
+
+			case "sounds":
+				$data_return .= $path_lib."/sounds";
 			
 			default:
 				throw new \Exception( sprintf(_("Path name (%s) not supported!"), $name) );
 		}
-		if (! empty($data_return)) 
+		if (! empty($data_return))
 		{
 			if ($backslashend)
 			{
@@ -185,32 +191,62 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function getActionBar($request)
 	{
 		$buttons = array();
+		$show_btn = false;
 		switch($request['display'])
 		{
-			case 'hotelwakeup':
-				$buttons = array(
-					'save' => array(
-						'id' => 'btn_save_settings',
-						'value' => _("Save"),
-						'type' => 'button'
-					),
-					'reload' => array(
-						'id' => 'btn_load_settings',
-						'value' => _("Reload"),
-						'type' => 'button'
-					)
-				);
+			case 'hotelwakeup_settings':
+
+				if ($request['action'] == "settings")
+				{
+					$show_btn = true;
+				}
+				elseif ($request['action'] == "messages" && $request['option'] == "edit")
+				{
+					$show_btn = true;
+				}
 			break;
 		}
+		if ($show_btn)
+		{
+			$buttons = array(
+				'save' => array(
+					'id' => 'btn_save_settings',
+					'value' => _("Save"),
+					'type' => 'button'
+				),
+				'reload' => array(
+					'id' => 'btn_load_settings',
+					'value' => _("Reload"),
+					'type' => 'button'
+				)
+			);
+		}
 		return $buttons;
+	}
+
+	public function getRightNav($request, $params = array()) 
+	{
+		$data_return = "";
+		$data = array(
+			"hotelwakeup" => $this,
+			"request" 	  => $request
+		);
+		$data = array_merge($data, $params);
+		switch($request['display'])
+		{
+			case 'hotelwakeup_settings':
+				$data_return = load_view(__DIR__.'/views/rnav.php', $data);
+			break;
+		}
+		return $data_return;
 	}
 
 	public function ajaxRequest($req, &$setting) {
 		// ** Allow remote consultation with Postman **
 		// ********************************************
-		// $setting['authenticate'] = false;
-		// $setting['allowremote'] = true;
-		// return true;
+		$setting['authenticate'] = false;
+		$setting['allowremote'] = true;
+		return true;
 		// ********************************************
 		switch($req)
 		{
@@ -219,6 +255,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case "removecall":
 			case "getsettings":
 			case "setsettings":
+			case "message_lang_list":
 				return true;
 			break;
 		}
@@ -262,6 +299,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case "setsettings":
 				return $this->run_action("settings_set", $_POST);
 				break;
+
+			case "getTableMessageLang":
+				$list = array();
+				foreach ($this->getLanguages() as $k => $v)
+				{
+					$list[] = array(
+						'language' => $k,
+						'description' => $v,
+						'action' => sprintf('<a href="?display=hotelwakeup_settings&amp;action=messages&amp;option=edit&amp;language=%s"><i class="fa fa-edit"></i></a>', $k),
+					);
+				}
+				return $list;
+			break;
 		}
 		return true;
 	}
@@ -469,37 +519,49 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function showPage($page, $params = array())
 	{
 		$data = array(
-			"hotelwakeup" => $this
+			"hotelwakeup" => $this,
+			'request'	  => $_REQUEST,
+			'page' 		  => $page,
 		);
 		$data = array_merge($data, $params);
 		switch ($page) 
 		{
 			case "wakeup":
 				$data_return = load_view(__DIR__."/views/page.wakeup.php", $data);
-				break;
+			break;
 
 			case "wakeup.grid":
 				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.php', $data);
-				break;
+			break;
 
 			case "wakeup.grid.create":
 				$data_return = load_view(__DIR__.'/views/view.wakeup.grid.create.php', $data);
+			break;
+
+
+
+			case "settings":
+				$data_return = load_view(__DIR__."/views/page.settings.php", $data);
+			break;
+			
+			case "settings.message.list":
+				$data_return = load_view(__DIR__.'/views/view.settings.message.list.php', $data);
+			break;
+
+			case "settings.message.edit":
+				$data_return = load_view(__DIR__.'/views/view.settings.message.edit.php', $data);
 				break;
 
-			case "wakeup.settings":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.settings.php', $data);
+			case "settings.message.edit.line":
+				$data_return = load_view(__DIR__.'/views/view.settings.message.edit.line.php', $data);
 				break;
 
-			case "wakeup.message":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.message.php', $data);
-				break;
-
-			case "wakeup.message.line":
-				$data_return = load_view(__DIR__.'/views/view.wakeup.message.line.php', $data);
+			case "settings.settings":
+				$data_return = load_view(__DIR__.'/views/view.settings.settings.php', $data);
 				break;
 
 			default:
-				$data_return = "";
+				$data_return = sprintf(_("Page Not Found (%s)!!!!"), $page);
 		}
 		return $data_return;
 	}
@@ -736,9 +798,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		$this->setConfig($msg, $val, 'message');
 	}
 
-	public function getMessageAll()
+	public function getMessageAll($lang = "")
 	{
-		$msg_all  = $this->getAll("message");
+		$id_message = 'message'.empty($lang) ? '' : '_' . $lang;
+		$msg_all  = $this->getAll($id_message);
 		$msg_diff = array_diff_key(self::$defaultMessage, $msg_all);
 		if (count($msg_diff) > 0)
 		{
@@ -810,7 +873,37 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 
+	public function getLanguages()
+	{
+		return $this->FreePBX->Soundlang->getLanguages();
+	}
 
+	/**
+	 * This is used to generate a language selection field using the sound
+	 * packets installed on the system.
+	 * @param  string $id   The name and id of the form field
+	 * @param  string $value   The current value
+	 * @param  string $nonelabel  What you want shown if nothing is chosen
+	 * @return html input containing timezones
+	 */
+	public function languageDrawSelect($id, $value='', $nonelabel='')
+	{
+		$nonelabel = !empty($nonelabel) ? $nonelabel : _("Select a Language");
+		
+		$input = '<select name="'.$id.'" id="'.$id.'" class="form-control">';
+		$input .= '<option value="">'.$nonelabel.'</option>';
+		foreach($this->getLanguages() as $lang => $display)
+		{
+			$input .= '<option value="'.$lang.'" '.(($lang == $value) ? 'selected' : '').'>'.$display.'</option>';
+		}
+		$input .= '</select>';
+		$input .= '<script type="text/javascript">';
+		$input .= '$(document).ready(function() {';
+		$input .= '$("#'.$id.'").multiselect({enableCaseInsensitiveFiltering: true, inheritClass: true, onChange: function(element, checked) { $("#'.$id.'").trigger("onchange",[element, checked]) }});';
+		$input .= '});';
+		$input .= '</script>';
+		return $input;
+	}
 
 
 	//Legacy \ Maintain for PMS module compatibility.

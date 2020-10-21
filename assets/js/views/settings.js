@@ -1,112 +1,15 @@
-var initial_load_end = false;
-var time = $("#servertime").data("time");
-var timezone = $("#servertime").data("zone");
-var updateTime = function() {
-	$("#servertime span").text(moment.unix(time).tz(timezone).format('HH:mm:ss z'));
-	time = time + 1;
-};
-setInterval(updateTime,1000);
-
 function is_Numeric(num)
 {
 	return !isNaN(parseFloat(num)) && isFinite(num);
 }
 
-
-$("#action-bar").addClass("hidden");
-
 $(document).ready(function()
 {
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) 
-	{
-		if(e.target.id == "settings") 
-		{
-			$("#action-bar").removeClass("hidden");
-			if (! initial_load_end) 
-			{
-				initial_load_end = true;
-				loadSettings();
-			}
-		}
-		else {
-			$("#action-bar").addClass("hidden");
-		}
-	});
-	$("#day").datepicker();
-	$('#time').timepicker({
-		// defaultTime: 'now',
-		dropdown: true,
-		// scrollbar: true,
-		zindex: 10001
-	});
-	$('#savecall').on("click", saveCall);
+	loadSettings();
+	
 	$('#btn_load_settings').on("click", loadSettings);
 	$('#btn_save_settings').on("click", saveSettings);
-
-
-	$("#dlgCreateCall").on('hide.bs.modal', function () {
-        $("ul.ui-timepicker-list").hide();
-		$("#ui-datepicker-div").hide();
-		$('#setlanguage').multiselect('select', '');
-		callform.reset();
-	});
-	
 });
-
-
-
-function saveCall(e)
-{
-	e.preventDefault();
-	if($("#destination").val().trim() === "") {
-		warnInvalid($("#destination"), _("Destination can not be blank"));
-		return false;
-	}
-	if($("#time").val().trim() === "") {
-		warnInvalid($("#time"), _("Time can not be blank"));
-		return false;
-	}
-	if($("#day").val().trim() === "") {
-		warnInvalid($("day"), _("Day can not be blank"));
-		return false;
-	}
-
-	$("#savecall").prop("disabled",true);
-	var post_data = {
-		command: "savecall",
-		module: "hotelwakeup",
-		destination: $("#destination").val(),
-		time: $("#time").val(),
-		day: $("#day").val(),
-		language: $("#setlanguage").val() 
-	};
-	$.post( window.FreePBX.ajaxurl, post_data, function( data ) {
-		if(!data.status){
-			fpbxToast(data.message, '', 'error');
-		} else {
-			$("#dlgCreateCall").modal("hide");
-			$('#callgrid').bootstrapTable('refresh');
-		}
-		$("#savecall").prop("disabled",false);
-	});
-}
-
-function removeWakeup(id, ext)
-{
-	var post_data = {
-		command: "removecall",
-		module: "hotelwakeup",
-		id: id,
-		ext: ext
-	};
-	$.post( window.FreePBX.ajaxurl, post_data, function( data ) {
-		if(!data.status){
-			fpbxToast(data.message, '', 'error');
-		} else {
-			$('#callgrid').bootstrapTable('refresh');
-		}
-	});
-}
 
 
 function loadSettings(e)
@@ -236,5 +139,5 @@ function disabledSettings(new_status)
 		"#maxretries",
 	];
 	input_list.forEach(element => $(element).prop("disabled", new_status));
-	$('#language').multiselect( new_status ? "disable" : "enable");	
+	$('#language').multiselect( new_status ? "disable" : "enable");
 }
