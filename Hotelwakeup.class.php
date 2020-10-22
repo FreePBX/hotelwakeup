@@ -20,88 +20,122 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	];
 
 	public static $defaultMessage = [
-		'SayUnixTime' 	 => "IMpABd",
-		'welcome' 	 	 => 'hello,this-is-yr-wakeup-call,silence|500',
+		'SayUnixTime'    => "IMpABd",
+		'welcome' 		 => 'hello,this-is-yr-wakeup-call,silence|500',
 		'goodbye'		 => "goodbye,silent|500",
 		'error' 		 => "an-error-has-occurred,silence|500",
 		'retry'			 => "please-try-again,silence|500",
 		'optionInvalid'  => "option-is-invalid,silence|500",
 		'invalidDialing' =>	"you-entered,bad,digits,silence|500",
 
-		'operatorSelectExt' => array(
-			"please-enter-the",
-			"number",
-			"for",
-			"your",
-			"wakeup-call",
-			"silence|500",
-		),
-		'operatorEntered' => "you-entered,d|{number},silence|500",
-
-		'wakeupMenu' => "for-wakeup-call,press-1,silence|400,list,press-2,silence|500",
-		'wakeupAdd' => array(
-			"please-enter-the",
-			"time",
-			"for",
-			"your",
-			"wakeup-call"
-		),
-		'wakeupAddType12H' => "1-for-am-2-for-pm",
-		'wakeupAddOk' => array(
-			"wakeup-call",
-			"added",
-			"digits/at",
-			"SayUnixTime|{time}",
-			"silence|500",
+		'operatorSelectExt' => [
+			'group' => 'operator',
+			'value' => [
+				"please-enter-the",
+				"number",
+				"for",
+				"your",
+				"wakeup-call",
+				"silence|500",
+			],
+		],
+		'operatorEntered' => array(
+			'group' => 'operator',
+			'value' => "you-entered,d|{number},silence|500",
 		),
 
-		'wakeupList' => "vm-youhave,{count},wakeup-call,silence|500",
-		'wakeupListEmpty' => "vm-youhave,{count},wakeup-call,silence|500",
-		'wakeupListInfoCall' => array(
-			"wakeup-call",
-			"number",
-			'{number}',
-			"digits/at",
-			'SayUnixTime|{time}',
-			"silence|500",
-		),	
-		'wakeupListMenu' => array(
-			"to-cancel-wakeup",
-			"press-1",
-			"silence|400",
-			"list",
-			"press-2",
-			"silence|400",
-			"menu",
-			"press-3",
-			"silence|500",
-		),
-		'wakeupListCancelCall' => "wakeup-call-cancelled,silence|500",
+		'wakeupMenu' => [
+			'group' => 'wakeup',
+			'value' => "for-wakeup-call,press-1,silence|400,list,press-2,silence|500",
+		],
+		'wakeupAdd' => [
+			'group' => 'wakeup',
+			'value' => [
+				"please-enter-the",
+				"time",
+				"for",
+				"your",
+				"wakeup-call",
+			],
+		],
+		'wakeupAddType12H' => [
+			'group' => 'wakeup',
+			'value' => "1-for-am-2-for-pm",
+		],
+		'wakeupAddOk' => [
+			'group' => 'wakeup',
+			'value' => array("wakeup-call", "added", "digits/at", "SayUnixTime|{time}", "silence|500"),
+		],
 
-		'wakeConfirmMenu' => array(
-			"to-snooze-for",
-			"5",
-			"minutes",
-			"press-1",
-			"silence|400",
-			"to-snooze-for",
-			"10",
-			"minutes",
-			"press-2",
-			"silence|400",
-			"to-snooze-for",
-			"15",
-			"minutes",
-			"press-3",
-		),
-		'wakeConfirmDelay' => array(
-			"rqsted-wakeup-for",
-			"{delay}",
-			"minutes",
-			"vm-from",
-			"now",
-			"silent|500"
-		),
+		'wakeupList' => [
+			'group' => 'wakeup',
+			'value' => "vm-youhave,{count},wakeup-call,silence|500",
+		],
+		'wakeupListEmpty' => [
+			'group' => 'wakeup',
+			'value' => "vm-youhave,{count},wakeup-call,silence|500",
+		],
+		'wakeupListInfoCall' => [
+			'group' => 'wakeup',
+			'value' => [
+				"wakeup-call",
+				"number",
+				'{number}',
+				"digits/at",
+				'SayUnixTime|{time}',
+				"silence|500",
+			],
+		],
+		'wakeupListMenu' => [
+			'group' => 'wakeup',
+			'value' => [
+				"to-cancel-wakeup",
+				"press-1",
+				"silence|400",
+				"list",
+				"press-2",
+				"silence|400",
+				"menu",
+				"press-3",
+				"silence|500",
+			],
+		],
+		'wakeupListCancelCall' => [
+			'group' => 'wakeup',
+			'value' => "wakeup-call-cancelled,silence|500",
+		],
+
+
+		'wakeConfirmMenu' => [
+			'group' => 'confirm',
+			'value' => [
+				"to-snooze-for",
+				"5",
+				"minutes",
+				"press-1",
+				"silence|400",
+				"to-snooze-for",
+				"10",
+				"minutes",
+				"press-2",
+				"silence|400",
+				"to-snooze-for",
+				"15",
+				"minutes",
+				"press-3",
+			],
+		],
+		'wakeConfirmDelay' => [
+			'group' => 'confirm',
+			'value' => [
+				"rqsted-wakeup-for",
+				"{delay}",
+				"minutes",
+				"vm-from",
+				"now",
+				"silent|500"
+			],
+		],
 	];
 
 	public function getPath($name, $backslashend = true)
@@ -255,7 +289,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case "removecall":
 			case "getsettings":
 			case "setsettings":
-			case "message_lang_list":
+			case "gettablemessagelang":
+			case "getmessagedefault":
+			case "getmessagekeys":
+			case "getmessage":
+			case "setmessage":
 				return true;
 			break;
 		}
@@ -263,7 +301,8 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 	public function ajaxHandler() {
-		switch($_REQUEST['command']) {
+		switch( $_REQUEST['command']) 
+		{
 			case "savecall":
 				$params = array(
 					'day' 			=> empty($_POST['day']) 		? '' : $_POST['day'],
@@ -300,7 +339,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				return $this->run_action("settings_set", $_POST);
 				break;
 
-			case "getTableMessageLang":
+			case "gettablemessagelang":
 				$list = array();
 				foreach ($this->getLanguages() as $k => $v)
 				{
@@ -311,7 +350,93 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					);
 				}
 				return $list;
+				break;
+
+			case "getmessagedefault":
+				$key = empty($_POST['msgkey'])  ? '' : $_POST['msgkey'];
+
+				return $this->getMessageDefault($key);
+				break;
+
+			case "getmessagekeys":
+				return array_keys(self::$defaultMessage);
+				break;
+
+			case 'getmessage':
+				$language = empty($_POST['language'])  ? '' : $_POST['language'];
+
+				$status	 = false;
+				if (empty($language))
+				{
+					$data = array('message' => 'Required parameters are missing!');
+				}
+				elseif( ! $this->isLanguagesAvailable($language) )
+				{
+					$data = array('message' => 'The specified language is not available!');
+				}
+				else
+				{
+					$status = true;
+					$data 	= $this->getMessageAll($language);
+				}
+				return array(
+					'status' => $status,
+					'data' 	 => $data,
+				);
+				break;
+			
+			case 'setmessage':
+				$language = empty($_POST['language'])  ? '' : $_POST['language'];
+				$messages = empty($_POST['messages'])  ? '' : $_POST['messages'];
+				
+				$status	= false;
+				$data	= array();
+				$all = 0;
+				$ok  = 0;
+				$err = 0;
+
+				if ( empty($language) || empty($messages) )
+				{
+					$data = array('message' => 'Required parameters are missing!');
+				}
+				elseif( ! $this->isLanguagesAvailable($language) )
+				{
+					$data = array('message' => 'The specified language is not available!');
+				}
+				elseif( ! is_array($messages) || count($messages) < 1 )
+				{
+					$data = array('message' => 'No messages have been received!');
+				}
+				else
+				{
+					$all = count($messages);
+					foreach($messages as $k => $v)
+					{
+						if (! $this->isMessageExists($k)) 
+						{
+							$err += 1;
+							$data[$k] = false;
+							continue;	
+						}
+
+						$ok += 1;
+						$this->setMessage($k, $v, $language);
+						$data[$k] = true;
+					}
+					$status = true;
+				}
+				return array(
+					'status' => $status,
+					'count'  => array(
+						'all' => $all,
+						'ok'  => $ok,
+						'err' => $err,
+					),
+					'data' 	 => $data,
+				);
 			break;
+
+
 		}
 		return true;
 	}
@@ -792,16 +917,20 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $val;
 	}
 
-	public function setMessage($msg, $val)
+	private function getMessagesIdKVStore($lang)
 	{
-		$val = $this->parseMessage($val);
-		$this->setConfig($msg, $val, 'message');
+		return 'message_'.$lang;
 	}
 
-	public function getMessageAll($lang = "")
+	public function setMessage($msg, $val, $lang)
 	{
-		$id_message = 'message'.empty($lang) ? '' : '_' . $lang;
-		$msg_all  = $this->getAll($id_message);
+		$val = $this->parseMessage($val);
+		$this->setConfig($msg, $val, $this->getMessagesIdKVStore($lang));
+	}
+
+	public function getMessageAll($lang)
+	{
+		$msg_all  = $this->getAll($this->getMessagesIdKVStore($lang));
 		$msg_diff = array_diff_key(self::$defaultMessage, $msg_all);
 		if (count($msg_diff) > 0)
 		{
@@ -809,7 +938,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			{
 				if (! array_key_exists($key, $msg_all)) 
 				{
-					$msg_all[$key] = $val;
+					$msg_all[$key] = $this->getMessageDefault($key, true);
 				}
 			}
 		}
@@ -821,18 +950,17 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $msg_all;
 	}
 
-	public function getMessage($msg, $params = array())
+	public function getMessage($msg, $lang, $params = array())
 	{
-		// TODO: Pending implement multi language support
-		$message = $this->getConfig($msg, 'message');
+		$message = $this->getConfig($msg, $this->getMessagesIdKVStore($lang));
 		if ($message === false)
 		{
 			//No does not exist in the database the default value is used
 			$message = "";
-			if (array_key_exists($msg, self::$defaultMessage))
+			if ( $this->isMessageExists($msg) )
 			{
-				$message = self::$defaultMessage[$msg];
-				// $this->setMessage($msg, $message);
+				$message = $this->getMessageDefault($msg, true);
+				// $this->setMessage($msg, $message, $lang);
 			}
 		}
 
@@ -869,9 +997,80 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			}
 			$data_return = $message;
 		}
+
+		//Remove items empty in array
+		$data_return = array_diff($data_return, array(''));
 		return $data_return;
 	}
 
+	public function getMessageDefault($key = "", $msgOnly = false)
+	{
+		$default 	 = self::$defaultMessage;
+		$data_return = array();
+		
+		if (! empty($key))
+		{
+			if ( $this->isMessageExists($key))
+			{
+				$val = $default[$key];
+				$data_return[$key] = $this->parseMessage(empty($val['value']) ? $val : $val['value']);
+			}
+			if ($msgOnly)
+			{
+				$data_return = array_values ($data_return);
+				$data_return = count($data_return) == 0 ? '' : $data_return[0] ;
+			}
+		}
+		else
+		{
+			foreach($default as $k => $v)
+			{
+				$data_return[$k] = $this->parseMessage(empty($v['value']) ? $v : $v['value']);
+			}
+		}
+		return $data_return;
+	}
+
+	public function isMessageExists($msg)
+	{
+		return array_key_exists($msg, self::$defaultMessage);
+	}
+
+	public function getGroupsMessages()
+	{
+		$grp = array(
+            'global'  => array(),
+            'wakeup'  => array(),
+            'confirm' => array(),
+            'operator'=> array(),
+        );
+        foreach( self::$defaultMessage as $k => $v )
+        {
+			if ( empty($v['group']) ) { $v_grp = ""; }
+			else 					  { $v_grp = $v['group']; }
+			switch($v_grp)
+			{
+				case 'operator':
+				case 'wakeup':
+				case 'confirm':
+				case 'global':
+					$grp[$v_grp][] = $k;
+				break;
+
+				default:
+					$grp['global'][] = $k;
+				break;
+			}
+		}
+		return $grp;
+	}
+
+
+
+	public function isLanguagesAvailable($lang)
+	{
+		return array_key_exists($lang, $this->getLanguages());
+	}
 
 	public function getLanguages()
 	{

@@ -2,7 +2,7 @@
 	<h2><i class="fa fa-globe">&nbsp;</i> <?php echo _("Message Settings") ?></h2>
 </div>
 <table id="message_lang" class="table table-striped"
-	   data-url="ajax.php?module=hotelwakeup&amp;command=getTableMessageLang"
+	   data-url="ajax.php?module=hotelwakeup&amp;command=gettablemessagelang"
        data-cache="false"
        data-toolbar="#toolbar-all"
 	   data-maintain-selected="true"

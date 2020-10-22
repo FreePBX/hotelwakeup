@@ -183,7 +183,7 @@ function getMessage($msg, $param = array())
 		"lang" => $AGI->request['agi_language']
 	);
 	$msgParams = array_merge($defaulParams, $param);
-	return $hotelwakeup->getMessage($msg, $msgParams);
+	return $hotelwakeup->getMessage($msg, $defaulParams['lang'], $msgParams);
 }
 
 function parseMessage($val)

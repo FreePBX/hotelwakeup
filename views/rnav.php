@@ -2,15 +2,15 @@
     if (!defined('FREEPBX_IS_AUTH')) { exit('No direct script access allowed'); }
 
     $list_menu = array(
-        'msgs' => array(
-            'label' => _('Messages'),
-            'icon' => 'fa-globe',
-            'action' => 'messages',
-        ),
         'setting' => array(
             'label' => _('Settings'),
             'icon' => 'fa-cog',
             'action' => 'settings',
+        ),
+        'msgs' => array(
+            'label' => _('Messages'),
+            'icon' => 'fa-globe',
+            'action' => 'messages',
         ),
     );
 ?>

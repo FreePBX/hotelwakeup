@@ -8,7 +8,12 @@
 		case '':
 			// if the action is null, set the next case as the default action.
 			// NO ADD BRACK TO CASE!!
-			$_REQUEST['action'] = "messages";
+			$_REQUEST['action'] = "settings";
+		
+		case "settings":
+			$show_page = "settings.settings";
+			$js_files[] = "settings.js";
+		break;
 
 		case "messages":
 			switch($request['option'])
@@ -47,11 +52,6 @@
 					$msgError = sprintf(_("Option Not Found (%s)!!!!"), $request['option']);
 				break;
 			}
-		break;
-
-		case "settings":
-			$show_page = "settings.settings";
-			$js_files[] = "settings.js";
 		break;
 
 		default:
