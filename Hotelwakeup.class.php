@@ -365,78 +365,76 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case 'getmessage':
 				$language = empty($_POST['language'])  ? '' : $_POST['language'];
 
-				$status	 = false;
+				$data_return = array(
+					'status'   => false,
+					'message'  => "",
+					'data' 	   => array(),
+					'language' => $language,
+				);
+
 				if (empty($language))
 				{
-					$data = array('message' => 'Required parameters are missing!');
+					$data_return['message'] = 'Required parameters are missing!';
 				}
 				elseif( ! $this->isLanguagesAvailable($language) )
 				{
-					$data = array('message' => 'The specified language is not available!');
+					$data_return['message'] = 'The specified language is not available!';
 				}
 				else
 				{
-					$status = true;
-					$data 	= $this->getMessageAll($language);
+					$data_return['status'] = true;
+					$data_return['data']   = $this->getMessageAll($language);
 				}
-				return array(
-					'status' => $status,
-					'data' 	 => $data,
-				);
+				return $data_return;
 				break;
 			
 			case 'setmessage':
 				$language = empty($_POST['language'])  ? '' : $_POST['language'];
 				$messages = empty($_POST['messages'])  ? '' : $_POST['messages'];
-				
-				$status	= false;
-				$data	= array();
-				$all = 0;
-				$ok  = 0;
-				$err = 0;
+
+				$data_return = array(
+					'status'   => false,
+					'message'  => "",
+					'data' 	   => array(),
+					'count'  => array(
+						'all' => 0,
+						'ok'  => 0,
+						'err' => 0,
+					),
+					'language' => $language,
+				);
 
 				if ( empty($language) || empty($messages) )
 				{
-					$data = array('message' => 'Required parameters are missing!');
+					$data_return['message'] = 'Required parameters are missing!';
 				}
 				elseif( ! $this->isLanguagesAvailable($language) )
 				{
-					$data = array('message' => 'The specified language is not available!');
+					$data_return['message'] = 'The specified language is not available!';
 				}
 				elseif( ! is_array($messages) || count($messages) < 1 )
 				{
-					$data = array('message' => 'No messages have been received!');
+					$data_return['message'] = 'No messages have been received!';
 				}
 				else
 				{
-					$all = count($messages);
+					$data_return['count']['all'] = count($messages);
 					foreach($messages as $k => $v)
 					{
 						if (! $this->isMessageExists($k)) 
 						{
-							$err += 1;
+							$data_return['count']['err'] += 1;
 							$data[$k] = false;
 							continue;	
 						}
-
-						$ok += 1;
+						$data_return['count']['ok'] += 1;
 						$this->setMessage($k, $v, $language);
 						$data[$k] = true;
 					}
-					$status = true;
+					$data_return['status'] = true;
 				}
-				return array(
-					'status' => $status,
-					'count'  => array(
-						'all' => $all,
-						'ok'  => $ok,
-						'err' => $err,
-					),
-					'data' 	 => $data,
-				);
+				return $data_return;
 			break;
-
-
 		}
 		return true;
 	}
@@ -925,7 +923,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function setMessage($msg, $val, $lang)
 	{
 		$val = $this->parseMessage($val);
-		$this->setConfig($msg, $val, $this->getMessagesIdKVStore($lang));
+		if ( $this->getMessageDefault($msg) == $val )
+		{
+			$val = "";
+		}
+		$this->setConfig($msg, empty($val) ? false : $val, $this->getMessagesIdKVStore($lang));
 	}
 
 	public function getMessageAll($lang)

@@ -1,3 +1,7 @@
+<?php if( empty($hotelwakeup->getLanguages())) { ?>
+	<div class="alert alert-danger"><?php echo sprintf(_("You have no sound packages installed in the %s module. Please install at least one language to use System Recordings"),"<a href='?display=soundlang'>"._("Sound Languages")."</a>")?></div>
+<?php } ?>
+
 <div id="toolbar-all">
 	<h2><i class="fa fa-globe">&nbsp;</i> <?php echo _("Message Settings") ?></h2>
 </div>

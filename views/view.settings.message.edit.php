@@ -1,5 +1,5 @@
 <?php
-    $all_msg  = $hotelwakeup->getMessageAll($lang);
+    $all_msg  = $hotelwakeup->getMessageDefault();
     $info_grp = [
         'global' => [
             'id'    => 'grpGlobal',
@@ -112,7 +112,8 @@
     <p><?php  echo _('SayUnixTime|xxxx') ?> </p>
 </div>
 <div class="display full-border">
-    <form id="messageform">
+    <input id="language" name="language" type="hidden" value="<?php echo $lang ?>">
+    <form id="messageform">    
         <?php
         foreach($hotelwakeup->getGroupsMessages() as $k => $v)
         {
