@@ -44,6 +44,7 @@
 	<depends>
 		<module>ivr gt1.0</module>
 		<module>soundlang</module>
+		<module>recordings</module>
 	</depends>
 	<supported>
 		<version>15.0</version>

@@ -1,5 +1,5 @@
 <?php
-	$js_files 	 = array();
+	$js_files 	 = array("global.js");
 	$show_page 	 = "";
 	$params_page = array();
 	

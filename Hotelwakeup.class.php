@@ -138,6 +138,21 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		],
 	];
 
+
+	public function __construct($freepbx = null) {
+		if ($freepbx == null) {
+			throw new \Exception("Not given a FreePBX Object");
+		}
+
+		$this->FreePBX  = $freepbx;
+		$this->db 		= $freepbx->Database;
+		$this->media 	= $freepbx->Media();
+
+		//Modules
+		$this->Recordings = $freepbx->Recordings;
+		$this->Soundlang  = $freepbx->Soundlang;
+	}
+
 	public function getPath($name, $backslashend = true)
 	{
 		$path_lib 	 = $this->FreePBX->Config->get("ASTVARLIBDIR");
@@ -148,18 +163,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		{
 			case "outgoing":
 				$data_return .= $path_spool."/outgoing";
-				break;
+			break;
 
 			case "outgoing_done";
 				$data_return .= $path_spool."/outgoing_done";
-				break;
+			break;
 
 			case "tmp":
 				$data_return .= $path_spool."/tmp";
-				break;
+			break;
 
 			case "sounds":
 				$data_return .= $path_lib."/sounds";
+			break;
 			
 			default:
 				throw new \Exception( sprintf(_("Path name (%s) not supported!"), $name) );
@@ -197,7 +213,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		//Migrate Table > KVSTORE
 		$sql = "SHOW TABLES LIKE 'hotelwakeup'";
 		$count = $this->Database->query($sql)->rowCount();
-		if($count == 1)
+		if($count > 0)
 		{
 			$sql = "SELECT * FROM hotelwakeup LIMIT 1";
 			$sth = $this->Database->prepare($sql);
@@ -229,14 +245,12 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		switch($request['display'])
 		{
 			case 'hotelwakeup_settings':
-
-				if ($request['action'] == "settings")
+				switch (true)
 				{
-					$show_btn = true;
-				}
-				elseif ($request['action'] == "messages" && $request['option'] == "edit")
-				{
-					$show_btn = true;
+					case ($request['action'] == "settings"):
+					case ($request['action'] == "messages" && $request['option'] == "edit"):
+						$show_btn = true;
+					break;
 				}
 			break;
 		}
@@ -278,9 +292,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function ajaxRequest($req, &$setting) {
 		// ** Allow remote consultation with Postman **
 		// ********************************************
-		$setting['authenticate'] = false;
-		$setting['allowremote'] = true;
-		return true;
+		// $setting['authenticate'] = false;
+		// $setting['allowremote'] = true;
+		// return true;
 		// ********************************************
 		switch($req)
 		{
@@ -294,14 +308,28 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			case "getmessagekeys":
 			case "getmessage":
 			case "setmessage":
+			case "i18n":
+			case "gethtml5":
+			case "getsupportedhtml5":
+			case "playback":
 				return true;
 			break;
 		}
 		return false;
 	}
 
-	public function ajaxHandler() {
-		switch( $_REQUEST['command']) 
+	public function ajaxCustomHandler() {
+		switch($_REQUEST['command']) {
+			case "playback":
+				$this->media->getHTML5File($_REQUEST['file']);
+			break;
+		}
+	}
+
+	public function ajaxHandler()
+	{
+		$command = isset($_REQUEST['command']) ? trim($_REQUEST['command']) : '';
+		switch($command)
 		{
 			case "savecall":
 				$params = array(
@@ -384,6 +412,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				{
 					$data_return['status'] = true;
 					$data_return['data']   = $this->getMessageAll($language);
+					$data_return['message'] = 'Settings Load Successfully';
 				}
 				return $data_return;
 				break;
@@ -432,11 +461,149 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 						$data[$k] = true;
 					}
 					$data_return['status'] = true;
+					$data_return['message'] = 'Settings Saved Successfully';
 				}
 				return $data_return;
-			break;
+				break;
+
+			case 'i18n':
+				$filejs = isset($_REQUEST['filejs']) ? $_REQUEST['filejs'] : NULL;
+				switch( strtolower($filejs) ) 
+				{
+					case "messages":
+						$data_return = array("status" => true, "i18n" => array(
+							'SETTING_RELOAD_OK'	=> _('Setting Restart Successfully'),
+							'PLAY_FILE_NOT_FOUND'=> _('The following files do not exist:'),
+						));
+						break;
+						
+					case "settings":
+						$data_return = array("status" => true, "i18n" => array(
+							"EXTENSIONLENGTH"			 => _("Max Destination Length"),
+							"WAITTIME"					 => _("Ring Time"),
+							"RETRYTIME"					 => _("Retry Time"),
+							"MAXRETRIES"				 => _("Max Retries"),
+							"CALLERID"					 => _("Wake Up Caller ID"),
+							"VALIDATE_ERROR_BLANK" 		 => _("%s can not be blank."),
+							"VALIDATE_ERROR_ONLY_NUMBER" => _("%s only allow numbers."),
+						));
+						break;
+
+					default:
+						$data_return = array("status" => false, "message" => _("File not found!"), "i18n" => array());
+				}
+				return $data_return;
+				break;
+			
+			
+			case "gethtml5":
+				$language  = empty($_POST['language'])  ? '' : $_POST['language'];
+				$filenames = empty($_POST['filenames'])  ? '' : $_POST['filenames'];
+				
+				$data_return = array(
+					'status'   => false,
+					'message'  => "",
+					'files'    => array(),
+					'language' => $language,
+				);
+				
+				switch(true)
+				{
+					case ( empty($language) || empty($filenames) ):
+						$data_return['message'] = 'Required parameters are missing!';
+						break;
+
+					case ( ! $this->isLanguagesAvailable($language) ):
+						$data_return['message'] = 'The specified language is not available!';
+						break;
+
+					case ( ! is_array($filenames) || count($filenames) < 1 ):
+						$data_return['message'] = 'No filenames have been received!';
+						break;
+				}
+				if (empty($data_return['message']))
+				{
+					$filenames_parsed = array();
+					foreach($filenames as $filename)
+					{
+						if (empty($filename)) { continue; }
+						if ( preg_match ('/\{(.*)\}/', $filename) )
+						{
+							$filenames_parsed[] = "letters/ascii123"; // == {
+							$filenames_parsed[] = "letters/ascii125"; // == }
+							continue;
+						}
+						$filenames_parsed[] = $filename;
+					}
+
+					foreach($filenames_parsed as $filename)
+					{
+						$path_filename = "";
+
+						$optionNoFile = explode("|", $filename, 2);
+						if ( count($optionNoFile) > 1 ) 
+						{	
+							$data_return['files'][] = array(
+								'type' => "option",
+								"key" => $optionNoFile[0],
+								"val" => $optionNoFile[1],
+							);
+							continue;
+						}
+
+						$info = pathinfo($filename);
+						if(empty($info['extension']))
+						{
+							$status = $this->fileStatus($filename);
+							if(!empty($status[$language])) {
+								$path_filename = $this->getPath("sounds", true) . $language . "/" . reset($status[$language]);
+							}
+						}
+						else
+						{
+							$path_filename = $this->getPath("sounds", true) . $filename;
+						}
+						
+						if (empty($path_filename))
+						{
+							$data_return['files'][] = array (
+								"type"		=> "file",
+								"status"	=> false,
+								"filename" 	=> $filename,
+							);
+						}
+						else
+						{
+							$this->media->load($path_filename);
+							$files = $this->media->generateHTML5();
+							foreach($files as $format => $fname)
+							{
+								$data_return['files'][] = array (
+									"type"		=> "file",
+									"status"	=> true,
+									"filename" 	=> $filename,
+									"url" 	 	=> "ajax.php?module=hotelwakeup&command=playback&file=".$fname,
+									"format" 	=> $format,
+								);
+							}
+						}
+					}
+					$data_return['status'] = true;
+				}
+				return $data_return;
+			
+			case "getsupportedhtml5":
+				$formats = $this->media->getSupportedHTML5Formats();
+    			return array(
+					"status" => true,
+					"data" 	 => implode(",", $formats),
+					'count'  => count($formats),
+				);
+				break;
+			
+			default:
+				return array("status" => false, "message" => _("Command not found!"), "command" => $command);
 		}
-		return true;
 	}
 
 
@@ -1074,11 +1241,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return array_key_exists($lang, $this->getLanguages());
 	}
 
-	public function getLanguages()
-	{
-		return $this->FreePBX->Soundlang->getLanguages();
-	}
-
 	/**
 	 * This is used to generate a language selection field using the sound
 	 * packets installed on the system.
@@ -1116,5 +1278,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			$call['actions'] = sprintf('<a href="?display=hotelwakeup&amp;action=delete&amp;id=%s&amp;ext=%s"><i class="fa fa-times"></i></a>', $call['id'], $call['destination']);
 		}
 		return $calls;
+	}
+
+
+	/**
+	 * Functions Proxy other Modules
+	 */
+	public function getLanguages()
+	{
+		return $this->Soundlang->getLanguages();
+	}
+
+	public function fileStatus($file) 
+	{
+		return $this->Recordings->fileStatus($file, true);
 	}
 }

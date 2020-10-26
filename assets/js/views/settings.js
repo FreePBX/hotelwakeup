@@ -1,3 +1,5 @@
+var global_module_hotelwakeup_i18n = i18nGet('settings');
+
 function is_Numeric(num)
 {
 	return !isNaN(parseFloat(num)) && isFinite(num);
@@ -22,6 +24,7 @@ function loadSettings(e)
 		module	: 'hotelwakeup',
 		command	: 'getsettings',
 	};
+
 	disabledSettings(true);
 	cleanWarnInvalid();
 	$.post(window.FreePBX.ajaxurl, post_data, function(data) 
@@ -65,6 +68,7 @@ function saveSettings(e)
 	{
 		return false;
 	}
+
 	var post_data = {
 		module	: 'hotelwakeup',
 		command	: 'setsettings',
@@ -93,29 +97,26 @@ function saveSettings(e)
 function validateSettings(showmsg=true)
 {
 	var arr_options = {
-		"extensionlength": _("Max Destination Length"),
-		"waittime"		 : _("Ring Time"),
-		"retrytime"		 : _("Retry Time"),
-		"maxretries"	 : _("Max Retries"),
-		"callerid"		 : _("Wake Up Caller ID"),
+		"extensionlength": 'int',
+		"waittime"		 : 'int',
+		"retrytime"		 : 'int',
+		"maxretries"	 : 'int',
+		"callerid"		 : 'string',
 	};
 	for (var key in arr_options)
-	{
+	{	
 		let obj  = $("#" + key);
 		let val  = obj.val().trim();
-		let name = arr_options[key];
+		let name = i18n_mod(key);
 		if(val === "")
 		{
-			warnInvalid(obj, showmsg ? name + _(" can not be blank.") : "");
+			warnInvalid(obj, showmsg ? sprintf( i18n_mod("VALIDATE_ERROR_BLANK"), name ) : "");
 			return false;
 		}
-		if (key != "callerid")
+		else if (arr_options[key] == "int" && ! is_Numeric(val))
 		{
-			if (! is_Numeric(val) )
-			{
-				warnInvalid(obj, showmsg ? name + _(" only allow numbers.") : "");
-				return false;
-			}
+			warnInvalid(obj, showmsg ? sprintf( i18n_mod("VALIDATE_ERROR_ONLY_NUMBER"), name ) : "");
+			return false;
 		}
 	}
 	return true;

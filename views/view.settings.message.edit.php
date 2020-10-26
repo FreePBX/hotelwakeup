@@ -23,88 +23,108 @@
         'SayUnixTime' => [
             'label'=> '',
             'help' => '<a href="https://www.voip-info.org/asterisk-cmd-sayunixtime/" target="_blank">https://www.voip-info.org/asterisk-cmd-sayunixtime/</a>',
+            'play' => false,
         ],
 		'welcome' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'goodbye' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'error' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'retry' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'optionInvalid' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'invalidDialing' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'operatorSelectExt' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'operatorEntered' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupMenu' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupAdd' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupAddType12H' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupAddOk' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupList' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupListEmpty' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupListInfoCall' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupListMenu' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeupListCancelCall' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeConfirmMenu' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
 		'wakeConfirmDelay' => [
             'label'=> '',
             'help' => '',
+            'play' => true,
         ],
     ];
 ?>
 
 
-<h2>Edit Message - <?php echo $language . "(".$lang.")" ?></h2>
+<h2><i class="fa fa-language">&nbsp;</i> Edit Message - <?php echo $language . "(".$lang.")" ?></h2>
 <div class="alert alert-info" role="alert">
     <h2><?php echo _("Wildcards:") ?></h2>
     <p><?php  echo _('To add silence between files we will use <b>"silence|xxx"</b>, <b>xxx</b> corresponding to the number of milliseconds we want the silence to last.') ?> </p>
@@ -113,7 +133,7 @@
 </div>
 <div class="display full-border">
     <input id="language" name="language" type="hidden" value="<?php echo $lang ?>">
-    <form id="messageform">    
+    <form id="messageform">
         <?php
         foreach($hotelwakeup->getGroupsMessages() as $k => $v)
         {
@@ -130,6 +150,7 @@
                     'label'       => empty($info_input[$sk]['label']) ? ucfirst($sk) : $info_input[$sk]['label'],
                     'help'        => $info_input[$sk]['help'],
                     'default'     => implode(",", $hotelwakeup->getMessageDefault($sk, true)),
+                    'jplayer'     => $info_input[$sk]['play'],
                 );
                 if ($data['value'] == $data['default'])
                 {
@@ -143,10 +164,7 @@
         ?>
     </form>
 </div>
-<br />
-<br />
-<br />
-
+<br><br><br>
 
 
 
@@ -165,8 +183,6 @@
     has-been = ha sido
     cancelled = cancelado
     your = su
-
-
 
 
     https://www.voip-info.org/asterisk-cmd-sayunixtime/
