@@ -46,7 +46,7 @@ $(document).ready(function()
 			ready: function(event) {
 				$(this).closest(".form-group").find(".btn-cmd-play").removeClass("hidden");
 			},
-			swfPath: "http://jplayer.org/latest/dist/jplayer",
+			swfPath: window.location.origin + "/admin/assets/js",
 			supplied: supportedHTML5,
 		});
 	});
@@ -378,7 +378,7 @@ async function playFile(e)
 					if (val.key == "silence" ) {
 						await sleep(val.val);
 					} else {
-						console.log("Option Unknown! " + val.type)
+						console.log("Key Option Unknown! " + val.key)
 					}
 				break;
 

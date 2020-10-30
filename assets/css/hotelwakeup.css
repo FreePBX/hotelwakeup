@@ -6,3 +6,8 @@
 .special .btn {
 	flex: 1
 }
+
+
+#messageform .btn-cmd-play {
+	width: 70px;
+}
