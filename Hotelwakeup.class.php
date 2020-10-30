@@ -22,7 +22,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public static $defaultMessage = [
 		'SayUnixTime'    => "IMpABd",
 		'welcome' 		 => 'hello,this-is-yr-wakeup-call,silence|500',
-		'goodbye'		 => "goodbye,silent|500",
+		'goodbye'		 => "goodbye,silence|500",
 		'error' 		 => "an-error-has-occurred,silence|500",
 		'retry'			 => "please-try-again,silence|500",
 		'optionInvalid'  => "option-is-invalid,silence|500",
@@ -133,7 +133,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				"minutes",
 				"vm-from",
 				"now",
-				"silent|500"
+				"silence|500"
 			],
 		],
 	];
@@ -1121,12 +1121,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function getMessage($msg, $lang, $params = array())
 	{
-		$message = $this->getConfig($msg, $this->getMessagesIdKVStore($lang));
-		if ($message === false)
+		$message = "";
+		if ( $this->isMessageExists($msg) )
 		{
-			//No does not exist in the database the default value is used
-			$message = "";
-			if ( $this->isMessageExists($msg) )
+			$message = $this->getConfig($msg, $this->getMessagesIdKVStore($lang));
+			$message = array_diff($message, array(''));
+
+			if (empty($message))
 			{
 				$message = $this->getMessageDefault($msg, true);
 				// $this->setMessage($msg, $message, $lang);
@@ -1164,11 +1165,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 					$value = $new_value;
 				}
 			}
-			$data_return = $message;
+			//Remove items empty in array
+			$data_return = array_diff($message, array(''));
 		}
-
-		//Remove items empty in array
-		$data_return = array_diff($data_return, array(''));
 		return $data_return;
 	}
 
