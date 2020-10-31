@@ -12,25 +12,13 @@ include '/etc/freepbx.conf';
 set_time_limit(0);
 error_reporting(0);
 
-// Connect to AGI:
-//
-require_once "phpagi.php";
-$AGI = new AGI();
-$AGI->answer();
-
-$lang = $AGI->request['agi_language'];
-$number = $AGI->request['agi_extension'];
-
-
-// Import Global Function Wake-Up Call
 require_once "wakeglobal.php";
-$hotelwakeup = \FreePBX::Hotelwakeup();
-
+$hotelwakeup = new AGI_Hotelwakeup();
 
 usleep(500);
-sim_playback($AGI, getMessage("welcome"));
+$hotelwakeup->sim_playback("welcome");
 
-$digit = sim_background($AGI, getMessage("wakeConfirmMenu"), "0123456789", 1);
+$digit = $hotelwakeup->sim_background("wakeConfirmMenu", "0123456789", 1);
 
 $params = array(
 	"delay" => 0,
@@ -50,14 +38,13 @@ switch($digit)
 		break;
 }
 
-
 if ($params['delay'] > 0)
 {
 	$time_wakeup = time();
 	$time_wakeup += $params['delay'] * 60;
-	$hotelwakeup->addWakeup($number, $time_wakeup, $lang);
-	sim_playback($AGI, getMessage("wakeConfirmDelay", $params));
+	$hotelwakeup->addWakeup($time_wakeup);
+	$hotelwakeup->sim_playback("wakeConfirmDelay", $params);
 }
 
-sim_playback($AGI, getMessage("goodbye"));
-$AGI->hangup();
+$hotelwakeup->sim_playback("goodbye");
+$hotelwakeup->hangup();

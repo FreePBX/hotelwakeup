@@ -862,7 +862,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $code;
 	}
 
-	public function getSetting()
+	public function getSetting($option = null)
 	{
 		$data_return = $this->getAll("setting");
 		if (empty($data_return))
@@ -879,6 +879,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		{
 			$ext = trim($ext);
 		}
+
+		if (! empty($option))
+		{
+			if ( array_key_exists($option, $data_return) )
+			{
+				$data_return = $data_return[$option];
+			}
+			else
+			{
+				throw new \Exception("Option ($option) not valid!");
+			}
+		}
+
 		return $data_return;
 	}
 
