@@ -25,7 +25,7 @@
 
                                 <?php if ($jplayer): ?>
                                 <div id="jplayer-file-<?php echo $key ?>" class="jp-jplayer"></div>
-                                <a class="btn btn-default btn-cmd-play hidden"><i class="fa fa-play" aria-hidden="true"></i></a>
+                                <a class="btn btn-default btn-cmd-play hidden"><i class="fa fa-play play" aria-hidden="true"></i></a>
                                 <?php endif; ?>
 
                                 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></a>

@@ -28,32 +28,60 @@ class AGI_Hotelwakeup
 		$this->AGI->hangup();
 	}
 
+	/**
+	 * Get language call
+	 * 
+	 * @return string lang
+	 */
 	public function getLang()
 	{
 		return $this->AGI->request['agi_language'];
 	}
 
+	/**
+	 * Get the extension number of the call destination.
+	 * 
+	 * @return string Number
+	 */
 	public function getDestinationExtension()
 	{
 		return $this->AGI->request['agi_extension'];
 	}
 
+	/**
+	 * Get the extension number of the call origin.
+	 * 
+	 * @return string Number
+	 */
 	public function getOriginExtension()
 	{
 		$cid = $this->getCID();
 		return $cid['username'];
 	}
 
+	/**
+	 * Get  info of the call origin.
+	 * 
+	 * @return array (name, protocol, username, host, port)
+	 */
 	public function getCID()
 	{
-		//Extension desde la que se llama = Origen
 		return $this->AGI->parse_callerid();
 	}
+
 
 	public function wait_for_digit($time_wait)
 	{
 		return $this->AGI->wait_for_digit($time_wait);
 	}
+
+	/**
+	 * Get setting specified of the module Hotelwakeup.
+	 * 
+	 * @param  string $option Option Name
+	 * 
+	 * @return mixed          Option value.
+	 */
 
 	public function getSetting($option)
 	{
@@ -62,10 +90,11 @@ class AGI_Hotelwakeup
 
 	/**
 	 * Simulate playback functionality like the dialplan
-	 * @param  string|array $file Audio files combined by/with '&' or using array
-	 * 							  We can add silences with the following format "silence|500",
-	 * 							  in this way we get a silence of 500 milliseconds.
-	 * 							  To read a number digit by digit we will use "d|157".
+	 * @param  string|array $file 	Audio files combined by/with '&' or MessageID or array.
+	 * 							  	We can add silences with the following format "silence|500",
+	 * 							  	in this way we get a silence of 500 milliseconds.
+	 * 							  	To read a number digit by digit we will use "d|157".
+	 * @param	array		$param 	Array with parameters that can be used in the generation of file names.
 	 */
 	public function sim_playback($file, $param = array())
 	{
@@ -89,14 +118,14 @@ class AGI_Hotelwakeup
 
 	/**
 	 * Simulate background playback with added functionality
-	 * @param  string  $file     Audio files combined by/with '&'
-	 * @param  string  $digits   Allowed digits (if we are prompting for them)
-	 * @param  string  $length   Length of allowed digits (if we are prompting for them)
-	 * @param  string  $escape   Escape character to exit
-	 * @param  integer $timeout  Timeout
-	 * @param  integer $maxLoops Max timeout loops
-	 * @param  integer $loops    Total loops
-	 * @param  array   $param    
+	 * @param  string|array  $file     Audio files combined by/with '&' or MessageID or array.
+	 * @param  string        $digits   Allowed digits (if we are prompting for them)
+	 * @param  string        $length   Length of allowed digits (if we are prompting for them)
+	 * @param  string        $escape   Escape character to exit
+	 * @param  integer       $timeout  Timeout
+	 * @param  integer       $maxLoops Max timeout loops
+	 * @param  integer       $loops    Total loops
+	 * @param  array         $param    Array with parameters that can be used in the generation of file names.
 	 */
 	public function sim_background($file, $digits='', $length='1', $escape='#', $timeout=15000, $maxLoops=1, $loops=0, $param=array())
 	{

@@ -472,8 +472,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				{
 					case "messages":
 						$data_return = array("status" => true, "i18n" => array(
-							'SETTING_RELOAD_OK'	=> _('Setting Restart Successfully'),
-							'PLAY_FILE_NOT_FOUND'=> _('The following files do not exist:'),
+							'SETTING_RELOAD_OK'			  => _('Setting Restart Successfully'),
+							'PLAY_FILE_NOT_FOUND'		  => _('The following files do not exist:'),
+							'PLAY_FILE_WAIT_PLAYBACK_END' => _('Wait for the current playback to finish.'),
 						));
 						break;
 						

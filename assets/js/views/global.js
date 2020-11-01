@@ -77,3 +77,42 @@ function sleep(ms)
     // Usage: await sleep(10);
     return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+function postSyncMode(send_data={}, timeout, dataType)
+{
+    let data_return = {
+        status  : null,
+        error   : null,
+        getData : {},
+    };
+
+    let ajax_args = {
+        url: window.FreePBX.ajaxurl,
+		async: false,
+		type: 'POST',
+		data: send_data,
+		dataType: dataType,
+		timeout: timeout,
+		success: function(data)
+		{
+            data_return.status  = true;
+            data_return.getData = data;
+		},
+		error: function(data) {
+            data_return.status = false;
+            data_return.error  = data;
+            console.log("ERROR AJAX: " + data);
+		},
+    };
+    
+    if (typeof(dataType) ==! undefined) {
+        ajax_args['dataType'] = dataType;
+    }
+
+    if (typeof(timeout) ==! undefined) {
+        ajax_args['timeout'] = timeout;
+    }
+
+    $.ajax(ajax_args);
+    return data_return;
+}

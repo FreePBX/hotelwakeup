@@ -125,48 +125,57 @@
 
 
 <h2><i class="fa fa-language">&nbsp;</i> Edit Message - <?php echo $language . "(".$lang.")" ?></h2>
-<div class="alert alert-info" role="alert">
-    <h2><?php echo _("Wildcards:") ?></h2>
-    <p><?php  echo _('To add silence between files we will use <b>"silence|xxx"</b>, <b>xxx</b> corresponding to the number of milliseconds we want the silence to last.') ?> </p>
-    <p><?php  echo _('By default when detecting a number "say_number" is used, but if we want to use "say_digits" we will have to use the following format <b>"d|xxxx"</b>, <b>xxx</b> corresponds to the number.') ?> </p>
-    <p><?php  echo _('SayUnixTime|xxxx') ?> </p>
+
+<div class="panel panel-default" id="boxWildcards">
+	<div class="panel-heading collapsed" data-target="#moreinfo" data-toggle="collapse" class="collapsed" aria-expanded="false">
+        <h3 class="panel-title">
+            <i class="fa fa-info fa-fw fa-lg"></i>&nbsp;&nbsp;&nbsp;<?php echo _('Wildcards') ?>
+            <span class="pull-right">
+                <i class="chevron fa fa-fw fa-lg"></i>
+            </span>
+        </h3>
+    </div>
+    <div class="panel-collapse collapse" id="moreinfo" aria-expanded="false" style="height: 0px;">
+        <div class="panel-body ">
+            <p><?php  echo _('To add silence between files we will use <b>"silence|xxx"</b>, <b>xxx</b> corresponding to the number of milliseconds we want the silence to last.') ?> </p>
+            <p><?php  echo _('By default when detecting a number "say_number" is used, but if we want to use "say_digits" we will have to use the following format <b>"d|xxxx"</b>, <b>xxx</b> corresponds to the number.') ?> </p>
+            <p><?php  echo _('SayUnixTime|xxxx') ?> </p>
+        </div>
+    </div>
 </div>
+
+<form id="messageform">
 <div class="display full-border">
     <input id="language" name="language" type="hidden" value="<?php echo $lang ?>">
-    <form id="messageform">
-        <?php
-        foreach($hotelwakeup->getGroupsMessages() as $k => $v)
+    <?php
+    foreach($hotelwakeup->getGroupsMessages() as $k => $v)
+    {
+        if (! array_key_exists($k, $info_grp)) { continue; }
+        $info = $info_grp[$k];
+        echo sprintf('<div class="section-title" data-for="%s"><h3><i class="fa fa-minus fa-fw"></i>&nbsp;%s</h3></div>', $info['id'], $info['label']);
+        echo sprintf('<div class="section" data-id="%s">', $info['id']);
+        foreach($v as $sk)
         {
-            if (! array_key_exists($k, $info_grp)) { continue; }
-            $info = $info_grp[$k];
-            echo sprintf('<div class="section-title" data-for="%s"><h2><i class="fa fa-minus"></i> %s</h2></div>', $info['id'], $info['label']);
-            echo sprintf('<div class="section" data-id="%s">', $info['id']);
-            foreach($v as $sk)
+            $data = array(
+                "hotelwakeup" => $hotelwakeup,
+                'key'         => $sk,
+                'value'       => implode(",", $all_msg[$sk]),
+                'label'       => empty($info_input[$sk]['label']) ? ucfirst($sk) : $info_input[$sk]['label'],
+                'help'        => $info_input[$sk]['help'],
+                'default'     => implode(",", $hotelwakeup->getMessageDefault($sk, true)),
+                'jplayer'     => $info_input[$sk]['play'],
+            );
+            if ($data['value'] == $data['default'])
             {
-                $data = array(
-                    "hotelwakeup" => $hotelwakeup,
-                    'key'         => $sk,
-                    'value'       => implode(",", $all_msg[$sk]),
-                    'label'       => empty($info_input[$sk]['label']) ? ucfirst($sk) : $info_input[$sk]['label'],
-                    'help'        => $info_input[$sk]['help'],
-                    'default'     => implode(",", $hotelwakeup->getMessageDefault($sk, true)),
-                    'jplayer'     => $info_input[$sk]['play'],
-                );
-                if ($data['value'] == $data['default'])
-                {
-                    $data['value'] = '';
-                }
-                echo $hotelwakeup->showPage('settings.message.edit.line', $data);
+                $data['value'] = '';
             }
-            echo '</div>';
-            echo '<br>';
+            echo $hotelwakeup->showPage('settings.message.edit.line', $data);
         }
-        ?>
-    </form>
+        echo '</div>';
+    }
+    ?>
 </div>
-<br><br><br>
-
-
+</form>
 
 <?php
 /*

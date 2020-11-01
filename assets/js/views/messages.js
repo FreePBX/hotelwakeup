@@ -43,8 +43,36 @@ $(document).ready(function()
 	{
 		if (supportedHTML5 == "") { supportedHTML5 = getSupportedHTML5(); }
 		$(this).jPlayer({
-			ready: function(event) {
+			ready: function(event)
+			{
 				$(this).closest(".form-group").find(".btn-cmd-play").removeClass("hidden");
+				setPlayingStatus($(this), "ready");	
+			},
+			error: function (event)
+			{
+				console.log("jplayer: error");
+				console.log(event.jPlayer.error);
+				console.log(event.jPlayer.error.type);
+			},
+			canplay: function(event)
+			{
+				if ( getPlayingStatus($(this)) == "loading" )
+				{
+					$(this).jPlayer("play", 0);
+				}
+			},
+			play: function(event)
+			{
+				$(this).jPlayer("pauseOthers", 0);
+				setPlayingStatus($(this), "playing");
+			},
+			pause: function(event)
+			{
+				setPlayingStatus($(this), "end");
+			},
+			ended: function(event)
+			{
+				setPlayingStatus($(this), "end");
 			},
 			swfPath: window.location.origin + "/admin/assets/js",
 			supplied: supportedHTML5,
@@ -254,8 +282,6 @@ function SayUnixTimeCheck(e)
 		  example_all.push(example);
 	}
 
-	// console.log("Example: " + example_all);
-
 	exico.removeClass("fa-check fa-times fa-spinner fa-spin fa-fw");
 	exbox.removeClass("label-primary label-danger label-success");
 	if (ok)
@@ -277,28 +303,45 @@ function SayUnixTimeCheck(e)
 
 function getSupportedHTML5()
 {
-	let formats = "";
-	$.ajax({
-		async: false,
-		type: 'POST',
-		url: window.FreePBX.ajaxurl,
-		data: {
-			module	 : 'hotelwakeup',
-			command	 : 'getsupportedhtml5',
-		},
-		// dataType: 'json',
-		success: function(data)
-		{
-			if (data.status) {
-				formats = data.data;
-			}
-		},
-		error: function(data) {
-			console.log("AJAX ERROR (getSupportedHTML5): " + data);
-		},
+	let ajaxData = postSyncMode({
+		module	 : 'hotelwakeup',
+		command	 : 'getsupportedhtml5'
 	});
-	return formats;
+	return (ajaxData.status) ? ajaxData.getData.data : "";
 }
+
+function isPlaying()
+{
+	return (getPlaying() == "") ? false : true;
+}
+
+function getPlaying()
+{
+	let data_return = "";
+	$(".jp-jplayer").each( function()
+	{
+		let self = $(this);
+		switch( getPlayingStatus(self) )
+		{
+			case "loading":
+			case "playing":
+				data_return = self.closest(".form-group").find("input").attr('id');
+			break;
+		}
+	});
+	return data_return;
+}
+
+function setPlayingStatus(e, newstatus)
+{
+	$(e).closest(".form-group").find(".btn-cmd-play i").data("playing_status", newstatus);
+}
+
+function getPlayingStatus(e)
+{
+	return $(e).closest(".form-group").find(".btn-cmd-play i").data("playing_status");
+}
+
 
 async function playFile(e)
 {
@@ -309,119 +352,93 @@ async function playFile(e)
 	let btnIco = btn.find("i");
 	let id 	   = input.attr('id');
 	let files  = input.val();
+	let lang   = $("#language").val();
 	if (files == "")
 	{
-		//Set default value
-		files = input.attr('placeholder');
+		files = input.attr('placeholder');	//Used default value
 	}
 	files = files.split(",");
 
-	// $(".btn-cmd-play").addClass("disabled");
-	$(".btn-cmd-play").find("i").removeClass("fa-spinner fa-spin active").addClass("fa-play ");
-	btnIco.toggleClass("fa-play fa-spinner fa-spin");
+	let playing = getPlaying();
+	if (playing != "")
+	{
+		// If playing the process it will skip.
+		if (playing != id ) { fpbxToast(i18n_mod("PLAY_FILE_WAIT_PLAYBACK_END"), '', 'warning' ); }
+		return;
+	}
 
-	let ajaxData = "";
-	let post_data = {
+	btnIco.addClass("active fa-spin");
+
+	let ajaxData = postSyncMode({
 		module	 : 'hotelwakeup',
 		command	 : 'gethtml5',
 		filenames: files,
-		language : $("#language").val(),
-	};
-	$.ajax({
-		async: false,
-		type: 'POST',
-		url: window.FreePBX.ajaxurl,
-		data: post_data,
-		dataType: 'json',
-		timeout: 30000,
-		success: function(data)
-		{
-			ajaxData = data;
-		},
-		error: function(data) {
-			console.log("ERROR AJAX playFile: " + data);
-		},
-	});
+		language : lang,
+	}, 30000, 'json');
 
-	if(ajaxData != "" && ajaxData.status)
+	if(ajaxData.status && ajaxData.getData.status)
 	{
+		let getData = ajaxData.getData;
+
 		let files_error = "";
-		for(var key in ajaxData.files)
+		for(var key in getData.files)
 		{
-			let val = ajaxData.files[key];
-			if (val.type == "file" && val.status == false) {
+			let val = getData.files[key];
+			if (val.type == "file" && val.status == false)
+			{
 				files_error += "<br>" + val.filename;
 			}
 		}
 		if ( files_error != "") { fpbxToast(i18n_mod("PLAY_FILE_NOT_FOUND") + files_error, '', 'error' ); }
 
 
-		player.on($.jPlayer.event.error, function(event) {
-			console.warn(event);
-		});
-		for(var key in ajaxData.files)
+		for(var key in getData.files)
 		{
-			let val = ajaxData.files[key];
-			let file = "";
-			let status = "";
+			let val = getData.files[key];
+			let file = {};
 
-			switch(val.type) {
+			switch(val.type)
+			{
 				case "file":
-					if (val.status == false) {
-						console.log("File not found: " + val.filename)
+					if (val.status == false)
+					{
+						console.warn("File not found: " + val.filename)
 						continue;
 					}
-					file = { oga: val.url };
+					file[val.format] = val.url;
 				break;
 
 				case "option":
-					if (val.key == "silence" ) {
+					if (val.key == "silence" )
+					{
 						await sleep(val.val);
-					} else {
-						console.log("Key Option Unknown! " + val.key)
+					}
+					else
+					{
+						console.warn("Key Option (" + val.key + ") Unknown!")
 					}
 				break;
 
 				default:
-					console.log("Type Unknown! " + val.type);
-					continue;
+					console.warn("Type (" + val.type + ") Unknown!");
+				continue;
 			}
 			
-			if (file != "")
+			if (Object.keys(file).length > 0)
 			{
-				status = "loading";
+				btnIco.data("playing_status", "loading");
 				player.jPlayer("setMedia", file);
-				
-				player.one($.jPlayer.event.canplay, function(event) {
-					status = "play";
-					player.jPlayer("play");
-				});
-				player.on($.jPlayer.event.play, function(event) {
-					status = "play";
-					player.jPlayer("pauseOthers", 0);
-					player.data("playing", true);
-					// btnIco.addClass("active");
-				});
-				player.on($.jPlayer.event.pause, function(event) {
-					status = "end";
-					player.data("playing", false);
-				});
-				player.on($.jPlayer.event.ended, function(event) {
-					status = "end";
-					player.data("playing", false);
-				});
-
-				while ( status != "end" )
+				while ( true )
 				{
-					await sleep(10);
+					if ( btnIco.data("playing_status") == "end" ) { break; }
+					await sleep(100);
 				};
-				player.jPlayer( "clearMedia" );
+				player.jPlayer("clearMedia");
+				btnIco.data("playing_status", "clearend");
 			}
 		}
 	}
 
-	btnIco.removeClass("fa-spinner fa-spin active");
-	btnIco.addClass("fa-play");
-	// $(".btn-cmd-play").removeClass("disabled");
+	btnIco.removeClass("active fa-spin");
 }
 
