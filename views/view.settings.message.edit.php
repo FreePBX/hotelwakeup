@@ -126,13 +126,12 @@
 
 <h2><i class="fa fa-language">&nbsp;</i> Edit Message - <?php echo $language . "(".$lang.")" ?></h2>
 
-<div class="panel panel-default" id="boxWildcards">
+<div class="panel panel-info" id="boxMoreInfo">
 	<div class="panel-heading collapsed" data-target="#moreinfo" data-toggle="collapse" class="collapsed" aria-expanded="false">
         <h3 class="panel-title">
-            <i class="fa fa-info fa-fw fa-lg"></i>&nbsp;&nbsp;&nbsp;<?php echo _('Wildcards') ?>
-            <span class="pull-right">
-                <i class="chevron fa fa-fw fa-lg"></i>
-            </span>
+            <span class="pull-left"><i class="fa fa-info-circle fa-fw fa-lg"></i></span>
+            <?php echo _('Wildcards') ?>
+            <span class="pull-right"><i class="chevron fa fa-fw fa-lg"></i></span>
         </h3>
     </div>
     <div class="panel-collapse collapse" id="moreinfo" aria-expanded="false" style="height: 0px;">

@@ -23,8 +23,16 @@
 	}
 }
 
-#boxWildcards {
+#boxMoreInfo {
 	margin-top: 20px;
+	.panel-heading .panel-title .pull-left {
+		margin-right: 5px;
+	}
+	.panel-heading.collapsed {
+		// fix bottom double edge in the panel-info
+		border-bottom: 0px;
+		border-radius: 4px;
+	}
 	.panel-heading .chevron:after {
 		content: "\f106";	// UP
 	}
