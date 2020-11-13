@@ -12,110 +12,119 @@ include '/etc/freepbx.conf';
 set_time_limit(0);
 error_reporting(0);
 
-// Connect to AGI:
-//
-require_once "phpagi.php";
-$AGI = new AGI();
-$AGI->answer();
-$config = FreePBX::Hotelwakeup()->getSetting();
+require_once "wakeglobal.php";
+$hotelwakeup = new AGI_Hotelwakeup();
+$select_extension = $hotelwakeup->getOriginExtension();
+
 usleep(500);
-$cid = $AGI->parse_callerid();
+$hotelwakeup->sim_playback("welcome");
 
-if($config['operator_mode']) {
-	if(in_array($cid['username'],$config['operator_extensions'])) {
-		$number = sim_background($AGI, "please-enter-the&number&for&your&wakeup-call&then-press-pound","0123456789",$config['extensionlength']);
+if($hotelwakeup->getSetting('operator_mode'))
+{
+	if( in_array($hotelwakeup->getOriginExtension(), $hotelwakeup->getSetting('operator_extensions')))
+	{
+		$select_extension = $hotelwakeup->sim_background("operatorSelectExt", "0123456789", $hotelwakeup->getSetting('extensionlength'));
 
-		if(empty($number) || strlen($number) > $config['extensionlength']) {
-			sim_playback($AGI, "goodbye");
-			$AGI->hangup();
+		//TODO: check if the extension exists
+		if(empty($select_extension) || strlen($select_extension) > $hotelwakeup->getSetting('extensionlength'))
+		{
+			$hotelwakeup->sim_playback("goodbye");
+			$hotelwakeup->hangup();
+			return;
 		}
 
-		$AGI->stream_file("you-entered");
-		$AGI->say_digits($number);
-		wakeupMenu($AGI, $number);
-		return;
+		$params = array(
+			"number" => $select_extension,
+		);
+		$hotelwakeup->sim_playback("operatorEntered", $params);
 	}
 }
+
 //TODO: needs to use AMPUSER through macro-caller-id
-wakeupMenu($AGI, $cid['username']);
+wakeupMenu($select_extension);
+
 
 /**
  * The WakeUp Administration Menu
- * @param  object $AGI    AGI Object
  * @param  string $number The "number" to work with
  */
-function wakeupMenu($AGI, $number) {
-	$lang = $AGI->request['agi_language'];
-	if($lang == 'ja') {
-		$digit = sim_background($AGI, "for-wakeup-call&press-1&list&press-2&pleasepress2","12");
-	}
-	else {
-		$digit = sim_background($AGI, "for-wakeup-call&press-1&list&press-2","12");
-	}
-	switch($digit) {
+function wakeupMenu($number)
+{
+	global $hotelwakeup;
+
+	$digit = $hotelwakeup->sim_background("wakeupMenu", "0123456789", 1);
+	switch($digit)
+	{
 		case 1:
-			wakeupAdd($AGI, $number);
-		break;
+			wakeupAdd($number);
+			break;
+
 		case 2:
-			wakeupList($AGI, $number);
-		break;
+			wakeupList($number);
+			break;
+		
 		default:
-			sim_playback($AGI,"an-error-has-occurred");
-			$AGI->hangup();
-		break;
+			$hotelwakeup->sim_playback("optionInvalid");
+			wakeupMenu($number);
+			break;
 	}
 }
 
 /**
  * Add a wakeup menu
- * @param  object $AGI    The AGI object
  * @param  string $number The "number" to work with
  */
-function wakeupAdd($AGI, $number) {
-	$lang = $AGI->request['agi_language'];
-	if($lang == 'ja') {
-		$time = sim_background($AGI, "wakeup-call&jp-no&time&please-enter-the","0123456789",3);
-	}
-	else {
-		$time = sim_background($AGI, "please-enter-the&time&for&your&wakeup-call","0123456789",3);
-	}
-	if(strlen($time) > 1) {
+function wakeupAdd($number, $retry = 0)
+{
+	global $hotelwakeup;
+
+	$time = $hotelwakeup->sim_background("wakeupAdd", "0123456789", 3);
+	if(strlen($time) > 1)
+	{
 		$last = '';
-		if(strlen($time) < 4) {
-			$ret = $AGI->wait_for_digit(1000);
-			$last = chr($ret['result']);
-			$last = $last != '#' ? $last : '';
+		if(strlen($time) < 4)
+		{
+			$ret = $hotelwakeup->wait_for_digit(1000);
+			if ($ret['result'] > 0)
+			{
+				$last = chr($ret['result']);
+				$last = $last != '#' ? $last : '';
+			}
 		}
 		$times = (string)($time.$last);
 		$time = (int)($time.$last);
 	}
-
 	$times = trim($times);
 	$type = (strlen($times) == 4) ? 24 : 12;
 
-	if($time > 2400) {
-		sim_playback($AGI,"an-error-has-occurred");
-		wakeupMenu($AGI, $number);
+	$needRetrying = false;
+	if (trim($times) == "")
+	{
+		$needRetrying = true;
+	}
+	elseif($time > 2400 || $time < 0)
+	{
+		$needRetrying = true;
+		$hotelwakeup->sim_playback("optionInvalid");
 	}
 
-	switch($type) {
+	switch($type)
+	{
 		case 12:
-			$td = sim_background($AGI, "1-for-am-2-for-pm","12",1);
-			switch($td) {
+			$td = $hotelwakeup->sim_background("wakeupAddType12H", "0123456789", 1);
+			switch($td)
+			{
 				case 1:
-					if($time > 1159) {
-						$time -= 1200;
-					}
+					if($time > 1159) { $time -= 1200; }
 				break;
+				
 				case 2:
-					if($time < 1159) {
-						$time += 1200;
-					}
+					if($time < 1159) { $time += 1200; }
 				break;
+
 				default:
-					sim_playback($AGI,"an-error-has-occurred");
-					$AGI->hangup();
-					return false;
+					$needRetrying = true;
+					$hotelwakeup->sim_playback("optionInvalid");
 				break;
 			}
 		break;
@@ -123,169 +132,92 @@ function wakeupAdd($AGI, $number) {
 		break;
 	}
 
-	$time_wakeup = hotelwakeup_convert_time($time);
-	if($time_wakeup === false) {
-		sim_playback($AGI,"an-error-has-occurred");
-		$AGI->hangup();
+
+	if ($needRetrying)
+	{
+		$retry += 1;
+		if ($retry >= 3)
+		{
+			wakeupMenu($number, $retry);
+		}
+		else
+		{
+			wakeupAdd($number, $retry);
+		}
+		return;
+	}
+
+	$time_wakeup = $hotelwakeup->convert_time($time);
+	if($time_wakeup === false)
+	{
+		$hotelwakeup->sim_playback("error");
+		$hotelwakeup->hangup();
 		return false;
 	}
 
 	$time_now = time();
-	if ($time_wakeup <= $time_now) {
+	if ($time_wakeup <= $time_now)
+	{
 		$time_wakeup += 86400; // Add One Day on
 	}
-	FreePBX::Hotelwakeup()->addWakeup($number,$time_wakeup,$lang);
-	sim_playback($AGI,"wakeup-call&added&digits/at");
-	$time = $time_wakeup;
-	if($lang == 'ja') {
-		$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
-	}
-	else {
-		$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
-	}
-	wakeupMenu($AGI, $number);
+
+	$hotelwakeup->addWakeup($time_wakeup, $number);
+	
+	$param = array("time" => $time_wakeup);
+	$hotelwakeup->sim_playback("wakeupAddOk", $param);
+
+	wakeupMenu($number);
 }
 
 /**
  * List all wakeup calls for said number
- * @param  object $AGI    The AGI Object
- * @param  string $number the "number" to work with
+  * @param  string $number the "number" to work with
  */
-function wakeupList($AGI, $number) {
-	$lang = $AGI->request['agi_language'];
-	$calls = FreePBX::Hotelwakeup()->getAllCalls();
-	$myCalls = array();
-	foreach($calls as $call) {
-		if($call['destination'] == $number) {
-			$myCalls[] = $call;
-		}
-	}
-	if($lang == 'ja') {
-		if(count($myCalls) != 0) {
-			sim_playback($AGI,"wakeup-call&jp-wa");
-			$AGI->say_digits(count($myCalls));
-			sim_playback($AGI,"jp-arimasu");
-		} else {
-			sim_playback($AGI,"wakeup-call&jp-wa");
-			sim_playback($AGI,"jp-arimasen");
-			sleep(1);
-		}
-	}
-	else { //Use English as default
-		sim_playback($AGI,"vm-youhave");
-		$AGI->say_digits(count($myCalls));
-		sim_playback($AGI,"wakeup-call");
-	}
-	foreach($myCalls as $id => $call) {
-		$time = $call['timestamp'];
-		if($lang == 'ja') {
-			$AGI->say_digits($id + 1);
-			sim_playback($AGI,"jp-banme&jp-no");
-			sim_playback($AGI,"wakeup-call");
-			sim_playback($AGI,"jp-wa");
-			$AGI->exec("SayUnixTime \"$time,,BdApIM\"");
-			sleep(1);
-			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
-		}
-		else {
-			sim_playback($AGI,"wakeup-call");
-			sim_playback($AGI,"number");
-			$AGI->say_digits($id + 1);
-			sim_playback($AGI,"digits/at");
-			$AGI->exec("SayUnixTime \"$time,,IMpABd\"");
-			sleep(1);
-			$digit = sim_background($AGI, "to-cancel-wakeup&press-1&list&press-2&menu&press-3","123",1);
-		}
-		switch($digit) {
+function wakeupList($number)
+{
+	global $hotelwakeup;
+	$calls = $hotelwakeup->getAllWakeup($number);
+
+	$param = array(
+		"count" => count($calls)
+	);
+	$hotelwakeup->sim_playback($param['count'] == 0 ? "wakeupListEmpty" : "wakeupList", $param);
+
+	foreach($calls as $id => $call) 
+	{
+		$param = array(
+			"number" => $id + 1,
+			"time" 	 => $call['timestamp'],
+		);
+		$hotelwakeup->sim_playback("wakeupListInfoCall", $param);
+
+		$digit = $hotelwakeup->sim_background("wakeupListMenu", "0123456789", 1);
+		switch($digit)
+		{
 			case 1:
-				FreePBX::Hotelwakeup()->removeWakeup($call['filename']);
-				sim_playback($AGI,"wakeup-call-cancelled");
-				wakeupList($AGI, $number);
+				$hotelwakeup->removeWakeup($call['filename']);
+				$hotelwakeup->sim_playback("wakeupListCancelCall");
+				wakeupList($number);
 				return;
 			break;
+
+			case 2:
+				//Next
+				break;
+
 			case 3:
-				wakeupMenu($AGI, $number);
+				wakeupMenu($number);
+				return;
+			break;
+
+			default:
+			$hotelwakeup->sim_playback("optionInvalid");
+				wakeupList($number);
 				return;
 			break;
 		}
 	}
-	wakeupMenu($AGI, $number);
+	wakeupMenu($number);
 }
 
-/**
- * Simulate playback functionality like the dialplan
- * @param  object $AGI  The AGI Object
- * @param  string $file Audio files combined by/with '&'
- */
-function sim_playback($AGI, $file) {
-	$files = explode('&',$file);
-	foreach($files as $f) {
-		$AGI->stream_file($f);
-	}
-}
 
-/**
- * Simulate background playback with added functionality
- * @param  object  $AGI      The AGI Object
- * @param  string  $file     Audio files combined by/with '&'
- * @param  string  $digits   Allowed digits (if we are prompting for them)
- * @param  string  $length   Length of allowed digits (if we are prompting for them)
- * @param  string  $escape   Escape character to exit
- * @param  integer $timeout  Timeout
- * @param  integer $maxLoops Max timeout loops
- * @param  integer $loops    Total loops
- */
-function sim_background($AGI, $file,$digits='',$length='1',$escape='#',$timeout=15000, $maxLoops=1, $loops=0) {
-	$files = explode('&',$file);
-	$number = '';
-	foreach($files as $f) {
-		$ret = $AGI->stream_file($f,$digits);
-		if($ret['code'] == 200 && $ret['result'] != 0) {
-			$number .= chr($ret['result']);
-		}
-		if(strlen($number) >= $length) {
-			break;
-		}
-	}
-	if(trim($digits) != '' && strlen($number) < $length) {
-		while(strlen($number) < $length && $loops < $maxLoops) {
-			$ret = $AGI->wait_for_digit($timeout);
-			if($loops > 0) {
-				sim_playback($AGI, "please-try-again");
-			}
-			if($ret['code'] == 200 && $ret['result'] == 0) {
-				sim_playback($AGI, "you-entered&bad&digits");
-			} elseif($ret['code'] == 200) {
-				$digit = chr($ret['result']);
-				if($digit == $escape) {
-					break;
-				}
-				if(strpos($digits,$digit) !== false) {
-					$number .= $digit;
-					continue; //dont count loops as we are good
-				} else {
-					sim_playback($AGI,"you-entered&bad&digits");
-				}
-			} else {
-				sim_playback($AGI,"an-error-has-occurred");
-			}
-			$loops++;
-		}
-	}
-	$number = trim($number);
-	return $number;
-}
-
-function hotelwakeup_convert_time($time) {
-	$w = getdate();
-	if(strlen($time) == 4) { //0130
-		$time_wakeup = mktime( substr( $time, 0, 2 ), substr( $time, 2, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	} elseif(strlen($time) == 3) { //130
-		$time_wakeup = mktime( substr( $time, 0, 1 ), substr( $time, 1, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	} elseif(strlen($time) == 2) { //30. EG 0030
-		$time_wakeup = mktime( 0, substr( $time, 0, 2 ), 0, $w['mon'], $w['mday'], $w['year'] );
-	} else {
-		return false;
-	}
-	return $time_wakeup;
-}
