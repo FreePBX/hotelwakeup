@@ -1,7 +1,39 @@
+//@import (less) 'assets/css/font-awesome.min-4.7.0.css';
+
 #servertime {
 	display: inline-block;
 	font-weight: bold;
 	span {
 		font-weight: normal;
 	}
+}
+
+#messageform {
+	margin-bottom: 55px;
+	.btn-cmd-play {
+		width: 70px;
+		.play.active:before {
+			content: "\f110";
+		}
+		.fa {
+			cursor: pointer;
+			font-size: 150%;
+		}
+	}
+	.section {
+		margin: 5px 25px 20px 25px;
+	}
+}
+
+.panel-help {
+	margin-top: 20px;
+	// .panel-heading .chevron {
+	// 	.fa-lg;
+	// }
+	// .panel-heading .chevron:after {
+	// 	content: "\f106" !important;	// UP
+	// }
+	// .panel-heading.collapsed .chevron:after {
+	// 	content: "\f107" !important;   // DOWN
+	// }
 }

@@ -5,7 +5,7 @@ class Backup Extends Base\BackupBase{
 	public function runBackup($id,$transaction){
 		$configs = [
 				'config' => $this->FreePBX->Hotelwakeup->getSetting(),
-				'calls' => $this->FreePBX->Hotelwakeup->getAllCalls(),
+				'calls' => $this->FreePBX->Hotelwakeup->getAllWakeup(),
 				'features' => $this->dumpFeatureCodes()
 		];
 		$this->addDependency('ivr');
