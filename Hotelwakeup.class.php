@@ -868,10 +868,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 
 	public function addWakeup($destination, $time, $lang) {
-		$date = $this->getSetting();  // module config provided by user
+		$data = $this->getSetting();  // module config provided by user
 		if(empty($lang))
 		{
-			$lang = $date['language'];
+			$lang = isset($data['language']) ? $data['language'] : '';
 			if (empty($lang))
 			{
 				//if no language has been configured, the system language is used
@@ -882,12 +882,12 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			"time"			=> $time,
 			"ext"			=> $destination,
 			"language"		=> $lang,
-			"maxretries"	=> $date['maxretries'],
-			"retrytime"		=> $date['retrytime'],
-			"waittime"		=> $date['waittime'],
-			"callerid"		=> $date['cnam']." <".$date['cid'].">",
-			"application"	=> $date['application'],
-			"data"			=> $date['data'],
+			"maxretries"	=> $data['maxretries'],
+			"retrytime"		=> $data['retrytime'],
+			"waittime"		=> $data['waittime'],
+			"callerid"		=> $data['cnam']." <".$data['cid'].">",
+			"application"	=> $data['application'],
+			"data"			=> $data['data'],
 			"AlwaysDelete"	=> "Yes",
 			"Archive"		=> "Yes"
 		));
