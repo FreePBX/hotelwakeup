@@ -867,17 +867,14 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 
-	public function addWakeup($destination, $time, $lang) {
-		$data = $this->getSetting();  // module config provided by user
+	public function addWakeup($destination, $time, $lang)
+	{
 		if(empty($lang))
 		{
-			$lang = isset($data['language']) ? $data['language'] : '';
-			if (empty($lang))
-			{
-				//if no language has been configured, the system language is used
-				$lang = $this->FreePBX->Config->get("UIDEFAULTLANG");
-			}
+			$lang = $this->getLanguage();
 		}
+		
+		$data = $this->getSetting();  // module config provided by user
 		$this->generateCallFile(array(
 			"time"			=> $time,
 			"ext"			=> $destination,
@@ -1343,6 +1340,27 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 
 
+	public function getLanguage()
+	{
+		//get the language configured in the hotelwkeup module
+		$data = $this->getSetting();
+		$lang = isset($data['language']) ? $data['language'] : '';
+
+		if (empty($lang))
+		{
+			//If no language is detected, the language configured in the 
+			//soundlang module will be used 
+			$lang = $this->getLanguageSoundlang();
+		}
+		if (empty($lang))
+		{
+			//If no language is detected, the language configured in the 
+			//general configuration of freepbx will be used. 
+			$lang = $this->FreePBX->Config->get("UIDEFAULTLANG");
+		}
+		return $lang;
+	}
+
 	public function isLanguagesAvailable($lang)
 	{
 		return array_key_exists($lang, $this->getLanguages());
@@ -1394,6 +1412,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	public function getLanguages()
 	{
 		return $this->Soundlang->getLanguages();
+	}
+
+	public function getLanguageSoundlang()
+	{
+		return $this->Soundlang->getLanguage();
 	}
 
 	public function fileStatus($file) 
