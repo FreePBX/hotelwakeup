@@ -744,10 +744,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 						"requiered" => true,
 						"type" 		=> "numeric"
 					),
-					"language" => array(
-						"requiered" => false,
-						"type" 		=> "string"
-					),
 				);
 				$new_options = array();
 				$missing_options = array();
@@ -1342,16 +1338,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function getLanguage()
 	{
-		//get the language configured in the hotelwkeup module
-		$data = $this->getSetting();
-		$lang = isset($data['language']) ? $data['language'] : '';
+		//the language configured in the soundlang module will be used
+		$lang = $this->getLanguageSoundlang();
 
-		if (empty($lang))
-		{
-			//If no language is detected, the language configured in the 
-			//soundlang module will be used 
-			$lang = $this->getLanguageSoundlang();
-		}
 		if (empty($lang))
 		{
 			//If no language is detected, the language configured in the 

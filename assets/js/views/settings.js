@@ -51,7 +51,6 @@ function loadSettings(e)
 				"maxretries",
 			];
 
-			$('#language').multiselect('select', config.language);
 			$("#operator_mode_" + config.operator_mode).prop('checked', true);
 			input_list.forEach(element => $("#" + element).val(config[element]));
 			autosize.update($("#operator_extensions"));
@@ -80,7 +79,6 @@ function saveSettings(e)
 		waittime			: $("#waittime").val(),
 		retrytime			: $("#retrytime").val(),
 		maxretries			: $("#maxretries").val(),
-		language			: $("#language").val(),
 	};
 	disabledSettings(true);
 	$.post(window.FreePBX.ajaxurl, post_data, function(data) 
@@ -140,5 +138,4 @@ function disabledSettings(new_status)
 		"#maxretries",
 	];
 	input_list.forEach(element => $(element).prop("disabled", new_status));
-	$('#language').multiselect( new_status ? "disable" : "enable");
 }
