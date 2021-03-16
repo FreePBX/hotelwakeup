@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-18 11:25+0530\n"
+"POT-Creation-Date: 2021-03-16 12:34+0000\n"
 "PO-Revision-Date: 2016-10-08 12:16+0200\n"
 "Last-Translator: psdk <hyavari26@gmail.com>\n"
 "Language-Team: Persian (Iran) <http://weblate.freepbx.org/projects/freepbx/"
@@ -21,19 +21,38 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.4\n"
 
-#: page.hotelwakeup.php:241
-msgid "<b>System time:</b> "
-msgstr "<b>ساعت سیستم:</b> "
+#: Hotelwakeup.class.php:488
+#, php-format
+msgid "%s can not be blank."
+msgstr ""
 
-#: views/grid.php:32
+#: Hotelwakeup.class.php:489
+#, php-format
+msgid "%s only allow numbers."
+msgstr ""
+
+#: views/view.settings.message.edit.php:64
+msgid "Accessing Extension"
+msgstr ""
+
+#: views/view.settings.message.list.php:25
+msgid "Action"
+msgstr ""
+
+#: views/page.settings.php:58
+#, php-format
+msgid "Action Not Found (%s)!!!!"
+msgstr ""
+
+#: views/view.wakeup.grid.php:29
 msgid "Actions"
 msgstr "عملیات"
 
-#: views/grid.php:19
+#: views/view.wakeup.grid.php:4
 msgid "Add"
 msgstr "افزودن"
 
-#: views/grid.php:220
+#: views/view.wakeup.grid.php:38
 msgid "Add new Wakeup Call"
 msgstr "افزودن تماس بیدارباش جدید"
 
@@ -41,11 +60,14 @@ msgstr "افزودن تماس بیدارباش جدید"
 msgid "Applications"
 msgstr "برنامه ها"
 
-#: views/grid.php:12
-msgid "Call List"
-msgstr "فهرست تماس"
+#: views/view.settings.message.edit.php:126
+msgid ""
+"By default when detecting a number \"say_number\" is used, but if we want to "
+"use \"say_digits\" we will have to use the following format <b>\"d|xxxx\"</"
+"b>, <b>xxx</b> corresponds to the number."
+msgstr ""
 
-#: views/grid.php:208
+#: views/view.settings.settings.php:190
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -55,7 +77,27 @@ msgstr ""
 "b>. You can also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide "
 "the CallerID sent out over Digital lines if supported (E1/T1/J1/BRI/SIP/IAX)"
 
-#: Hotelwakeup.class.php:110
+#: views/view.wakeup.grid.create.php:82
+msgid "Calling language"
+msgstr ""
+
+#: views/view.wakeup.grid.php:44
+msgid "Cancel"
+msgstr ""
+
+#: Hotelwakeup.class.php:689
+msgid "Cannot delete the call, due to insufficient data!"
+msgstr ""
+
+#: Hotelwakeup.class.php:670
+msgid "Cannot get info the call, due to insufficient data!"
+msgstr ""
+
+#: Hotelwakeup.class.php:677
+msgid "Cannot get info the call, due to not exist the call!"
+msgstr ""
+
+#: Hotelwakeup.class.php:657
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -64,116 +106,362 @@ msgstr ""
 "Cannot schedule  the call the scheduled time is in the past. [Time now: %s] "
 "[Wakeup Time: %s]"
 
-#: Hotelwakeup.class.php:98
-msgid "Cannot schedule the call, due to insufficient data"
-msgstr "امکان زمانبندی تماس وجود ندارد،با توجه به اطلاعات ناکافی"
+#: Hotelwakeup.class.php:645
+msgid "Cannot schedule the call, due to insufficient data!"
+msgstr ""
 
-#: views/grid.php:291
-msgid "Close"
-msgstr "بستن"
+#: views/view.settings.message.edit.line.php:57
+msgid "Checking..."
+msgstr ""
 
-#: views/grid.php:30
+#: Hotelwakeup.class.php:606
+msgid "Command not found!"
+msgstr ""
+
+#: views/view.settings.message.edit.php:18
+msgid "Confirmation Call"
+msgstr ""
+
+#: views/view.settings.message.edit.php:119
+msgid "Confirmation of Wake-Up Call Delay"
+msgstr ""
+
+#: views/view.settings.message.edit.php:74
+msgid "Create"
+msgstr ""
+
+#: views/view.wakeup.grid.php:45
+msgid "Create Call"
+msgstr ""
+
+#: views/view.wakeup.grid.php:26
 msgid "Date"
 msgstr "تاریخ"
 
-#: views/grid.php:272
+#: views/view.wakeup.grid.create.php:50
 msgid "Day"
 msgstr "روز"
 
-#: assets/js/hotelwakeup.js:34
+#: assets/js/views/wakeup.js:44
 msgid "Day can not be blank"
 msgstr "روز نمیتواند خالی باشد"
 
-#: views/grid.php:282
+#: views/view.wakeup.grid.create.php:60
 msgid "Day to call"
 msgstr "روز برای تماس"
 
-#: views/grid.php:31 views/grid.php:232
+#: views/view.settings.message.list.php:24
+msgid "Description"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:10 views/view.wakeup.grid.php:27
 msgid "Destination"
 msgstr "مقصد"
 
-#: assets/js/hotelwakeup.js:26
+#: assets/js/views/wakeup.js:36
 msgid "Destination can not be blank"
 msgstr "مقصد نمیتواند خالی باشد"
 
-#: views/grid.php:242
+#: views/view.wakeup.grid.create.php:20
 msgid "Destination to call"
 msgstr "مقصد تماس"
 
-#: views/grid.php:112
+#: views/view.settings.message.edit.php:94
+msgid "Empty Wake Up Call List"
+msgstr ""
+
+#: views/view.settings.settings.php:82
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
-"\"Operator\".  Operator extensions are allowed to create wakeup calls for "
-"any valid destination. Numbers can be extension numbers, full caller ID "
-"numbers or Asterisk dialing patterns"
+"\"Operator\" (separating them with commas ###,###). Operator extensions are "
+"allowed to create wakeup calls for any valid destination. Numbers can be "
+"extension numbers, full caller ID numbers or Asterisk dialing patterns"
 msgstr ""
-"Enter the Caller IDs of each  telephone you wish to be recognized as an "
-"\"Operator\".  Operator extensions are allowed to create wakeup calls for "
-"any valid destination. Numbers can be extension numbers, full caller ID "
-"numbers or Asterisk dialing patterns"
+
+#: Hotelwakeup.class.php:494
+msgid "File not found!"
+msgstr ""
 
 #: hotelwakeup.i18n.php:8
 msgid "FreePBX module for generating reminder and wakeup calls"
 msgstr "ماژول FreePBX برای ایجاد تماسهای بیدارباش و یادآوری"
 
-#: views/grid.php:75
+#: views/view.settings.message.edit.php:6
+msgid "Gloabl"
+msgstr ""
+
+#: views/page.settings.php:64 views/page.wakeup.php:1
+msgid "Hotel Style Wakeup Calls"
+msgstr ""
+
+#: views/view.settings.message.edit.php:54
+msgid "Invalid Dialing"
+msgstr ""
+
+#: views/view.settings.message.edit.php:49
+msgid "Invalid Option"
+msgstr ""
+
+#: Hotelwakeup.class.php:860
+msgid "Invalid action!"
+msgstr ""
+
+#: views/view.settings.message.list.php:23 views/view.wakeup.grid.create.php:70
+#: views/view.wakeup.grid.php:28
+msgid "Language"
+msgstr ""
+
+#: Hotelwakeup.class.php:483 views/view.settings.settings.php:42
 msgid "Max Destination Length"
 msgstr "بیشترین طول مقصد"
 
-#: views/grid.php:171
+#: Hotelwakeup.class.php:486 views/view.settings.settings.php:150
 msgid "Max Retries"
 msgstr "حداکثر تلاش مجدد"
 
-#: views/grid.php:54
+#: views/view.settings.message.list.php:8
+msgid "Message Settings"
+msgstr ""
+
+#: views/view.settings.message.edit.php:60
+msgid "Message asking the operator for the extension number."
+msgstr ""
+
+#: views/view.settings.message.edit.php:120
+msgid ""
+"Message confirming that the wake-up call will be repeated in {delay} minutes."
+msgstr ""
+
+#: views/view.settings.message.edit.php:110
+msgid "Message informing that the wake-up call has been canceled."
+msgstr ""
+
+#: views/view.settings.message.edit.php:85
+msgid ""
+"Message informing that the wake-up call has been created successfully "
+"({time})."
+msgstr ""
+
+#: views/view.settings.message.edit.php:95
+msgid "Message informing you that you have no wake-up call created."
+msgstr ""
+
+#: views/view.settings.message.edit.php:75
+msgid "Message requesting the data to create the wake-up call."
+msgstr ""
+
+#: Hotelwakeup.class.php:850
+msgid "Message setting cleared successfully"
+msgstr ""
+
+#: Hotelwakeup.class.php:809
+msgid "Message setting loaded successfully"
+msgstr ""
+
+#: Hotelwakeup.class.php:831
+msgid "Message setting update successfully"
+msgstr ""
+
+#: views/view.settings.message.edit.php:80
+msgid ""
+"Message that asks us if the time entered is AM (press key 1) or PM (press "
+"key 2)."
+msgstr ""
+
+#: views/view.settings.message.edit.php:105
+msgid ""
+"Message that asks us what we want to do after giving us the information of "
+"the call. <br> Press 1 to cancel the call, press 2 to continue with the next "
+"call or press 3 to go to the menu."
+msgstr ""
+
+#: views/view.settings.message.edit.php:115
+msgid ""
+"Message that does not request if we want you to repeat the call in 5, 10 or "
+"15 minutes."
+msgstr ""
+
+#: views/view.settings.message.edit.php:50
+msgid "Message that informs that the selected operation is invalid."
+msgstr ""
+
+#: views/view.settings.message.edit.php:90
+msgid ""
+"Message that informs the number of wake-up calls ({count}) that it has "
+"created."
+msgstr ""
+
+#: views/view.settings.message.edit.php:65
+msgid ""
+"Message that informs the operator of the extension ({num}) in which you are "
+"accessing."
+msgstr ""
+
+#: views/view.settings.message.edit.php:100
+msgid ""
+"Message that informs us of the details of each wake-up call that is created, "
+"when we click on the list option. <br> Available values: {number} for the "
+"number occupied by the call in the list and {time} for the date and time of "
+"the call."
+msgstr ""
+
+#: views/view.settings.message.edit.php:45
+msgid "Message to inform that you retry the operation."
+msgstr ""
+
+#: views/view.settings.message.edit.php:40
+msgid "Message when an error occurs."
+msgstr ""
+
+#: views/view.settings.message.edit.php:55
+msgid "Message when dialing invalid digits."
+msgstr ""
+
+#: views/rnav.php:11
+msgid "Messages"
+msgstr ""
+
+#: views/view.settings.settings.php:18
 msgid "No"
 msgstr "خیر"
 
-#: views/grid.php:23
+#: Hotelwakeup.class.php:616
+msgid "No language has been specified!"
+msgstr ""
+
+#: Hotelwakeup.class.php:624
+msgid "No message specified!"
+msgstr ""
+
+#: assets/js/views/global.js:57
+msgid "Not found in i18n!"
+msgstr ""
+
+#: views/view.wakeup.grid.php:9
 msgid "Not received"
 msgstr "دریافت نشده"
 
-#: views/grid.php:99
+#: views/view.settings.message.edit.php:89
+msgid "Number of Wake Up Calls in List"
+msgstr ""
+
+#: views/view.settings.message.edit.php:10
+msgid "Operator"
+msgstr ""
+
+#: views/view.settings.settings.php:69
 msgid "Operator Extensions"
 msgstr "داخلی های اپراتور"
 
-#: views/grid.php:46
+#: views/view.settings.settings.php:10
 msgid "Operator Mode"
 msgstr "حالت اپراتور"
 
-#: Hotelwakeup.class.php:64
-msgid "Reset"
-msgstr "بازنشانی"
+#: views/page.settings.php:52
+#, php-format
+msgid "Option Not Found (%s)!!!!"
+msgstr ""
+
+#: views/view.settings.message.edit.php:69
+msgid "Options Menu"
+msgstr ""
+
+#: views/view.settings.message.edit.php:104
+msgid "Options Menu in List of Created Wake-Up Calls"
+msgstr ""
+
+#: Hotelwakeup.class.php:934
+#, php-format
+msgid "Page Not Found (%s)!!!!"
+msgstr ""
+
+#: Hotelwakeup.class.php:181
+#, php-format
+msgid "Path name (%s) not supported!"
+msgstr ""
+
+#: Api/Rest/Hotelwakeup.php:12
+msgid "Read Wake Up Call settings"
+msgstr ""
+
+#: Hotelwakeup.class.php:267
+msgid "Reload"
+msgstr ""
 
 #: Restore.php:17
 #, php-format
 msgid "Restoring destination : %s"
 msgstr ""
 
-#: views/grid.php:147
+#: Hotelwakeup.class.php:485 views/view.settings.settings.php:123
 msgid "Retry Time"
 msgstr "زمان تلاش مجدد"
 
-#: views/grid.php:123
+#: Hotelwakeup.class.php:484 views/view.settings.settings.php:96
 msgid "Ring Time"
 msgstr "زمان زنگ"
 
-#: views/grid.php:292
-msgid "Save changes"
-msgstr "ذخیره تغییرات"
+#: Hotelwakeup.class.php:262
+msgid "Save"
+msgstr ""
 
-#: views/grid.php:22
+#: Hotelwakeup.class.php:792
+msgid "Save failed, invalid values!"
+msgstr ""
+
+#: Hotelwakeup.class.php:797
+msgid "Save failed, missing parameters!"
+msgstr ""
+
+#: views/view.settings.message.edit.php:127
+msgid "SayUnixTime|xxxx"
+msgstr ""
+
+#: views/view.settings.message.edit.php:59
+msgid "Select Extension"
+msgstr ""
+
+#: Hotelwakeup.class.php:1368
+msgid "Select a Language"
+msgstr ""
+
+#: views/view.wakeup.grid.php:8
 msgid "Server time"
 msgstr "ساعت سرور"
 
-#: views/grid.php:13
+#: Hotelwakeup.class.php:475
+msgid "Setting Restart Successfully"
+msgstr ""
+
+#: views/rnav.php:6
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: Hotelwakeup.class.php:70
-msgid "Submit"
-msgstr "ثبت"
+#: Hotelwakeup.class.php:708
+msgid "Settings loaded successfully"
+msgstr ""
 
-#: views/grid.php:184
+#: Hotelwakeup.class.php:788
+msgid "Settings saved successfully"
+msgstr ""
+
+#: views/view.settings.message.edit.php:114
+msgid "Snooze Wake-Up Call"
+msgstr ""
+
+#: views/view.settings.message.list.php:3
+msgid "Sound Languages"
+msgstr ""
+
+#: views/view.settings.message.edit.php:84
+msgid "Successfully Created"
+msgstr ""
+
+#: Hotelwakeup.class.php:476
+msgid "The following files do not exist:"
+msgstr ""
+
+#: views/view.settings.settings.php:163
 msgid ""
 "The maximum number of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
@@ -181,7 +469,7 @@ msgstr ""
 "The maximum number  of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
 
-#: views/grid.php:136
+#: views/view.settings.settings.php:109
 msgid ""
 "The number of seconds for the phone to ring. Consider setting lower than the "
 "voicemail threshold or the wakeup call can end up going to voicemail"
@@ -189,7 +477,7 @@ msgstr ""
 "The number of seconds  for the phone to ring. Consider setting lower than "
 "the voicemail threshold or the wakeup call can end up going to voicemail"
 
-#: views/grid.php:160
+#: views/view.settings.settings.php:136
 msgid ""
 "The number of seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
@@ -197,7 +485,15 @@ msgstr ""
 "The number of  seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
 
-#: views/grid.php:88
+#: Hotelwakeup.class.php:620
+msgid "The specified language is not available!"
+msgstr ""
+
+#: Hotelwakeup.class.php:629
+msgid "The specified message does not exist!"
+msgstr ""
+
+#: views/view.settings.settings.php:55
 msgid ""
 "This controls the maximum number of digits an operator can send a wakeup "
 "call to. Set to 10 or 11 to allow wake up calls to outside numbers"
@@ -205,34 +501,57 @@ msgstr ""
 "This controls the  maximum number of digits an operator can send a wakeup "
 "call to. Set to 10 or 11 to allow wake up calls to outside numbers"
 
-#: page.hotelwakeup.php:292
-msgid ""
-"This section will be removed from this time group and all current settings "
-"including changes will be updated. OK to proceed?"
-msgstr "این بخش از گروه زمانی و تمامی تنظیمات حذف می شود. ادامه می دهید؟"
-
-#: views/grid.php:29 views/grid.php:252
+#: views/view.wakeup.grid.create.php:30 views/view.wakeup.grid.php:25
 msgid "Time"
 msgstr "ساعت"
 
-#: assets/js/hotelwakeup.js:30
+#: assets/js/views/wakeup.js:40
 msgid "Time can not be blank"
 msgstr "زمان نمیتواند خالی باشد"
 
-#: views/grid.php:262
+#: views/view.wakeup.grid.create.php:40
 msgid "Time to call"
 msgstr "ساعت تماس"
 
-#: views/grid.php:195
+#: views/view.settings.message.edit.php:125
+msgid ""
+"To add silence between files we will use <b>\"silence|xxx\"</b>, <b>xxx</b> "
+"corresponding to the number of milliseconds we want the silence to last."
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:74
+msgid "Use Default Language"
+msgstr ""
+
+#: Hotelwakeup.class.php:477
+msgid "Wait for the current playback to finish."
+msgstr ""
+
+#: views/view.settings.message.edit.php:109
+msgid "Wake Up Call Canceled"
+msgstr ""
+
+#: views/view.settings.message.edit.php:14
+msgid "Wake Up Call Creation"
+msgstr ""
+
+#: views/view.settings.message.edit.php:99
+msgid "Wake Up Call Information"
+msgstr ""
+
+#: Hotelwakeup.class.php:487 views/view.settings.settings.php:177
 msgid "Wake Up Caller ID"
 msgstr "شناسه تماس گیرنده بیدارباش"
 
-#: Hotelwakeup.class.php:162 hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10
-#: hotelwakeup.i18n.php:12
+#: hotelwakeup.i18n.php:4 hotelwakeup.i18n.php:10 hotelwakeup.i18n.php:14
 msgid "Wake Up Calls"
 msgstr "تماسهای بیدارباش"
 
-#: views/grid.php:8
+#: hotelwakeup.i18n.php:12
+msgid "Wake Up Calls Settings"
+msgstr ""
+
+#: views/page.wakeup.php:6
 #, php-format
 msgid ""
 "Wake Up calls can be used to schedule a reminder or wakeup call to any valid "
@@ -241,11 +560,30 @@ msgstr ""
 "Wake Up calls can be used to schedule a reminder or wakeup call to any valid "
 "destination. To  schedule a call, dial %s or use the form below"
 
-#: views/grid.php:4
+#: Hotelwakeup.class.php:695
+msgid "Wake up call does not exist!"
+msgstr ""
+
+#: views/view.settings.message.edit.php:70
+msgid ""
+"Wake up call service menu options message. Key 1 to create call and key 2 "
+"for list of created calls."
+msgstr ""
+
+#: views/page.settings.php:32
+msgid "Warning: No language has been specified!"
+msgstr ""
+
+#: views/page.settings.php:37
+#, php-format
+msgid "Warning: The language (%s) is not installed!"
+msgstr ""
+
+#: views/page.wakeup.php:6
 msgid "What is Hotel Style Wakeup Calls?"
 msgstr "روش تماسهای بیدارباش هتل به چه صورت است؟"
 
-#: views/grid.php:64
+#: views/view.settings.settings.php:28
 msgid ""
 "When Operator Mode is enabled it will allow designated extentions to create "
 "wake up calls for any valid destination. If disabled calls can only be "
@@ -255,9 +593,61 @@ msgstr ""
 "wake up calls for any valid destination. If disabled calls can only be "
 "placed back to the caller ID of the user scheduling the wakeup call"
 
-#: views/grid.php:52
+#: views/view.settings.message.edit.php:133
+msgid "Wildcards"
+msgstr ""
+
+#: Api/Rest/Hotelwakeup.php:15
+msgid "Write Wake Up Call settings"
+msgstr ""
+
+#: views/view.settings.settings.php:16
 msgid "Yes"
 msgstr "بله"
+
+#: views/view.settings.message.list.php:3
+#, php-format
+msgid ""
+"You have no sound packages installed in the %s module. Please install at "
+"least one language to use System Recordings"
+msgstr ""
+
+#~ msgid "<b>System time:</b> "
+#~ msgstr "<b>ساعت سیستم:</b> "
+
+#~ msgid "Call List"
+#~ msgstr "فهرست تماس"
+
+#~ msgid "Cannot schedule the call, due to insufficient data"
+#~ msgstr "امکان زمانبندی تماس وجود ندارد،با توجه به اطلاعات ناکافی"
+
+#~ msgid "Close"
+#~ msgstr "بستن"
+
+#~ msgid ""
+#~ "Enter the Caller IDs of each telephone you wish to be recognized as an "
+#~ "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
+#~ "any valid destination. Numbers can be extension numbers, full caller ID "
+#~ "numbers or Asterisk dialing patterns"
+#~ msgstr ""
+#~ "Enter the Caller IDs of each  telephone you wish to be recognized as an "
+#~ "\"Operator\".  Operator extensions are allowed to create wakeup calls for "
+#~ "any valid destination. Numbers can be extension numbers, full caller ID "
+#~ "numbers or Asterisk dialing patterns"
+
+#~ msgid "Reset"
+#~ msgstr "بازنشانی"
+
+#~ msgid "Save changes"
+#~ msgstr "ذخیره تغییرات"
+
+#~ msgid "Submit"
+#~ msgstr "ثبت"
+
+#~ msgid ""
+#~ "This section will be removed from this time group and all current "
+#~ "settings including changes will be updated. OK to proceed?"
+#~ msgstr "این بخش از گروه زمانی و تمامی تنظیمات حذف می شود. ادامه می دهید؟"
 
 #~ msgid "Delete"
 #~ msgstr "حذف"
