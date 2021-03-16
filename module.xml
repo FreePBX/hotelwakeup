@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>15.0.5.5</version>
+	<version>16.0.1</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,15 +10,7 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://wiki.freepbx.org/display/F2/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
-		*15.0.5.5* Packaging of ver 15.0.5.5
-		*15.0.5.4* Related to FREEPBX-20414: removed $jobid from runRestore() 
-		*15.0.5.3* FREEPBX-20092 Wakeup Calls entries flushed while doing backup restore 
-		*15.0.5.2* FREEPBX-19870 
-		*15.0.5* fixing legacy restore
-		*15.0.4* fixing legacy restore
-		*15.0.3* FREEPBX-18363 Removing Bulk Delete button broken under wakeup calls
-		*15.0.2* Packaging of ver 15.0.2
-		*15.0.1* Add Backup 15.0
+		*16.0.1* 16.0 
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
@@ -47,6 +39,6 @@
 		<module>recordings</module>
 	</depends>
 	<supported>
-		<version>15.0</version>
+		<version>16.0</version>
 	</supported>
 </module>
