@@ -247,7 +247,8 @@ class AGI_Hotelwakeup
 			if ( $find[0] == "SayUnixTime")
 			{
 				$SayUnixTimeFormat = $this->getMessage("SayUnixTime")[0];
-				$this->AGI->exec( sprintf('SayUnixTime "%s,,%s"', $find[1], $SayUnixTimeFormat) );
+				$cmd = sprintf('SayUnixTime "%s,,%s"', $find[1], $SayUnixTimeFormat);
+				$this->AGI->exec($cmd, array());
 				return true;
 			}
 		}
