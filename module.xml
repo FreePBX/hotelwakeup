@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>16.0.1</version>
+	<version>16.0.2</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,7 +10,8 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://wiki.freepbx.org/display/F2/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
-		*16.0.1* 16.0 
+		*16.0.2* FREEPBX-23261: Fix crash to exec 
+		*16.0.1* 16.0
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
