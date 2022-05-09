@@ -4,8 +4,8 @@
 			<div class="element-container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="row">
-							<div class="form-group">
+						<div class="">
+							<div class="row form-group">
 								<div class="col-md-3">
 									<label class="control-label" for="destination"><?php echo _('Destination')?></label>
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="destination"></i>
@@ -24,8 +24,8 @@
 			<div class="element-container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="row">
-							<div class="form-group">
+						<div class="">
+							<div class="row form-group">
 								<div class="col-md-3">
 									<label class="control-label" for="time"><?php echo _('Time')?></label>
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="time"></i>
@@ -44,8 +44,8 @@
 			<div class="element-container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="row">
-							<div class="form-group">
+						<div class="">
+							<div class="row form-group">
 								<div class="col-md-3">
 									<label class="control-label" for="day"><?php echo _('Day')?></label>
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="day"></i>
@@ -64,8 +64,8 @@
 			<div class="element-container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="row">
-							<div class="form-group">
+						<div class="">
+							<div class="row form-group">
 								<div class="col-md-3">
 									<label class="control-label" for="setlanguage"><?php echo _('Language')?></label>
 									<i class="fa fa-question-circle fpbx-help-icon" data-for="setlanguage"></i>
