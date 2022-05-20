@@ -15,7 +15,6 @@
     );
 ?>
 
-<br>
 <div class="list-group">
 <?php
     $template = '<a href="?display=%s&amp;action=%s" class="list-group-item %s"><i class="fa %s">&nbsp;&nbsp;</i>%s</a>';
