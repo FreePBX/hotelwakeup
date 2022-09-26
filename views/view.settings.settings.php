@@ -4,8 +4,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="operator_mode"><?php echo _('Operator Mode')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="operator_mode"></i>
@@ -36,8 +36,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="extensionlength"><?php echo _('Max Destination Length')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="extensionlength"></i>
@@ -63,8 +63,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="operator_extensions"><?php echo _('Operator Extensions')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="operator_extensions"></i>
@@ -90,8 +90,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="waittime"><?php echo _('Ring Time')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="waittime"></i>
@@ -117,8 +117,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="retrytime"><?php echo _('Retry Time')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="retrytime"></i>
@@ -144,8 +144,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="maxretries"><?php echo _('Max Retries')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="maxretries"></i>
@@ -171,8 +171,8 @@
         <div class="element-container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="">
-                        <div class="row form-group">
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="callerid"><?php echo _('Wake Up Caller ID')?></label>
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="callerid"></i>

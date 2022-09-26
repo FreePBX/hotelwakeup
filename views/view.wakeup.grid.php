@@ -32,7 +32,7 @@
 </table>
 
 <div class="modal fade" id="dlgCreateCall" tabindex="-1" role="dialog" aria-labelledby="dlgCreateCallLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="dlgCreateCallLabel"><?php echo _('Add new Wakeup Call')?></h4>
