@@ -40,7 +40,7 @@ if($hotelwakeup->getSetting('operator_mode'))
 	}
 }
 
-//TODO: needs to use AMPUSER through macro-caller-id
+//TODO: needs to use AMPUSER through sub-caller-id
 wakeupMenu($select_extension);
 
 
