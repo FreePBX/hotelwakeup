@@ -5,7 +5,10 @@ use FreePBX_Helpers;
 use PDO;
 
 class Hotelwakeup extends FreePBX_Helpers implements BMO {
-    public static $defaultConfig = [
+
+	const ASTERISK_SECTION = 'app-hotelwakeup';
+
+	public static $defaultConfig = [
         'maxretries' => 3, 
         'waittime' => 60, 
         'retrytime' => 60, 
@@ -138,7 +141,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		],
 	];
 
-
 	public function __construct($freepbx = null) {
 		if ($freepbx == null) {
 			throw new \Exception("Not given a FreePBX Object");
@@ -236,8 +238,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			$this->saveSetting(self::$defaultConfig);
 		}
     }
+
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
+	
 	public function getActionBar($request)
 	{
 		$buttons = array();
@@ -607,7 +611,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		}
 	}
 
-
 	private function check_action_settings_messages($language, $message, $message_required = false, $message_noCheckIsExist = false)
 	{
 		switch(true)
@@ -862,7 +865,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $data_return;
 	}
 
-
 	public function addWakeup($destination, $time, $lang)
 	{
 		if(empty($lang))
@@ -940,6 +942,12 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		$fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
 		$code = $fcc->getCode();
 		return $code;
+	}
+
+	public function getCodeActive() {
+		$fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
+		$fc = $fcc->getCodeActive();
+		return $fc;
 	}
 
 	public function getSetting($option = null)
@@ -1334,8 +1342,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $grp;
 	}
 
-
-
 	public function getLanguage()
 	{
 		//the language configured in the soundlang module will be used
@@ -1382,7 +1388,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		return $input;
 	}
 
-
 	//Legacy \ Maintain for PMS module compatibility.
 	public function getAllCalls() 
 	{
@@ -1393,7 +1398,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		}
 		return $calls;
 	}
-
 
 	/**
 	 * Functions Proxy other Modules
@@ -1412,4 +1416,28 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	{
 		return $this->Recordings->fileStatus($file, true);
 	}
+
+	/**
+	 * Dialplan hooks
+	 * 
+	 */
+	public function myDialplanHooks() {
+		return true;
+	}
+	public function doDialplanHook(&$ext, $engine, $priority) {
+		if ($engine != "asterisk") { return; }
+
+		$section = self::ASTERISK_SECTION;
+		$fc = $this->getCodeActive();
+		if (!empty($fc))
+		{
+			$ext->addInclude('from-internal-additional', $section); // Add the include from from-internal
+			$ext->add($section, $fc, '', new \ext_Macro('user-callerid'));
+			$ext->add($section, $fc, '', new \ext_answer(''));
+			$ext->add($section, $fc, '', new \ext_wait(1));
+			$ext->add($section, $fc, '', new \ext_AGI('wakeup'));
+			$ext->add($section, $fc, '', new \ext_Hangup);
+		}
+	}
+
 }
