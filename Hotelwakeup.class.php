@@ -12,7 +12,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'cnam' => 'Wake Up Calls', 
         'cid' => '*68', 
         'operator_mode' => '1', 
-        'operator_extensions' => ['00','01'], 
+        'operator_extensions' => [], 
         'extensionlength' => '4', 
         'application' => 'AGI', 
         'data' => 'wakeconfirm.php',
@@ -710,8 +710,6 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				);
 
 				$data_return['config']['operator_mode'] = ($data_return['config']['operator_mode']) ? "yes" : "no";
-				// $data_return['config']['callerid'] = htmlentities($data_return['config']['callerid']);
-				// $data_return['config']['operator_extensions'] = implode("\n", $data_return['config']['operator_extensions']);
 				break;
 			
 			case "settings_set": 
@@ -949,12 +947,26 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		{
 			$data_return = self::$defaultConfig;
 		}
+		
+        $not_allow_empty = array("application", "data");
+        foreach ($not_allow_empty as $opt)
+        {
+            if (isset($data_return[$opt]) && empty($data_return[$opt]))
+            {
+                $data_return[$opt] = self::$defaultConfig[$opt];
+            }
+        }
 
 		$data_return['callerid'] = sprintf('"%s" <%s>', $data_return['cnam'], $data_return['cid']);
 		if ( ! is_array($data_return['operator_extensions']) )
 		{
-			$data_return['operator_extensions'] = explode(",", $data_return['operator_extensions']);
+			$options['operator_extensions'] = [];
+			if ( preg_match('/^[0-9,\n\s]+$/', $data_return['operator_extensions']) )
+			{
+				$options['operator_extensions'] = explode(",", $options['operator_extensions']);
+			}
 		}
+
 		foreach($data_return['operator_extensions'] as &$ext)
 		{
 			$ext = trim($ext);
@@ -977,25 +989,19 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 	public function saveSetting($options)
 	{
-		// Info:
-		// $options_list = array(
-		// 	'cid',
-		// 	'cnam',
-		// 	'extensionlength',
-		// 	'language',
-		// 	'maxretries',
-		// 	'operator_extensions',
-		// 	'operator_mode',
-		// 	'retrytime',
-		// 	'waittime',
-		// );
-
 		unset($options['callerid']);
 		if(! empty($options)) 
 		{
 			if ( ! is_array($options['operator_extensions']) )
 			{
-				$options['operator_extensions'] = explode(",", $options['operator_extensions']);
+				if ( preg_match('/^[0-9,\n\s]+$/', $options['operator_extensions']) )
+				{
+					$options['operator_extensions'] = explode(",", $options['operator_extensions']);
+				}
+				else
+				{
+					$options['operator_extensions'] = [];
+				}
 			}
 
 			foreach($options as $key => $value)
@@ -1144,15 +1150,23 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		}
 
 		// Create up a .call file, write and close
+		$defaultConfig  = self::$defaultConfig;
+		$maxretries 	= !empty($foo['maxretries'])? $foo['maxretries'] : $defaultConfig["maxretries"];
+		$retrytime 		= !empty($foo['retrytime'])? $foo['retrytime'] : $defaultConfig["retrytime"];
+		$waittime 		= !empty($foo['waittime'])? $foo['waittime'] : $defaultConfig['waittime'];
+		$language 		= !empty($foo['language'])? $foo['language'] : $defaultConfig['language'];
+		$application 	= !empty($foo['application'])? $foo['application'] : $defaultConfig['application'];
+		$data 			= !empty($foo['data'])? $foo['data'] : $defaultConfig['data'];
+		
 		$wuc = fopen($tempfile, 'w');
 		fputs( $wuc, "channel: Local/".$foo['ext']."@originate-skipvm\n" );
-		fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
-		fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
-		fputs( $wuc, "waittime: ".$foo['waittime']."\n");
+		fputs( $wuc, "maxretries: ".$maxretries."\n");
+		fputs( $wuc, "retrytime: ".$retrytime."\n");
+		fputs( $wuc, "waittime: ".$waittime."\n");
 		fputs( $wuc, "callerid: ".$foo['callerid']."\n");
-		fputs( $wuc, 'set: CHANNEL(language)='.$foo['language']."\n");
-		fputs( $wuc, "application: ".$foo['application']."\n");
-		fputs( $wuc, "data: ".$foo['data']."\n");
+		fputs( $wuc, 'set: CHANNEL(language)='.$language."\n");
+		fputs( $wuc, "application: ".$application."\n");
+		fputs( $wuc, "data: ".$data."\n");
 		fputs( $wuc, "AlwaysDelete: ".$foo['AlwaysDelete']."\n");
 		fputs( $wuc, "Archive: ".$foo['Archive']."\n");
 		fclose( $wuc );

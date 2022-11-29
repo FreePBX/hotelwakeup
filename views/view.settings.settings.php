@@ -70,7 +70,7 @@
                                 <i class="fa fa-question-circle fpbx-help-icon" data-for="operator_extensions"></i>
                             </div>
                             <div class="col-md-9">
-                                <textarea class="form-control autosize" name="operator_extensions" id="operator_extensions"></textarea>
+                                <textarea class="form-control autosize" name="operator_extensions" id="operator_extensions" placeholder="<?php echo(_("E.g: 100,110")) ?>"></textarea>
                             </div>
                         </div>
                     </div>
