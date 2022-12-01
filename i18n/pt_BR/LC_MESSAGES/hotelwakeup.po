@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-16 12:34+0000\n"
+"POT-Creation-Date: 2022-12-01 04:21+0000\n"
 "PO-Revision-Date: 2017-03-08 21:01+0200\n"
 "Last-Translator: Kingvoice <suporte@kingvoice.com.br>\n"
 "Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
@@ -167,6 +167,10 @@ msgstr "Destino não pode estar em branco"
 msgid "Destination to call"
 msgstr "Destino para chamar"
 
+#: views/view.settings.settings.php:73
+msgid "E.g: 100,110"
+msgstr ""
+
 #: views/view.settings.message.edit.php:94
 msgid "Empty Wake Up Call List"
 msgstr ""
@@ -203,7 +207,7 @@ msgstr ""
 msgid "Invalid Option"
 msgstr ""
 
-#: Hotelwakeup.class.php:860
+#: Hotelwakeup.class.php:858
 msgid "Invalid action!"
 msgstr ""
 
@@ -251,15 +255,15 @@ msgstr ""
 msgid "Message requesting the data to create the wake-up call."
 msgstr ""
 
-#: Hotelwakeup.class.php:850
+#: Hotelwakeup.class.php:848
 msgid "Message setting cleared successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:809
+#: Hotelwakeup.class.php:807
 msgid "Message setting loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:831
+#: Hotelwakeup.class.php:829
 msgid "Message setting update successfully"
 msgstr ""
 
@@ -371,7 +375,7 @@ msgstr ""
 msgid "Options Menu in List of Created Wake-Up Calls"
 msgstr ""
 
-#: Hotelwakeup.class.php:934
+#: Hotelwakeup.class.php:932
 #, php-format
 msgid "Page Not Found (%s)!!!!"
 msgstr ""
@@ -406,11 +410,11 @@ msgstr "Duração de Toque"
 msgid "Save"
 msgstr ""
 
-#: Hotelwakeup.class.php:792
+#: Hotelwakeup.class.php:790
 msgid "Save failed, invalid values!"
 msgstr ""
 
-#: Hotelwakeup.class.php:797
+#: Hotelwakeup.class.php:795
 msgid "Save failed, missing parameters!"
 msgstr ""
 
@@ -422,7 +426,7 @@ msgstr ""
 msgid "Select Extension"
 msgstr ""
 
-#: Hotelwakeup.class.php:1368
+#: Hotelwakeup.class.php:1382
 msgid "Select a Language"
 msgstr ""
 
@@ -442,7 +446,7 @@ msgstr "Configurações"
 msgid "Settings loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:788
+#: Hotelwakeup.class.php:786
 msgid "Settings saved successfully"
 msgstr ""
 
