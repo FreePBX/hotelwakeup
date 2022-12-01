@@ -41,8 +41,8 @@
 				<?php echo $hotelwakeup->showPage("wakeup.grid.create"); ?>	
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo _('Cancel')?></button>
-				<button type="button" class="btn btn-success" id="savecall"><?php echo _('Create Call')?></button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo _('Cancel')?></button>
+				<button type="button" class="btn active" id="savecall"><?php echo _('Create Call')?></button>
 			</div>
 		</div>
 	</div>
