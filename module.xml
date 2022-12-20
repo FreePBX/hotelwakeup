@@ -18,7 +18,7 @@
 	</changelog>
 	<menuitems>
 		<hotelwakeup>Wake Up Calls</hotelwakeup>
-		<settings display="hotelwakeup_settings" needsenginedb="yes" category="Settings">Wake Up Calls Settings</settings>
+		<hotelwakeup_settings display="hotelwakeup_settings" needsenginedb="yes" category="Settings">Wake Up Calls Settings</hotelwakeup_settings>
 	</menuitems>
     <database>
         <table name="hotelwakeup_calls">
