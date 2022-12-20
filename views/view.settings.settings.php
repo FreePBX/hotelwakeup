@@ -67,23 +67,51 @@
                         <div class="form-group">
                             <div class="col-md-3">
                                 <label class="control-label" for="operator_extensions"><?php echo _('Operator Extensions')?></label>
-                                <i class="fa fa-question-circle fpbx-help-icon" data-for="operator_extensions"></i>
+                               	<i class="fa fa-question-circle fpbx-help-icon" data-for="operator_extensions"></i>
+								<div class="row">
+									<div class="col-md-12">
+										<span id="operator_extensions-help" class="help-block fpbx-help-block">
+											<?php echo _('Enter the Caller IDs of each telephone you wish to be recognized as an "Operator". Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns')?>
+										</span>
+									</div>
+								</div>
                             </div>
                             <div class="col-md-9">
-                                <textarea class="form-control autosize" name="operator_extensions" id="operator_extensions" placeholder="<?php echo(_("E.g: 100,110")) ?>"></textarea>
+								<input type="hidden" class="form-control" name="operator_extensions" id="operator_extensions" value="">
+								<div class="BoxExtensionsList">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="alert alert-info" role="alert">
+												<?php echo _("Available Extensions"); ?>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="alert alert-info" role="alert">
+												<?php echo _("Selected Extensions"); ?>
+											</div>								
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<ul class="ExtensionList list-group" id="available_extensions"></ul>
+										</div>
+										<div class="col-md-6">
+											<ul class="ExtensionList ExtensionListSelected list-group" id="selected_extensions"></ul>
+											<div class="input-group">
+												<input type="text" class="form-control" id="operator_add_number" placeholder="<?php echo _("Number to Add"); ?>">
+												<span class="input-group-btn">
+													<button class="btn btn-default" id="btn_operator_add_number" type="button" title="<?php echo _("Add Manually"); ?>"><i class="fa fa-plus" aria-hidden="true"></i></button>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <span id="operator_extensions-help" class="help-block fpbx-help-block">
-                        <?php echo _('Enter the Caller IDs of each telephone you wish to be recognized as an "Operator" (separating them with commas ###,###). Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns')?>
-                    </span>
-                </div>
-            </div>
-        </div>
+		</div>
         <!-- Block Operator Extensions -->
 
         <!-- Block - Ring Time -->
