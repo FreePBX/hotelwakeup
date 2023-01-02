@@ -1,10 +1,8 @@
 <?php
 namespace FreePBX\modules;
-use BMO;
-use FreePBX_Helpers;
 use PDO;
 
-class Hotelwakeup extends FreePBX_Helpers implements BMO {
+class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 
 	const ASTERISK_SECTION = 'app-hotelwakeup';
 
@@ -146,9 +144,11 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			throw new \Exception("Not given a FreePBX Object");
 		}
 
-		$this->FreePBX  = $freepbx;
-		$this->db 		= $freepbx->Database;
-		$this->media 	= $freepbx->Media();
+		$this->FreePBX    = $freepbx;
+		$this->db 		  = $freepbx->Database;
+
+		$this->media 	  = $freepbx->Media();
+		$this->extensions = $freepbx->Extensions();
 
 		//Modules
 		$this->Recordings = $freepbx->Recordings;
@@ -709,7 +709,8 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				$data_return = array(
 					"status"  => true,
 					"message" => _("Settings loaded successfully"),
-					"config"  => $this->getSetting()
+					"config"  => $this->getSetting(),
+					"extensions" => $this->HookGetExtensions(),
 				);
 
 				$data_return['config']['operator_mode'] = ($data_return['config']['operator_mode']) ? "yes" : "no";
@@ -1452,6 +1453,31 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			$ext->add($section, $fc, '', new \ext_AGI('wakeup'));
 			$ext->add($section, $fc, '', new \ext_Hangup);
 		}
+	}
+
+
+	/**
+	 * Hook Extensions
+	 */
+	public function HookGetExtensions()
+	{
+		// It is necessary to call "loadAllFunctionsInc" since otherwise "extensions->checkusage" returns an empty array.
+		$this->FreePBX->Modules->loadAllFunctionsInc();
+
+		$data_return = array();
+		$results = $this->extensions->checkUsage(true);
+		$results = is_array($results) ? $results : array();
+		foreach($results as $key => $value)
+		{
+			if (in_array($key, array('core', 'customappsreg')))
+			{
+				foreach($value as $subkey => $subvalue)
+				{
+					$data_return[$subkey] = $subvalue['description'];
+				}
+			}
+		}
+		return $data_return;
 	}
 
 }

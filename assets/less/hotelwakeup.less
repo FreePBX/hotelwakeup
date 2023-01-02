@@ -37,3 +37,42 @@
 	// 	content: "\f107" !important;   // DOWN
 	// }
 }
+
+
+
+.BoxExtensionsList {
+	.alert {
+		text-align: center;
+	}
+	ul {
+		width: 100%;
+		height: 300px;
+		max-height: 300px;
+		margin-bottom: 10px;
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+
+		border: 1px dashed rgb(197, 70, 70);
+	}
+
+	ul.ExtensionListSelected {
+		height: 258px;
+		max-height: 258px;
+	}
+
+	ul li {
+		background-color: Azure;
+		list-style-type: "";
+		text-align: left;
+		padding: 5px;
+		border: 0px;
+	}
+
+	ul li:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+	ul li.selected {
+		background-color: GoldenRod;
+	}
+}
