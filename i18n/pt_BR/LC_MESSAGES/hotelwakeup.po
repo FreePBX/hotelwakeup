@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 08:47+0000\n"
+"POT-Creation-Date: 2023-01-02 03:34+0000\n"
 "PO-Revision-Date: 2017-03-08 21:01+0200\n"
 "Last-Translator: Kingvoice <suporte@kingvoice.com.br>\n"
 "Language-Team: Portuguese (Brazil) <http://weblate.freepbx.org/projects/"
@@ -52,6 +52,10 @@ msgstr "Ações"
 msgid "Add"
 msgstr "Adicionar"
 
+#: views/view.settings.settings.php:103
+msgid "Add Manually"
+msgstr ""
+
 #: views/view.wakeup.grid.php:38
 msgid "Add new Wakeup Call"
 msgstr "Adicionar nova Chamada de Despertador"
@@ -60,6 +64,10 @@ msgstr "Adicionar nova Chamada de Despertador"
 msgid "Applications"
 msgstr "Aplicações"
 
+#: views/view.settings.settings.php:85
+msgid "Available Extensions"
+msgstr ""
+
 #: views/view.settings.message.edit.php:126
 msgid ""
 "By default when detecting a number \"say_number\" is used, but if we want to "
@@ -67,7 +75,7 @@ msgid ""
 "b>, <b>xxx</b> corresponds to the number."
 msgstr ""
 
-#: views/view.settings.settings.php:190
+#: views/view.settings.settings.php:218
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -167,20 +175,16 @@ msgstr "Destino não pode estar em branco"
 msgid "Destination to call"
 msgstr "Destino para chamar"
 
-#: views/view.settings.settings.php:73
-msgid "E.g: 100,110"
-msgstr ""
-
 #: views/view.settings.message.edit.php:94
 msgid "Empty Wake Up Call List"
 msgstr ""
 
-#: views/view.settings.settings.php:82
+#: views/view.settings.settings.php:74
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
-"\"Operator\" (separating them with commas ###,###). Operator extensions are "
-"allowed to create wakeup calls for any valid destination. Numbers can be "
-"extension numbers, full caller ID numbers or Asterisk dialing patterns"
+"\"Operator\". Operator extensions are allowed to create wakeup calls for any "
+"valid destination. Numbers can be extension numbers, full caller ID numbers "
+"or Asterisk dialing patterns"
 msgstr ""
 
 #: Hotelwakeup.class.php:498
@@ -207,7 +211,7 @@ msgstr ""
 msgid "Invalid Option"
 msgstr ""
 
-#: Hotelwakeup.class.php:861
+#: Hotelwakeup.class.php:862
 msgid "Invalid action!"
 msgstr ""
 
@@ -220,7 +224,7 @@ msgstr ""
 msgid "Max Destination Length"
 msgstr "Comprimento Máximo do Destino"
 
-#: Hotelwakeup.class.php:490 views/view.settings.settings.php:150
+#: Hotelwakeup.class.php:490 views/view.settings.settings.php:178
 msgid "Max Retries"
 msgstr "Máximo de Tentativas"
 
@@ -255,15 +259,15 @@ msgstr ""
 msgid "Message requesting the data to create the wake-up call."
 msgstr ""
 
-#: Hotelwakeup.class.php:851
+#: Hotelwakeup.class.php:852
 msgid "Message setting cleared successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:810
+#: Hotelwakeup.class.php:811
 msgid "Message setting loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:832
+#: Hotelwakeup.class.php:833
 msgid "Message setting update successfully"
 msgstr ""
 
@@ -338,6 +342,10 @@ msgstr ""
 msgid "No message specified!"
 msgstr ""
 
+#: assets/js/views/settings.js:257
+msgid "No number specified!"
+msgstr ""
+
 #: assets/js/views/global.js:57
 msgid "Not found in i18n!"
 msgstr ""
@@ -348,6 +356,10 @@ msgstr "Não recebido"
 
 #: views/view.settings.message.edit.php:89
 msgid "Number of Wake Up Calls in List"
+msgstr ""
+
+#: views/view.settings.settings.php:101
+msgid "Number to Add"
 msgstr ""
 
 #: views/view.settings.message.edit.php:10
@@ -375,7 +387,7 @@ msgstr ""
 msgid "Options Menu in List of Created Wake-Up Calls"
 msgstr ""
 
-#: Hotelwakeup.class.php:934
+#: Hotelwakeup.class.php:935
 #, php-format
 msgid "Page Not Found (%s)!!!!"
 msgstr ""
@@ -398,11 +410,11 @@ msgstr ""
 msgid "Restoring destination : %s"
 msgstr ""
 
-#: Hotelwakeup.class.php:489 views/view.settings.settings.php:123
+#: Hotelwakeup.class.php:489 views/view.settings.settings.php:151
 msgid "Retry Time"
 msgstr "Tempo da Tentativa"
 
-#: Hotelwakeup.class.php:488 views/view.settings.settings.php:96
+#: Hotelwakeup.class.php:488 views/view.settings.settings.php:124
 msgid "Ring Time"
 msgstr "Duração de Toque"
 
@@ -410,11 +422,11 @@ msgstr "Duração de Toque"
 msgid "Save"
 msgstr ""
 
-#: Hotelwakeup.class.php:793
+#: Hotelwakeup.class.php:794
 msgid "Save failed, invalid values!"
 msgstr ""
 
-#: Hotelwakeup.class.php:798
+#: Hotelwakeup.class.php:799
 msgid "Save failed, missing parameters!"
 msgstr ""
 
@@ -426,8 +438,12 @@ msgstr ""
 msgid "Select Extension"
 msgstr ""
 
-#: Hotelwakeup.class.php:1388
+#: Hotelwakeup.class.php:1389
 msgid "Select a Language"
+msgstr ""
+
+#: views/view.settings.settings.php:90
+msgid "Selected Extensions"
 msgstr ""
 
 #: views/view.wakeup.grid.php:8
@@ -446,7 +462,7 @@ msgstr "Configurações"
 msgid "Settings loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:789
+#: Hotelwakeup.class.php:790
 msgid "Settings saved successfully"
 msgstr ""
 
@@ -466,7 +482,7 @@ msgstr ""
 msgid "The following files do not exist:"
 msgstr ""
 
-#: views/view.settings.settings.php:163
+#: views/view.settings.settings.php:191
 msgid ""
 "The maximum number of times the system should attempt to deliver the wakeup "
 "call when there is no answer. Zero retries means only one call will be placed"
@@ -475,7 +491,11 @@ msgstr ""
 "despertar quando não há resposta. Zero tentativas significa que apenas uma "
 "chamada será efetuada"
 
-#: views/view.settings.settings.php:109
+#: assets/js/views/settings.js:272
+msgid "The number is already in the operator list."
+msgstr ""
+
+#: views/view.settings.settings.php:137
 msgid ""
 "The number of seconds for the phone to ring. Consider setting lower than the "
 "voicemail threshold or the wakeup call can end up going to voicemail"
@@ -484,7 +504,7 @@ msgstr ""
 "ao limite do correio de voz ou a chamada de ativação pode acabar indo para o "
 "correio de voz"
 
-#: views/view.settings.settings.php:136
+#: views/view.settings.settings.php:164
 msgid ""
 "The number of seconds to wait between retrys.  A \"retry\" happens if the "
 "wakeup call is not answered"
@@ -547,7 +567,7 @@ msgstr ""
 msgid "Wake Up Call Information"
 msgstr ""
 
-#: Hotelwakeup.class.php:491 views/view.settings.settings.php:177
+#: Hotelwakeup.class.php:491 views/view.settings.settings.php:205
 msgid "Wake Up Caller ID"
 msgstr "ID de chamada da chamada de despertar"
 
