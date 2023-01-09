@@ -71,7 +71,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<span id="operator_extensions-help" class="help-block fpbx-help-block">
-											<?php echo _('Enter the Caller IDs of each telephone you wish to be recognized as an "Operator". Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers, full caller ID numbers or Asterisk dialing patterns')?>
+											<?php echo _('Enter the Caller IDs of each telephone you wish to be recognized as an "Operator". Operator extensions are allowed to create wakeup calls for any valid destination. Numbers can be extension numbers or full caller ID numbers.')?>
 										</span>
 									</div>
 								</div>
@@ -82,12 +82,12 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="alert alert-info" role="alert">
-												<?php echo _("Available Extensions"); ?>
+												<?php echo _("Available"); ?>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="alert alert-info" role="alert">
-												<?php echo _("Selected Extensions"); ?>
+												<?php echo _("Selected"); ?>
 											</div>								
 										</div>
 									</div>
