@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 03:34+0000\n"
+"POT-Creation-Date: 2023-01-11 04:10+0000\n"
 "PO-Revision-Date: 2017-07-25 21:58+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.4\n"
 
-#: Hotelwakeup.class.php:492
+#: Hotelwakeup.class.php:493
 #, php-format
 msgid "%s can not be blank."
 msgstr ""
 
-#: Hotelwakeup.class.php:493
+#: Hotelwakeup.class.php:494
 #, php-format
 msgid "%s only allow numbers."
 msgstr ""
@@ -65,7 +65,7 @@ msgid "Applications"
 msgstr "Các ứng dụng"
 
 #: views/view.settings.settings.php:85
-msgid "Available Extensions"
+msgid "Available"
 msgstr ""
 
 #: views/view.settings.message.edit.php:126
@@ -94,19 +94,19 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: Hotelwakeup.class.php:692
+#: Hotelwakeup.class.php:697
 msgid "Cannot delete the call, due to insufficient data!"
 msgstr ""
 
-#: Hotelwakeup.class.php:673
+#: Hotelwakeup.class.php:678
 msgid "Cannot get info the call, due to insufficient data!"
 msgstr ""
 
-#: Hotelwakeup.class.php:680
+#: Hotelwakeup.class.php:685
 msgid "Cannot get info the call, due to not exist the call!"
 msgstr ""
 
-#: Hotelwakeup.class.php:660
+#: Hotelwakeup.class.php:665
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -115,7 +115,7 @@ msgstr ""
 "Không thể tạo lịch cuộc gọi theo như thời gian đã lập trước đó. [Thời gian "
 "hiện tại: %s]  [Thời gian đánh thức: %s]"
 
-#: Hotelwakeup.class.php:648
+#: Hotelwakeup.class.php:653
 msgid "Cannot schedule the call, due to insufficient data!"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgstr ""
 msgid "Checking..."
 msgstr ""
 
-#: Hotelwakeup.class.php:610
+#: Hotelwakeup.class.php:615
 msgid "Command not found!"
 msgstr ""
 
@@ -175,6 +175,15 @@ msgstr "Không để trống mục Điểm đích"
 msgid "Destination to call"
 msgstr "Điểm đích để gọi"
 
+#: Hotelwakeup.class.php:495
+#, php-format
+msgid "Detected invalid characters in %s."
+msgstr ""
+
+#: Hotelwakeup.class.php:496
+msgid "Detected invalid characters!"
+msgstr ""
+
 #: views/view.settings.message.edit.php:94
 msgid "Empty Wake Up Call List"
 msgstr ""
@@ -183,11 +192,11 @@ msgstr ""
 msgid ""
 "Enter the Caller IDs of each telephone you wish to be recognized as an "
 "\"Operator\". Operator extensions are allowed to create wakeup calls for any "
-"valid destination. Numbers can be extension numbers, full caller ID numbers "
-"or Asterisk dialing patterns"
+"valid destination. Numbers can be extension numbers or full caller ID "
+"numbers."
 msgstr ""
 
-#: Hotelwakeup.class.php:498
+#: Hotelwakeup.class.php:503
 msgid "File not found!"
 msgstr ""
 
@@ -211,7 +220,7 @@ msgstr ""
 msgid "Invalid Option"
 msgstr ""
 
-#: Hotelwakeup.class.php:862
+#: Hotelwakeup.class.php:867
 msgid "Invalid action!"
 msgstr ""
 
@@ -259,15 +268,15 @@ msgstr ""
 msgid "Message requesting the data to create the wake-up call."
 msgstr ""
 
-#: Hotelwakeup.class.php:852
+#: Hotelwakeup.class.php:857
 msgid "Message setting cleared successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:811
+#: Hotelwakeup.class.php:816
 msgid "Message setting loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:833
+#: Hotelwakeup.class.php:838
 msgid "Message setting update successfully"
 msgstr ""
 
@@ -334,15 +343,15 @@ msgstr ""
 msgid "No"
 msgstr "Không"
 
-#: Hotelwakeup.class.php:619
+#: Hotelwakeup.class.php:624
 msgid "No language has been specified!"
 msgstr ""
 
-#: Hotelwakeup.class.php:627
+#: Hotelwakeup.class.php:632
 msgid "No message specified!"
 msgstr ""
 
-#: assets/js/views/settings.js:257
+#: Hotelwakeup.class.php:497
 msgid "No number specified!"
 msgstr ""
 
@@ -366,7 +375,7 @@ msgstr ""
 msgid "Operator"
 msgstr ""
 
-#: views/view.settings.settings.php:69
+#: Hotelwakeup.class.php:492 views/view.settings.settings.php:69
 msgid "Operator Extensions"
 msgstr "Máy nhánh điều hành"
 
@@ -387,7 +396,7 @@ msgstr ""
 msgid "Options Menu in List of Created Wake-Up Calls"
 msgstr ""
 
-#: Hotelwakeup.class.php:935
+#: Hotelwakeup.class.php:940
 #, php-format
 msgid "Page Not Found (%s)!!!!"
 msgstr ""
@@ -422,11 +431,11 @@ msgstr "Thời gian đổ chuông"
 msgid "Save"
 msgstr ""
 
-#: Hotelwakeup.class.php:794
+#: Hotelwakeup.class.php:799
 msgid "Save failed, invalid values!"
 msgstr ""
 
-#: Hotelwakeup.class.php:799
+#: Hotelwakeup.class.php:804
 msgid "Save failed, missing parameters!"
 msgstr ""
 
@@ -438,12 +447,12 @@ msgstr ""
 msgid "Select Extension"
 msgstr ""
 
-#: Hotelwakeup.class.php:1389
+#: Hotelwakeup.class.php:1394
 msgid "Select a Language"
 msgstr ""
 
 #: views/view.settings.settings.php:90
-msgid "Selected Extensions"
+msgid "Selected"
 msgstr ""
 
 #: views/view.wakeup.grid.php:8
@@ -458,11 +467,11 @@ msgstr ""
 msgid "Settings"
 msgstr "Các cài đặt"
 
-#: Hotelwakeup.class.php:711
+#: Hotelwakeup.class.php:716
 msgid "Settings loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:790
+#: Hotelwakeup.class.php:795
 msgid "Settings saved successfully"
 msgstr ""
 
@@ -490,7 +499,7 @@ msgstr ""
 "Thời lượng tối đa mà hệ thống cố để chuyển cuộc gọi khi không có trả lời. Số "
 "lần thử lại là 0 nghĩa là chỉ có một cuộc gọi được đặt"
 
-#: assets/js/views/settings.js:272
+#: Hotelwakeup.class.php:498
 msgid "The number is already in the operator list."
 msgstr ""
 
@@ -510,11 +519,11 @@ msgstr ""
 "Số giây đợi giữa các lần thử. Một \"lần thử\" xảy ra nếu cuộc gọi đánh thức "
 "không được trả lời"
 
-#: Hotelwakeup.class.php:623
+#: Hotelwakeup.class.php:628
 msgid "The specified language is not available!"
 msgstr ""
 
-#: Hotelwakeup.class.php:632
+#: Hotelwakeup.class.php:637
 msgid "The specified message does not exist!"
 msgstr ""
 
@@ -587,7 +596,7 @@ msgstr ""
 "nhắc nhở đến bất kỳ điểm đích hợp lệ nào. Ddể lập lịch một cuộc gọi, quay %s "
 "hoặc sử dụng mẫu sau"
 
-#: Hotelwakeup.class.php:698
+#: Hotelwakeup.class.php:703
 msgid "Wake up call does not exist!"
 msgstr ""
 
