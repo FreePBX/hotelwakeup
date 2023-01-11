@@ -184,13 +184,19 @@ function saveSettings(e)
 
 function validateSettings(showmsg=true)
 {
-	var arr_options = {
-		"extensionlength": 'int',
-		"waittime"		 : 'int',
-		"retrytime"		 : 'int',
-		"maxretries"	 : 'int',
-		"callerid"		 : 'string',
+	let arr_options = {
+		"extensionlength"	  : 'int',
+		"waittime"		 	  : 'int',
+		"retrytime"		 	  : 'int',
+		"maxretries"	 	  : 'int',
+		"callerid"		 	  : 'string',
+		'operator_extensions' : 'regex',
 	};
+
+	let regex = {
+		'operator_extensions' : /^[0-9,+\s]+$/,
+	}
+
 	for (var key in arr_options)
 	{	
 		let obj  = $("#" + key);
@@ -205,6 +211,11 @@ function validateSettings(showmsg=true)
 		{
 			warnInvalid(obj, showmsg ? sprintf( i18n_mod("VALIDATE_ERROR_ONLY_NUMBER"), name ) : "");
 			return false;
+		}
+		else if (arr_options[key] == "regex" && ! regex[key].test(val))
+		{
+			warnInvalid(obj, showmsg ? sprintf( i18n_mod("VALIDATE_ERROR_CHARACTERS_INVALID"), name ) : "");
+	 		return false;
 		}
 	}
 	return true;
@@ -249,16 +260,24 @@ function addNumberOperator(e) {
 	var ls_available = $("#available_extensions");
 	var ls_selected  = $("#selected_extensions");
 
+	let regex =  /^[0-9,+\s]+$/;
+
 	var new_input  = undefined;
 	var new_number = input.val().trim();
 
 	if (new_number == "")
 	{
-		fpbxToast(_("No number specified!"), '', 'error');
+		fpbxToast( i18n_mod("NO_NUMBER"), '', 'error');
+		input.focus();
+	}
+	else if (! regex.test(new_number))
+	{
+		fpbxToast( i18n_mod("INVALID_CHAR"), '', 'error');
 		input.focus();
 	}
 	else
 	{
+		input.val(""); //Clean input
 		var isSelectedExtension = false;
 		ls_selected.each(function()
 		{
@@ -266,10 +285,10 @@ function addNumberOperator(e) {
 			{
 				var current   = $(this);
 				var extension = current.data('extension');
-				if (extension == new_number)
+				if (String(extension) == String(new_number))
 				{
 					isSelectedExtension = true;
-					fpbxToast(_("The number is already in the operator list."), '', 'error');
+					fpbxToast(i18n_mod("NUMBER_IN_LIST"), '', 'error');
 					input.focus();
 					return true;
 				}
@@ -287,7 +306,7 @@ function addNumberOperator(e) {
 
 					if (extension !== undefined)
 					{
-						if (extension == new_number)
+						if (String(extension) == String(new_number))
 						{
 							new_input = current.clone();
 							current.remove();

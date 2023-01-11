@@ -484,13 +484,18 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 						
 					case "settings":
 						$data_return = array("status" => true, "i18n" => array(
-							"EXTENSIONLENGTH"			 => _("Max Destination Length"),
-							"WAITTIME"					 => _("Ring Time"),
-							"RETRYTIME"					 => _("Retry Time"),
-							"MAXRETRIES"				 => _("Max Retries"),
-							"CALLERID"					 => _("Wake Up Caller ID"),
-							"VALIDATE_ERROR_BLANK" 		 => _("%s can not be blank."),
-							"VALIDATE_ERROR_ONLY_NUMBER" => _("%s only allow numbers."),
+							"EXTENSIONLENGTH"			 		=> _("Max Destination Length"),
+							"WAITTIME"					 		=> _("Ring Time"),
+							"RETRYTIME"					 		=> _("Retry Time"),
+							"MAXRETRIES"				 		=> _("Max Retries"),
+							"CALLERID"					 		=> _("Wake Up Caller ID"),
+							"OPERATOR_EXTENSIONS"				=> _("Operator Extensions"),
+							"VALIDATE_ERROR_BLANK" 		 		=> _("%s can not be blank."),
+							"VALIDATE_ERROR_ONLY_NUMBER" 		=> _("%s only allow numbers."),
+							"VALIDATE_ERROR_CHARACTERS_INVALID" => _("Detected invalid characters in %s."),
+							"INVALID_CHAR"						=> _("Detected invalid characters!"),
+							"NO_NUMBER" 						=> _("No number specified!"),
+							"NUMBER_IN_LIST" 					=> _("The number is already in the operator list."),
 						));
 						break;
 
@@ -1003,7 +1008,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		{
 			if ( ! is_array($options['operator_extensions']) )
 			{
-				if ( preg_match('/^[0-9,\n\s]+$/', $options['operator_extensions']) )
+				if ( preg_match('/^[0-9,+\s]+$/', $options['operator_extensions']) )
 				{
 					$options['operator_extensions'] = explode(",", $options['operator_extensions']);
 				}
