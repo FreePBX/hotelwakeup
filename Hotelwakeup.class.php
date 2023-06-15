@@ -965,7 +965,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
         $not_allow_empty = array("application", "data");
         foreach ($not_allow_empty as $opt)
         {
-            if (isset($data_return[$opt]) && empty($data_return[$opt]))
+            if (!isset($data_return[$opt]) || empty($data_return[$opt]))
             {
                 $data_return[$opt] = self::$defaultConfig[$opt];
             }
