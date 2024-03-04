@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>17.0.1</version>
+	<version>17.0.1.1</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://wiki.freepbx.org/display/F2/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
+		*17.0.1.1* 17.0.1.1
 		*17.0.1* 17.0
 	</changelog>
 	<menuitems>
@@ -34,7 +35,7 @@
         </table>
     </database>
 	<depends>
-		<module>ivr gt1.0</module>
+		<module>ivr gt 17.0</module>
 		<module>soundlang</module>
 		<module>recordings</module>
 	</depends>

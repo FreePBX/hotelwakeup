@@ -894,6 +894,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			'page' 		  => $page,
 		);
 		$data = array_merge($data, $params);
+		$data['action'] ?? '';
 		switch ($page) 
 		{
 			case "wakeup":
