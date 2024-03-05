@@ -3,7 +3,7 @@
 	$show_page 	 = "";
 	$params_page = array();
 	
-	switch($request['action'])
+	switch($request['action'] ?? '')
 	{
 		case '':
 			// if the action is null, set the next case as the default action.
@@ -16,7 +16,7 @@
 		break;
 
 		case "messages":
-			switch($request['option'])
+			switch($request['option'] ?? '')
 			{
 				case '':
 					$_REQUEST['option'] = "list";
