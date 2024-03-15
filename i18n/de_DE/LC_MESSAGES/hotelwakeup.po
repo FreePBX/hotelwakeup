@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-03 21:56-0500\n"
+"POT-Creation-Date: 2024-03-15 03:00-0400\n"
 "PO-Revision-Date: 2018-02-16 20:01+0200\n"
 "Last-Translator: Nils <Nils@heckenkamp.info>\n"
 "Language-Team: German <http://weblate.freepbx.org/projects/freepbx/"
@@ -421,7 +421,7 @@ msgstr ""
 msgid "Select Extension"
 msgstr ""
 
-#: Hotelwakeup.class.php:1369
+#: Hotelwakeup.class.php:1370
 msgid "Select a Language"
 msgstr ""
 
