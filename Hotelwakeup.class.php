@@ -875,12 +875,12 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			"time"			=> $time,
 			"ext"			=> $destination,
 			"language"		=> $lang,
-			"maxretries"	=> $data['maxretries'],
-			"retrytime"		=> $data['retrytime'],
-			"waittime"		=> $data['waittime'],
-			"callerid"		=> $data['cnam']." <".$data['cid'].">",
-			"application"	=> $data['application'],
-			"data"			=> $data['data'],
+			"maxretries"	=> ($data['maxretries'] ?? ''),
+			"retrytime"		=> ($data['retrytime'] ?? ''),
+			"waittime"		=> ($data['waittime'] ?? ''),
+			"callerid"		=> ($data['cnam'] ?? '')." <".($data['cid'] ?? '').">",
+			"application"	=> ($data['application'] ?? ''),
+			"data"			=> ($data['data'] ?? ''),
 			"AlwaysDelete"	=> "Yes",
 			"Archive"		=> "Yes"
 		));
