@@ -1226,8 +1226,9 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		if ( $this->isMessageExists($msg) )
 		{
 			$message = $this->getConfig($msg, $this->getMessagesIdKVStore($lang));
-			$message = array_diff($message, array(''));
-
+			if(is_array($message)){
+				$message = array_diff($message, array(''));
+			}
 			if (empty($message))
 			{
 				$message = $this->getMessageDefault($msg, true);
