@@ -231,10 +231,12 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		
 		//Create default values
 		$currentConfig = $this->getSetting();
-		if( empty($currentConfig) ) 
-		{
-			$this->saveSetting(self::$defaultConfig);
+		foreach (self::$defaultConfig as $key => $value) {
+			if (!array_key_exists($key, $currentConfig)) {
+				$currentConfig[$key] = $value;
+			}
 		}
+		$this->saveSetting($currentConfig);
     }
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
