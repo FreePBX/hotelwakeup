@@ -36,6 +36,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				"for",
 				"your",
 				"wakeup-call",
+				"then-press-pound",
 				"silence|500",
 			],
 		],

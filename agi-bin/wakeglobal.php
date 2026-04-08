@@ -138,6 +138,7 @@ class AGI_Hotelwakeup
 		$number = '';
 		foreach($files as $f) 
 		{
+			$ret = array('code' => 200, 'result' => 0);
 			if (strlen(trim($f)) == 0) 				{ continue; }
 			if ($this->find_silence($f, true) > 0) 	{ continue; }
 			// if ($this->find_SayUnixTime($f))		{ continue; }

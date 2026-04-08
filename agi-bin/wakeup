@@ -23,7 +23,11 @@ if($hotelwakeup->getSetting('operator_mode'))
 {
 	if( in_array($hotelwakeup->getOriginExtension(), $hotelwakeup->getSetting('operator_extensions')))
 	{
-		$select_extension = $hotelwakeup->sim_background("operatorSelectExt", "0123456789", $hotelwakeup->getSetting('extensionlength'));
+		// Play the full prompt without digit escape (sim_playback), then collect digits. Using
+		// sim_background for the whole chain skips remaining clips once extensionlength digits
+		// are pressed during an earlier sound, and the default prompt never reached then-press-pound.
+		$hotelwakeup->sim_playback("operatorSelectExt");
+		$select_extension = $hotelwakeup->sim_background("", "0123456789", $hotelwakeup->getSetting('extensionlength'));
 
 		//TODO: check if the extension exists
 		if(empty($select_extension) || strlen($select_extension) > $hotelwakeup->getSetting('extensionlength'))
