@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>17.0.1.6</version>
+	<version>17.0.1.7</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/21299361/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
+		*17.0.1.7* #issue-991 wakeup call audio instruction issue fix 
 		*17.0.1.6* bump 
 		*17.0.1* 17.0
 	</changelog>
