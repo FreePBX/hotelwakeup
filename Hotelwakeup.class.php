@@ -1,23 +1,23 @@
 <?php
 namespace FreePBX\modules;
+use BMO;
+use FreePBX_Helpers;
 use PDO;
 
-class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
-
-	const ASTERISK_SECTION = 'app-hotelwakeup';
-
-	public static $defaultConfig = [
+class Hotelwakeup extends FreePBX_Helpers implements BMO {
+    public static $defaultConfig = [
         'maxretries' => 3, 
         'waittime' => 60, 
         'retrytime' => 60, 
         'cnam' => 'Wake Up Calls', 
         'cid' => '*68', 
         'operator_mode' => '1', 
-        'operator_extensions' => [], 
+        'operator_extensions' => ['00','01'], 
         'extensionlength' => '4', 
-        'application' => 'AGI', 
+        'application' => 'AGI',
         'data' => 'wakeconfirm.php',
 		'language' => '',
+		'wakeup_time_step' => 15,
 	];
 
 	public static $defaultMessage = [
@@ -139,16 +139,15 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		],
 	];
 
+
 	public function __construct($freepbx = null) {
 		if ($freepbx == null) {
 			throw new \Exception("Not given a FreePBX Object");
 		}
 
-		$this->FreePBX    = $freepbx;
-		$this->db 		  = $freepbx->Database;
-
-		$this->media 	  = $freepbx->Media();
-		$this->extensions = $freepbx->Extensions();
+		$this->FreePBX  = $freepbx;
+		$this->db 		= $freepbx->Database;
+		$this->media 	= $freepbx->Media();
 
 		//Modules
 		$this->Recordings = $freepbx->Recordings;
@@ -233,15 +232,15 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		
 		//Create default values
 		$currentConfig = $this->getSetting();
-		if( empty($currentConfig) ) 
-		{
-			$this->saveSetting(self::$defaultConfig);
+		foreach (self::$defaultConfig as $key => $value) {
+			if (!array_key_exists($key, $currentConfig)) {
+				$currentConfig[$key] = $value;
+			}
 		}
+		$this->saveSetting($currentConfig);
     }
-
 	public function uninstall() {}
 	public function doConfigPageInit($page) {}
-	
 	public function getActionBar($request)
 	{
 		$buttons = array();
@@ -337,11 +336,34 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		{
 			case "savecall":
 				$params = array(
-					'day' 			=> empty($_POST['day']) 		? '' : $_POST['day'],
 					'time' 			=> empty($_POST['time']) 		? '' : $_POST['time'],
 					'destination' 	=> empty($_POST['destination']) ? '' : $_POST['destination'],
 					'language' 		=> empty($_POST['language'])	? '' : $_POST['language'],
+					'repeat'		=> empty($_POST['repeat'])		? 0 : intval($_POST['repeat']),
 				);
+				
+				if ($params['repeat'] == 1) {
+					// Repeat mode
+					$params['repeat_type'] = empty($_POST['repeat_type']) ? 'consecutive' : $_POST['repeat_type'];
+					$params['start_date'] = empty($_POST['start_date']) ? '' : $_POST['start_date'];
+					
+					switch ($params['repeat_type']) {
+						case 'consecutive':
+							$params['consecutive_days'] = empty($_POST['consecutive_days']) ? 1 : intval($_POST['consecutive_days']);
+							break;
+						case 'weekdays':
+							$params['weekdays'] = empty($_POST['weekdays']) ? array() : $_POST['weekdays'];
+							$params['end_date'] = empty($_POST['end_date']) ? '' : $_POST['end_date'];
+							break;
+						case 'until_date':
+							$params['end_date'] = empty($_POST['end_date']) ? '' : $_POST['end_date'];
+							break;
+					}
+				} else {
+					// Single day mode
+					$params['day'] = empty($_POST['day']) ? '' : $_POST['day'];
+				}
+				
 				return $this->run_action("wakeup_create", $params);
 				break;
 
@@ -484,18 +506,13 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 						
 					case "settings":
 						$data_return = array("status" => true, "i18n" => array(
-							"EXTENSIONLENGTH"			 		=> _("Max Destination Length"),
-							"WAITTIME"					 		=> _("Ring Time"),
-							"RETRYTIME"					 		=> _("Retry Time"),
-							"MAXRETRIES"				 		=> _("Max Retries"),
-							"CALLERID"					 		=> _("Wake Up Caller ID"),
-							"OPERATOR_EXTENSIONS"				=> _("Operator Extensions"),
-							"VALIDATE_ERROR_BLANK" 		 		=> _("%s can not be blank."),
-							"VALIDATE_ERROR_ONLY_NUMBER" 		=> _("%s only allow numbers."),
-							"VALIDATE_ERROR_CHARACTERS_INVALID" => _("Detected invalid characters in %s."),
-							"INVALID_CHAR"						=> _("Detected invalid characters!"),
-							"NO_NUMBER" 						=> _("No number specified!"),
-							"NUMBER_IN_LIST" 					=> _("The number is already in the operator list."),
+							"EXTENSIONLENGTH"			 => _("Max Destination Length"),
+							"WAITTIME"					 => _("Ring Time"),
+							"RETRYTIME"					 => _("Retry Time"),
+							"MAXRETRIES"				 => _("Max Retries"),
+							"CALLERID"					 => _("Wake Up Caller ID"),
+							"VALIDATE_ERROR_BLANK" 		 => _("%s can not be blank."),
+							"VALIDATE_ERROR_ONLY_NUMBER" => _("%s only allow numbers."),
 						));
 						break;
 
@@ -616,6 +633,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		}
 	}
 
+
 	private function check_action_settings_messages($language, $message, $message_required = false, $message_noCheckIsExist = false)
 	{
 		switch(true)
@@ -648,26 +666,78 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		switch($action)
 		{
 			case "wakeup_create":
-				if(empty($params['day']) || empty($params['time']) || empty($params['destination'])) 
+				if(empty($params['time']) || empty($params['destination'])) 
 				{
 					$data_return = array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data!"));
 				}
 				else 
 				{
 					$lang = empty($params['language']) ? '' :  $params['language'];
-					$time_wakeup = strtotime($params['day']." ".$params['time']);
 					$time_now = time();
-	
-					// check for insufficient data
-					if ( $time_wakeup === false || $time_wakeup <= $time_now )
-					{
-						// abandon .call file creation and pop up a js alert to the user
-						$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
-					}
-					else
-					{
-						$this->addWakeup($params['destination'], $time_wakeup, $lang);
-						$data_return = array("status" => true);
+					
+					if (!empty($params['repeat']) && $params['repeat'] == 1) {
+						// Repeat mode - validate repeat parameters
+						if (empty($params['start_date'])) {
+							$data_return = array("status" => false, "message" => _("Start date is required for repeat mode!"));
+						} else {
+							$repeatOptions = array(
+								'type' => $params['repeat_type'],
+								'start_date' => $params['start_date']
+							);
+							
+							switch ($params['repeat_type']) {
+								case 'consecutive':
+									$repeatOptions['consecutive_days'] = $params['consecutive_days'];
+									break;
+								case 'weekdays':
+									if (empty($params['weekdays']) || !is_array($params['weekdays'])) {
+										$data_return = array("status" => false, "message" => _("At least one weekday must be selected!"));
+										break 2;
+									}
+									$repeatOptions['weekdays'] = $params['weekdays'];
+									$repeatOptions['end_date'] = $params['end_date'];
+									break;
+								case 'until_date':
+									if (empty($params['end_date'])) {
+										$data_return = array("status" => false, "message" => _("End date is required for until_date mode!"));
+										break 2;
+									}
+									$repeatOptions['end_date'] = $params['end_date'];
+									break;
+							}
+							
+							// Validate start date is not in the past
+							$start_timestamp = strtotime($params['start_date'] . ' ' . $params['time']);
+							if ($start_timestamp <= $time_now) {
+								$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call, the scheduled start time is in the past. [Time now: %s] [Start Time: %s]"), date(DATE_RFC2822, $time_now), date(DATE_RFC2822, $start_timestamp)));
+							} else {
+								try {
+									$count = $this->addMultipleWakeups($params['destination'], $params['time'], $lang, $repeatOptions);
+									$data_return = array("status" => true, "message" => sprintf(_("Successfully scheduled %d wakeup calls"), $count));
+								} catch (Exception $e) {
+									$data_return = array("status" => false, "message" => _("Error creating repeat wakeup calls: ") . $e->getMessage());
+								}
+							}
+						}
+					} else {
+						// Single day mode
+						if (empty($params['day'])) {
+							$data_return = array("status" => false, "message" => _("Day is required for single wakeup mode!"));
+						} else {
+							$time_wakeup = strtotime($params['day']." ".$params['time']);
+							
+							// check for insufficient data
+							if ( $time_wakeup === false || $time_wakeup <= $time_now )
+							{
+								// abandon .call file creation and pop up a js alert to the user
+								$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
+							}
+							else
+							{
+								$this->addWakeup($params['destination'], $time_wakeup, $lang);
+								$data_return = array("status" => true);
+							}
+						}
 					}
 				}
 				break;
@@ -714,11 +784,12 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 				$data_return = array(
 					"status"  => true,
 					"message" => _("Settings loaded successfully"),
-					"config"  => $this->getSetting(),
-					"extensions" => $this->HookGetExtensions(),
+					"config"  => $this->getSetting()
 				);
 
 				$data_return['config']['operator_mode'] = ($data_return['config']['operator_mode']) ? "yes" : "no";
+				// $data_return['config']['callerid'] = htmlentities($data_return['config']['callerid']);
+				// $data_return['config']['operator_extensions'] = implode("\n", $data_return['config']['operator_extensions']);
 				break;
 			
 			case "settings_set": 
@@ -751,6 +822,10 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 						"requiered" => true,
 						"type" 		=> "numeric"
 					),
+					"wakeup_time_step" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
 				);
 				$new_options = array();
 				$missing_options = array();
@@ -773,6 +848,21 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 
 						case "operator_mode":
 							$new_options[$key] = ($params[$key] == "yes") ? "1": "0";
+						break;
+
+						case "wakeup_time_step":
+							// Only accept the values actually offered by the
+							// select (views/view.settings.settings.php), so a
+							// tampered/forged request can't push an arbitrary
+							// number into the timepicker's minute interval.
+							if ( ! in_array($params[$key], ['5', '10', '15', '30'], true) )
+							{
+								$invalid_value[] = $key;
+							}
+							else
+							{
+								$new_options[$key] = (int) $params[$key];
+							}
 						break;
 
 						default:
@@ -869,7 +959,8 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		return $data_return;
 	}
 
-	public function addWakeup($destination, $time, $lang)
+
+	public function addWakeup($destination, $time, $lang, $seriesId = null)
 	{
 		if(empty($lang))
 		{
@@ -877,19 +968,84 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		}
 		
 		$data = $this->getSetting();  // module config provided by user
+		dbug($data);
 		$this->generateCallFile(array(
 			"time"			=> $time,
 			"ext"			=> $destination,
 			"language"		=> $lang,
-			"maxretries"	=> $data['maxretries'],
-			"retrytime"		=> $data['retrytime'],
-			"waittime"		=> $data['waittime'],
-			"callerid"		=> $data['cnam']." <".$data['cid'].">",
-			"application"	=> $data['application'],
-			"data"			=> $data['data'],
+			"maxretries"	=> ($data['maxretries'] ?? ''),
+			"retrytime"		=> ($data['retrytime'] ?? ''),
+			"waittime"		=> ($data['waittime'] ?? ''),
+			"callerid"		=> ($data['cnam'] ?? '')." <".($data['cid'] ?? '').">",
+			"application"	=> ($data['application'] ?? ''),
+			"data"			=> ($data['data'] ?? ''),
 			"AlwaysDelete"	=> "Yes",
-			"Archive"		=> "Yes"
+			"Archive"		=> "Yes",
+			"seriesId"		=> $seriesId
 		));
+	}
+
+	public function addMultipleWakeups($destination, $time, $lang, $repeatOptions)
+	{
+		$dates = $this->calculateRepeatDates($repeatOptions);
+		$seriesId = uniqid('series_');
+		
+		foreach ($dates as $date) {
+			$wakeupTime = strtotime($date . ' ' . $time);
+			if ($wakeupTime > time()) {
+				$this->addWakeup($destination, $wakeupTime, $lang, $seriesId);
+			}
+		}
+		
+		return count($dates);
+	}
+
+	private function calculateRepeatDates($repeatOptions)
+	{
+		$dates = [];
+		$startDate = new \DateTime($repeatOptions['start_date']);
+		$currentTime = new \DateTime();
+		
+		// Ensure start date is not in the past
+		if ($startDate < $currentTime) {
+			$startDate = $currentTime;
+		}
+		
+		switch ($repeatOptions['type']) {
+			case 'consecutive':
+				$consecutiveDays = intval($repeatOptions['consecutive_days']);
+				for ($i = 0; $i < $consecutiveDays; $i++) {
+					$dates[] = $startDate->format('Y-m-d');
+					$startDate->add(new \DateInterval('P1D'));
+				}
+				break;
+				
+			case 'weekdays':
+				$endDate = new \DateTime($repeatOptions['end_date']);
+				$selectedWeekdays = array_map('intval', $repeatOptions['weekdays']);
+				
+				$current = clone $startDate;
+				while ($current <= $endDate) {
+					$dayOfWeek = intval($current->format('w')); // 0 = Sunday, 1 = Monday, etc.
+					if (in_array($dayOfWeek, $selectedWeekdays)) {
+						$dates[] = $current->format('Y-m-d');
+					}
+					$current->add(new \DateInterval('P1D'));
+				}
+				break;
+				
+			case 'until_date':
+				$endDate = new \DateTime($repeatOptions['end_date']);
+				$current = clone $startDate;
+				
+				while ($current <= $endDate) {
+					$dates[] = $current->format('Y-m-d');
+					$current->add(new \DateInterval('P1D'));
+				}
+				break;
+		}
+		
+		return $dates;
 	}
 
 	public function showPage($page, $params = array())
@@ -900,6 +1056,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 			'page' 		  => $page,
 		);
 		$data = array_merge($data, $params);
+		$data['action'] ?? '';
 		switch ($page) 
 		{
 			case "wakeup":
@@ -948,12 +1105,6 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		return $code;
 	}
 
-	public function getCodeActive() {
-		$fcc = new \featurecode('hotelwakeup', 'hotelwakeup');
-		$fc = $fcc->getCodeActive();
-		return $fc;
-	}
-
 	public function getSetting($option = null)
 	{
 		$data_return = $this->getAll("setting");
@@ -962,7 +1113,10 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 			$data_return = self::$defaultConfig;
 		}
 		
-        $not_allow_empty = array("application", "data");
+        // wakeup_time_step included here (not just application/data) so an
+        // already-saved config from before this setting existed still comes
+        // back with a usable value instead of an undefined index.
+        $not_allow_empty = array("application", "data", "wakeup_time_step");
         foreach ($not_allow_empty as $opt)
         {
             if (!isset($data_return[$opt]) || empty($data_return[$opt]))
@@ -1001,21 +1155,28 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		return $data_return;
 	}
 
+
 	public function saveSetting($options)
 	{
+		// Info:
+		// $options_list = array(
+		// 	'cid',
+		// 	'cnam',
+		// 	'extensionlength',
+		// 	'language',
+		// 	'maxretries',
+		// 	'operator_extensions',
+		// 	'operator_mode',
+		// 	'retrytime',
+		// 	'waittime',
+		// );
+
 		unset($options['callerid']);
 		if(! empty($options)) 
 		{
 			if ( ! is_array($options['operator_extensions']) )
 			{
-				if ( preg_match('/^[0-9,+\s]+$/', $options['operator_extensions']) )
-				{
-					$options['operator_extensions'] = explode(",", $options['operator_extensions']);
-				}
-				else
-				{
-					$options['operator_extensions'] = [];
-				}
+				$options['operator_extensions'] = explode(",", $options['operator_extensions']);
 			}
 
 			foreach($options as $key => $value)
@@ -1136,6 +1297,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 	}
 
 	public function generateCallFile($foo) {
+		dbug($foo);
 		if (empty($foo['tempdir'])) {
 			$ast_tmp_path = $this->getPath("tmp");
 			if(!file_exists($ast_tmp_path)) {
@@ -1164,23 +1326,15 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		}
 
 		// Create up a .call file, write and close
-		$defaultConfig  = self::$defaultConfig;
-		$maxretries 	= !empty($foo['maxretries'])? $foo['maxretries'] : $defaultConfig["maxretries"];
-		$retrytime 		= !empty($foo['retrytime'])? $foo['retrytime'] : $defaultConfig["retrytime"];
-		$waittime 		= !empty($foo['waittime'])? $foo['waittime'] : $defaultConfig['waittime'];
-		$language 		= !empty($foo['language'])? $foo['language'] : $defaultConfig['language'];
-		$application 	= !empty($foo['application'])? $foo['application'] : $defaultConfig['application'];
-		$data 			= !empty($foo['data'])? $foo['data'] : $defaultConfig['data'];
-		
 		$wuc = fopen($tempfile, 'w');
 		fputs( $wuc, "channel: Local/".$foo['ext']."@originate-skipvm\n" );
-		fputs( $wuc, "maxretries: ".$maxretries."\n");
-		fputs( $wuc, "retrytime: ".$retrytime."\n");
-		fputs( $wuc, "waittime: ".$waittime."\n");
+		fputs( $wuc, "maxretries: ".$foo['maxretries']."\n");
+		fputs( $wuc, "retrytime: ".$foo['retrytime']."\n");
+		fputs( $wuc, "waittime: ".$foo['waittime']."\n");
 		fputs( $wuc, "callerid: ".$foo['callerid']."\n");
-		fputs( $wuc, 'set: CHANNEL(language)='.$language."\n");
-		fputs( $wuc, "application: ".$application."\n");
-		fputs( $wuc, "data: ".$data."\n");
+		fputs( $wuc, 'set: CHANNEL(language)='.$foo['language']."\n");
+		fputs( $wuc, "application: ".$foo['application']."\n");
+		fputs( $wuc, "data: ".$foo['data']."\n");
 		fputs( $wuc, "AlwaysDelete: ".$foo['AlwaysDelete']."\n");
 		fputs( $wuc, "Archive: ".$foo['Archive']."\n");
 		fclose( $wuc );
@@ -1254,8 +1408,9 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		if ( $this->isMessageExists($msg) )
 		{
 			$message = $this->getConfig($msg, $this->getMessagesIdKVStore($lang));
-			$message = array_diff($message, array(''));
-
+			if(is_array($message)){
+				$message = array_diff($message, array(''));
+			}
 			if (empty($message))
 			{
 				$message = $this->getMessageDefault($msg, true);
@@ -1362,6 +1517,8 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		return $grp;
 	}
 
+
+
 	public function getLanguage()
 	{
 		//the language configured in the soundlang module will be used
@@ -1408,6 +1565,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		return $input;
 	}
 
+
 	//Legacy \ Maintain for PMS module compatibility.
 	public function getAllCalls() 
 	{
@@ -1418,6 +1576,7 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 		}
 		return $calls;
 	}
+
 
 	/**
 	 * Functions Proxy other Modules
@@ -1436,53 +1595,4 @@ class Hotelwakeup extends \FreePBX_Helpers implements \BMO {
 	{
 		return $this->Recordings->fileStatus($file, true);
 	}
-
-	/**
-	 * Dialplan hooks
-	 * 
-	 */
-	public function myDialplanHooks() {
-		return true;
-	}
-	public function doDialplanHook(&$ext, $engine, $priority) {
-		if ($engine != "asterisk") { return; }
-
-		$section = self::ASTERISK_SECTION;
-		$fc = $this->getCodeActive();
-		if (!empty($fc))
-		{
-			$ext->addInclude('from-internal-additional', $section); // Add the include from from-internal
-			$ext->add($section, $fc, '', new \ext_Macro('user-callerid'));
-			$ext->add($section, $fc, '', new \ext_answer(''));
-			$ext->add($section, $fc, '', new \ext_wait(1));
-			$ext->add($section, $fc, '', new \ext_AGI('wakeup'));
-			$ext->add($section, $fc, '', new \ext_Hangup);
-		}
-	}
-
-
-	/**
-	 * Hook Extensions
-	 */
-	public function HookGetExtensions()
-	{
-		// It is necessary to call "loadAllFunctionsInc" since otherwise "extensions->checkusage" returns an empty array.
-		$this->FreePBX->Modules->loadAllFunctionsInc();
-
-		$data_return = array();
-		$results = $this->extensions->checkUsage(true);
-		$results = is_array($results) ? $results : array();
-		foreach($results as $key => $value)
-		{
-			if (in_array($key, array('core', 'customappsreg')))
-			{
-				foreach($value as $subkey => $subvalue)
-				{
-					$data_return[$subkey] = $subvalue['description'];
-				}
-			}
-		}
-		return $data_return;
-	}
-
 }

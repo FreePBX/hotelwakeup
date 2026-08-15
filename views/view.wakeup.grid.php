@@ -6,7 +6,7 @@
 	</div>
     <span class="btn btn-time disabled">
         <b><?php echo _("Server time")?>:</b>
-        <div id="servertime" data-time="<?php echo time()?>" data-zone="<?php echo date("e")?>" style="display: inline;"><span><?php echo _("Not received")?></span></div>
+        <div id="servertime" data-time="<?php echo time()?>" data-zone="<?php echo date("e")?>" data-timestep="<?php echo (int)$hotelwakeup->getSetting('wakeup_time_step')?>" style="display: inline;"><span><?php echo _("Not received")?></span></div>
     </span>
 </div>
 <table id="callgrid" class="table table-striped"
@@ -32,7 +32,7 @@
 </table>
 
 <div class="modal fade" id="dlgCreateCall" tabindex="-1" role="dialog" aria-labelledby="dlgCreateCallLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="dlgCreateCallLabel"><?php echo _('Add new Wakeup Call')?></h4>
@@ -41,8 +41,8 @@
 				<?php echo $hotelwakeup->showPage("wakeup.grid.create"); ?>	
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo _('Cancel')?></button>
-				<button type="button" class="btn active" id="savecall"><?php echo _('Create Call')?></button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo _('Cancel')?></button>
+				<button type="button" class="btn btn-primary" id="savecall"><?php echo _('Create Call')?></button>
 			</div>
 		</div>
 	</div>

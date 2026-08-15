@@ -38,54 +38,21 @@
 	// }
 }
 
-
-.has-error {
-	.BoxExtensionsList {
-		& .alert-info {
-			border: 2px solid #a94442;
-		}
-		
-		& ul {
-			border: 2px dashed #a94442;
-			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-			box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-		}
-	}
+#floating-nav-bar .floating-nav-bar-contents {
+	padding: 15px 0px 15px 0px !important;
 }
 
-.BoxExtensionsList {
-	.alert {
-		text-align: center;
-	}
-	ul {
-		width: 100%;
-		height: 300px;
-		max-height: 300px;
-		margin-bottom: 10px;
-		overflow: auto;
-		-webkit-overflow-scrolling: touch;
+// The "Enable repeat options" and "Specific Weekdays" checkboxes in the
+// Add/Edit Wakeup Call modal render with the browser's native blue accent
+// by default. Use the same theme primary color as the rest of the admin
+// (confirmed against the .panel-primary heading background) instead.
+#callform input[type="checkbox"] {
+	accent-color: #157d7c !important;
+}
 
-		border: 1px dashed rgb(197, 70, 70);
-	}
-
-	ul.ExtensionListSelected {
-		height: 258px;
-		max-height: 258px;
-	}
-
-	ul li {
-		background-color: Azure;
-		list-style-type: "";
-		text-align: left;
-		padding: 5px;
-		border: 0px;
-	}
-
-	ul li:nth-child(even) {
-		background-color: #f2f2f2;
-	}
-
-	ul li.selected {
-		background-color: GoldenRod;
-	}
+// Same issue in the "Language" bootstrap-multiselect dropdown: the currently
+// selected item is highlighted with Bootstrap's default blue (#337ab7)
+// instead of the theme color.
+#callform .multiselect-container li.active > a {
+	background-color: #157d7c !important;
 }

@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>16.0.9</version>
+	<version>16.0.10</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,7 +10,8 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://wiki.freepbx.org/display/F2/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
-		*16.0.9* FREEPBX-24236 
+		*16.0.10* The Time field in the Add/Edit Wakeup Call modal now always displays/accepts 24h format (e.g. "14:30") instead of the jquery.timepicker plugin's default 12h "2:30 pm". Added a "Wakeup Time Step" setting (5/10/15/30 minutes, default 15) on ?display=hotelwakeup_settings controlling the granularity of the times offered in the Time dropdown -- typing an exact time still always works regardless of this setting. Added cache-busting (filemtime-based version query string) to the wakeup.js/settings.js/global.js/messages.js includes: without it, a browser tab left open across a module update kept running the previous JS, which on the Settings page silently dropped any field the stale script didn't know to send and surfaced as a "missing parameters" save error. Fixed the "Enable repeat options" / weekday checkboxes and the selected Language dropdown item highlighting in the Add/Edit Wakeup Call modal rendering with the browser's default blue accent instead of the FreePBX theme color.
+		*16.0.9* FREEPBX-24236
 		*16.0.8* FREEPBX-23913 
 		*16.0.7* FREEPBX-23913 
 		*16.0.6* FREEPBX-23910 and FREEPBX-23773 
