@@ -167,6 +167,38 @@
         </div>
         <!-- Block - Max Retries -->
 
+        <!-- Block - Wakeup Time Step -->
+        <div class="element-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label" for="wakeup_time_step"><?php echo _('Wakeup Time Step')?></label>
+                                <i class="fa fa-question-circle fpbx-help-icon" data-for="wakeup_time_step"></i>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control" name="wakeup_time_step" id="wakeup_time_step">
+                                    <option value="5"><?php echo sprintf(_('%d minutes'), 5)?></option>
+                                    <option value="10"><?php echo sprintf(_('%d minutes'), 10)?></option>
+                                    <option value="15"><?php echo sprintf(_('%d minutes'), 15)?></option>
+                                    <option value="30"><?php echo sprintf(_('%d minutes'), 30)?></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span id="wakeup_time_step-help" class="help-block fpbx-help-block">
+                        <?php echo _('Interval, in minutes, between the times offered in the Time dropdown of the Add/Edit Wakeup Call form. Typing an exact time is always possible regardless of this setting.')?>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Wakeup Time Step -->
+
         <!-- Block - Wake Up Caller ID -->
         <div class="element-container">
             <div class="row">

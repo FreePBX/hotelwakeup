@@ -14,9 +14,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
         'operator_mode' => '1', 
         'operator_extensions' => ['00','01'], 
         'extensionlength' => '4', 
-        'application' => 'AGI', 
+        'application' => 'AGI',
         'data' => 'wakeconfirm.php',
 		'language' => '',
+		'wakeup_time_step' => 15,
 	];
 
 	public static $defaultMessage = [
@@ -336,11 +337,34 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		{
 			case "savecall":
 				$params = array(
-					'day' 			=> empty($_POST['day']) 		? '' : $_POST['day'],
 					'time' 			=> empty($_POST['time']) 		? '' : $_POST['time'],
 					'destination' 	=> empty($_POST['destination']) ? '' : $_POST['destination'],
 					'language' 		=> empty($_POST['language'])	? '' : $_POST['language'],
+					'repeat'		=> empty($_POST['repeat'])		? 0 : intval($_POST['repeat']),
 				);
+
+				if ($params['repeat'] == 1) {
+					// Repeat mode
+					$params['repeat_type'] = empty($_POST['repeat_type']) ? 'consecutive' : $_POST['repeat_type'];
+					$params['start_date'] = empty($_POST['start_date']) ? '' : $_POST['start_date'];
+
+					switch ($params['repeat_type']) {
+						case 'consecutive':
+							$params['consecutive_days'] = empty($_POST['consecutive_days']) ? 1 : intval($_POST['consecutive_days']);
+							break;
+						case 'weekdays':
+							$params['weekdays'] = empty($_POST['weekdays']) ? array() : $_POST['weekdays'];
+							$params['end_date'] = empty($_POST['end_date']) ? '' : $_POST['end_date'];
+							break;
+						case 'until_date':
+							$params['end_date'] = empty($_POST['end_date']) ? '' : $_POST['end_date'];
+							break;
+					}
+				} else {
+					// Single day mode
+					$params['day'] = empty($_POST['day']) ? '' : $_POST['day'];
+				}
+
 				return $this->run_action("wakeup_create", $params);
 				break;
 
@@ -643,26 +667,78 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		switch($action)
 		{
 			case "wakeup_create":
-				if(empty($params['day']) || empty($params['time']) || empty($params['destination'])) 
+				if(empty($params['time']) || empty($params['destination']))
 				{
 					$data_return = array("status" => false, "message" => _("Cannot schedule the call, due to insufficient data!"));
 				}
-				else 
+				else
 				{
 					$lang = empty($params['language']) ? '' :  $params['language'];
-					$time_wakeup = strtotime($params['day']." ".$params['time']);
 					$time_now = time();
-	
-					// check for insufficient data
-					if ( $time_wakeup === false || $time_wakeup <= $time_now )
-					{
-						// abandon .call file creation and pop up a js alert to the user
-						$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
-					}
-					else
-					{
-						$this->addWakeup($params['destination'], $time_wakeup, $lang);
-						$data_return = array("status" => true);
+
+					if (!empty($params['repeat']) && $params['repeat'] == 1) {
+						// Repeat mode - validate repeat parameters
+						if (empty($params['start_date'])) {
+							$data_return = array("status" => false, "message" => _("Start date is required for repeat mode!"));
+						} else {
+							$repeatOptions = array(
+								'type' => $params['repeat_type'],
+								'start_date' => $params['start_date']
+							);
+
+							switch ($params['repeat_type']) {
+								case 'consecutive':
+									$repeatOptions['consecutive_days'] = $params['consecutive_days'];
+									break;
+								case 'weekdays':
+									if (empty($params['weekdays']) || !is_array($params['weekdays'])) {
+										$data_return = array("status" => false, "message" => _("At least one weekday must be selected!"));
+										break 2;
+									}
+									$repeatOptions['weekdays'] = $params['weekdays'];
+									$repeatOptions['end_date'] = $params['end_date'];
+									break;
+								case 'until_date':
+									if (empty($params['end_date'])) {
+										$data_return = array("status" => false, "message" => _("End date is required for until_date mode!"));
+										break 2;
+									}
+									$repeatOptions['end_date'] = $params['end_date'];
+									break;
+							}
+
+							// Validate start date is not in the past
+							$start_timestamp = strtotime($params['start_date'] . ' ' . $params['time']);
+							if ($start_timestamp <= $time_now) {
+								$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call, the scheduled start time is in the past. [Time now: %s] [Start Time: %s]"), date(DATE_RFC2822, $time_now), date(DATE_RFC2822, $start_timestamp)));
+							} else {
+								try {
+									$count = $this->addMultipleWakeups($params['destination'], $params['time'], $lang, $repeatOptions);
+									$data_return = array("status" => true, "message" => sprintf(_("Successfully scheduled %d wakeup calls"), $count));
+								} catch (Exception $e) {
+									$data_return = array("status" => false, "message" => _("Error creating repeat wakeup calls: ") . $e->getMessage());
+								}
+							}
+						}
+					} else {
+						// Single day mode
+						if (empty($params['day'])) {
+							$data_return = array("status" => false, "message" => _("Day is required for single wakeup mode!"));
+						} else {
+							$time_wakeup = strtotime($params['day']." ".$params['time']);
+
+							// check for insufficient data
+							if ( $time_wakeup === false || $time_wakeup <= $time_now )
+							{
+								// abandon .call file creation and pop up a js alert to the user
+								$data_return = array("status" => false, "message" => sprintf(_("Cannot schedule the call the scheduled time is in the past. [Time now: %s] [Wakeup Time: %s]"),date(DATE_RFC2822,$time_now),date(DATE_RFC2822,$time_wakeup)));
+							}
+							else
+							{
+								$this->addWakeup($params['destination'], $time_wakeup, $lang);
+								$data_return = array("status" => true);
+							}
+						}
 					}
 				}
 				break;
@@ -747,6 +823,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 						"requiered" => true,
 						"type" 		=> "numeric"
 					),
+					"wakeup_time_step" => array(
+						"requiered" => true,
+						"type" 		=> "numeric"
+					),
 				);
 				$new_options = array();
 				$missing_options = array();
@@ -769,6 +849,21 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 						case "operator_mode":
 							$new_options[$key] = ($params[$key] == "yes") ? "1": "0";
+						break;
+
+						case "wakeup_time_step":
+							// Only accept the values actually offered by the
+							// select (views/view.settings.settings.php), so a
+							// tampered/forged request can't push an arbitrary
+							// number into the timepicker's minute interval.
+							if ( ! in_array($params[$key], ['5', '10', '15', '30'], true) )
+							{
+								$invalid_value[] = $key;
+							}
+							else
+							{
+								$new_options[$key] = (int) $params[$key];
+							}
 						break;
 
 						default:
@@ -866,13 +961,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 	}
 
 
-	public function addWakeup($destination, $time, $lang)
+	public function addWakeup($destination, $time, $lang, $seriesId = null)
 	{
 		if(empty($lang))
 		{
 			$lang = $this->getLanguage();
 		}
-		
+
 		$data = $this->getSetting();  // module config provided by user
 		$this->generateCallFile(array(
 			"time"			=> $time,
@@ -885,8 +980,72 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 			"application"	=> ($data['application'] ?? ''),
 			"data"			=> ($data['data'] ?? ''),
 			"AlwaysDelete"	=> "Yes",
-			"Archive"		=> "Yes"
+			"Archive"		=> "Yes",
+			"seriesId"		=> $seriesId
 		));
+	}
+
+	public function addMultipleWakeups($destination, $time, $lang, $repeatOptions)
+	{
+		$dates = $this->calculateRepeatDates($repeatOptions);
+		$seriesId = uniqid('series_');
+
+		foreach ($dates as $date) {
+			$wakeupTime = strtotime($date . ' ' . $time);
+			if ($wakeupTime > time()) {
+				$this->addWakeup($destination, $wakeupTime, $lang, $seriesId);
+			}
+		}
+
+		return count($dates);
+	}
+
+	private function calculateRepeatDates($repeatOptions)
+	{
+		$dates = [];
+		$startDate = new \DateTime($repeatOptions['start_date']);
+		$currentTime = new \DateTime();
+
+		// Ensure start date is not in the past
+		if ($startDate < $currentTime) {
+			$startDate = $currentTime;
+		}
+
+		switch ($repeatOptions['type']) {
+			case 'consecutive':
+				$consecutiveDays = intval($repeatOptions['consecutive_days']);
+				for ($i = 0; $i < $consecutiveDays; $i++) {
+					$dates[] = $startDate->format('Y-m-d');
+					$startDate->add(new \DateInterval('P1D'));
+				}
+				break;
+
+			case 'weekdays':
+				$endDate = new \DateTime($repeatOptions['end_date']);
+				$selectedWeekdays = array_map('intval', $repeatOptions['weekdays']);
+
+				$current = clone $startDate;
+				while ($current <= $endDate) {
+					$dayOfWeek = intval($current->format('w')); // 0 = Sunday, 1 = Monday, etc.
+					if (in_array($dayOfWeek, $selectedWeekdays)) {
+						$dates[] = $current->format('Y-m-d');
+					}
+					$current->add(new \DateInterval('P1D'));
+				}
+				break;
+
+			case 'until_date':
+				$endDate = new \DateTime($repeatOptions['end_date']);
+				$current = clone $startDate;
+
+				while ($current <= $endDate) {
+					$dates[] = $current->format('Y-m-d');
+					$current->add(new \DateInterval('P1D'));
+				}
+				break;
+		}
+
+		return $dates;
 	}
 
 	public function showPage($page, $params = array())
@@ -952,6 +1111,13 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 		if (empty($data_return))
 		{
 			$data_return = self::$defaultConfig;
+		}
+		else
+		{
+			// Backfill any default keys missing from an already-saved config
+			// (e.g. after upgrading and adding a new setting like
+			// wakeup_time_step) so callers never get an undefined index.
+			$data_return = array_merge(self::$defaultConfig, $data_return);
 		}
 
 		$data_return['callerid'] = sprintf('"%s" <%s>', $data_return['cnam'], $data_return['cid']);

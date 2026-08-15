@@ -49,6 +49,7 @@ function loadSettings(e)
 				"waittime",
 				"retrytime",
 				"maxretries",
+				"wakeup_time_step",
 			];
 
 			$("#operator_mode_" + config.operator_mode).prop('checked', true);
@@ -79,6 +80,7 @@ function saveSettings(e)
 		waittime			: $("#waittime").val(),
 		retrytime			: $("#retrytime").val(),
 		maxretries			: $("#maxretries").val(),
+		wakeup_time_step	: $("#wakeup_time_step").val(),
 	};
 	disabledSettings(true);
 	$.post(window.FreePBX.ajaxurl, post_data, function(data) 
@@ -136,6 +138,7 @@ function disabledSettings(new_status)
 		"#waittime",
 		"#retrytime",
 		"#maxretries",
+		"#wakeup_time_step",
 	];
 	input_list.forEach(element => $(element).prop("disabled", new_status));
 }

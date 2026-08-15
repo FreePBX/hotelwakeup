@@ -41,3 +41,18 @@
 #floating-nav-bar .floating-nav-bar-contents {
 	padding: 15px 0px 15px 0px !important;
 }
+
+// The "Enable repeat options" and "Specific Weekdays" checkboxes in the
+// Add/Edit Wakeup Call modal render with the browser's native blue accent
+// by default. Use the same theme primary color as the rest of the admin
+// (confirmed against the .panel-primary heading background) instead.
+#callform input[type="checkbox"] {
+	accent-color: #157d7c !important;
+}
+
+// Same issue in the "Language" bootstrap-multiselect dropdown: the selected
+// item's radio indicator uses the browser/Bootstrap default blue instead of
+// the theme color.
+#callform .multiselect-container input[type="radio"] {
+	accent-color: #157d7c !important;
+}
