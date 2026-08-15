@@ -24,9 +24,11 @@ class Hotelwakeup extends Base {
 		* @returns - code
 		* @uri /hotelwakeup/code
 		*/
-		$app->get('/code', function ($request, $response, $args) {
-            $code = $this->freepbx->Hotelwakeup->getCode();
-			return $response->withJson($code);
+		$freepbx = $this->freepbx;
+		$app->get('/code', function ($request, $response, $args) use($freepbx) {
+            $code = $freepbx->Hotelwakeup->getCode();
+			$response->getBody()->write(json_encode($code));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 		
 		/**
@@ -34,9 +36,10 @@ class Hotelwakeup extends Base {
 		* @returns - the list of all languages installed
 		* @uri /hotelwakeup/languages
 		*/
-		$app->get('/languages', function ($request, $response, $args) {
-			$langs = $this->freepbx->Hotelwakeup->getLanguages();
-			return $response->withJson($langs);
+		$app->get('/languages', function ($request, $response, $args) use($freepbx) {
+			$langs = $freepbx->Hotelwakeup->getLanguages();
+			$response->getBody()->write(json_encode($langs));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 
 
@@ -47,9 +50,10 @@ class Hotelwakeup extends Base {
 		* @returns - wake up call list
 		* @uri /hotelwakeup/wakeup
 		*/
-		$app->get('/wakeup', function ($request, $response, $args) {
-            $calls = $this->freepbx->Hotelwakeup->getAllWakeup();
-			return $response->withJson($calls);
+		$app->get('/wakeup', function ($request, $response, $args) use($freepbx) {
+            $calls = $freepbx->Hotelwakeup->getAllWakeup();
+			$response->getBody()->write(json_encode($calls));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllReadScopeMiddleware());
 		
 		/**
@@ -57,13 +61,14 @@ class Hotelwakeup extends Base {
 		* @returns - wake up call info
 		* @uri /hotelwakeup/wakeup/:id/:ext
 		*/
-		$app->get('/wakeup/{id}/{ext}', function ($request, $response, $args) {
+		$app->get('/wakeup/{id}/{ext}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'id' 	=> empty($args['id'])  ? '' : $args['id'],
 				'ext' 	=> empty($args['ext']) ? '' : $args['ext']
 			);
-			$call = $this->freepbx->Hotelwakeup->run_action("wakeup_get", $params);
-			return $response->withJson($call);
+			$call = $freepbx->Hotelwakeup->run_action("wakeup_get", $params);
+			$response->getBody()->write(json_encode($call));
+			return $response->withHeader('Content-Type', 'application/json');
         })->add($this->checkAllReadScopeMiddleware());
 
         /**
@@ -71,7 +76,7 @@ class Hotelwakeup extends Base {
 		* @returns - true if the wakeup call was create, false otherwise
 		* @uri /hotelwakeup/wakeup
 		*/
-		$app->post('/wakeup', function ($request, $response, $args) {
+		$app->post('/wakeup', function ($request, $response, $args) use($freepbx) {
 			$params_all = $request->getParsedBody();
 			$params = array(
 				'day' 			=> empty($params_all['day']) 		? '' : $params_all['day'],
@@ -79,8 +84,9 @@ class Hotelwakeup extends Base {
 				'destination'	=> empty($params_all['destination'])? '' : $params_all['destination'],
 				'language' 		=> empty($params_all['language'])	? '' : $params_all['language'],
 			);
-            $data_return = $this->freepbx->Hotelwakeup->run_action("wakeup_create", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("wakeup_create", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllWriteScopeMiddleware());
 
         /**
@@ -88,13 +94,14 @@ class Hotelwakeup extends Base {
 		* @returns - true if the wakeup call was deleted, false otherwise
 		* @uri /hotelwakeup/wakeup/:id/:ext
 		*/
-		$app->delete('/wakeup/{id}/{ext}', function ($request, $response, $args) {
+		$app->delete('/wakeup/{id}/{ext}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'id' 	=> empty($args['id'])  ? '' : $args['id'],
 				'ext' 	=> empty($args['ext']) ? '' : $args['ext']
 			);
-            $data_return = $this->freepbx->Hotelwakeup->run_action("wakeup_delete", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("wakeup_delete", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkAllWriteScopeMiddleware());
 
 
@@ -105,9 +112,10 @@ class Hotelwakeup extends Base {
 		* @returns - the list of all settings
 		* @uri /hotelwakeup/settings
 		*/
-		$app->get('/settings', function ($request, $response, $args) {
-			$settings = $this->freepbx->Hotelwakeup->run_action("settings_get");
-			return $response->withJson($settings);
+		$app->get('/settings', function ($request, $response, $args) use($freepbx) {
+			$settings = $freepbx->Hotelwakeup->run_action("settings_get");
+			$response->getBody()->write(json_encode($settings));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkReadScopeMiddleware('settings'));
 		
 		
@@ -116,10 +124,11 @@ class Hotelwakeup extends Base {
 		* @returns - True if settings have been updated, false otherwise
 		* @uri /hotelwakeup/settings
 		*/
-		$app->put('/settings', function ($request, $response, $args) {
+		$app->put('/settings', function ($request, $response, $args) use($freepbx) {
 			$params = $request->getParsedBody();
-            $data_return = $this->freepbx->Hotelwakeup->run_action("settings_set", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("settings_set", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkWriteScopeMiddleware('settings'));
 		
 
@@ -130,13 +139,14 @@ class Hotelwakeup extends Base {
 		* @returns - all messegaes by lang
 		* @uri /hotelwakeup/settings/messages/:language
 		*/
-		$app->get('/settings/messages/{language}', function ($request, $response, $args) {
+		$app->get('/settings/messages/{language}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'language' 	=> empty($args['language'])  ? '' : $args['language'],
 				'message' 	=> "",
 			);
-			$settings = $this->freepbx->Hotelwakeup->run_action("settings_messages_get", $params);
-			return $response->withJson($settings);
+			$settings = $freepbx->Hotelwakeup->run_action("settings_messages_get", $params);
+			$response->getBody()->write(json_encode($settings));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkReadScopeMiddleware('settings'));
 
 		/**
@@ -144,13 +154,14 @@ class Hotelwakeup extends Base {
 		* @returns - returns the selected message for the specified language
 		* @uri /hotelwakeup/settings/messages/:language/:message
 		*/
-		$app->get('/settings/messages/{language}/{message}', function ($request, $response, $args) {
+		$app->get('/settings/messages/{language}/{message}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'language' 	=> empty($args['language'])  ? '' : $args['language'],
 				'message' 	=> empty($args['message'])   ? '' : $args['message'],
 			);
-			$settings = $this->freepbx->Hotelwakeup->run_action("settings_messages_get", $params);
-			return $response->withJson($settings);
+			$settings = $freepbx->Hotelwakeup->run_action("settings_messages_get", $params);
+			$response->getBody()->write(json_encode($settings));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkReadScopeMiddleware('settings'));
 
 
@@ -159,13 +170,14 @@ class Hotelwakeup extends Base {
 		* @returns - true if the data has been updated correctly
 		* @uri /hotelwakeup/settings/messages/:language
 		*/
-		$app->put('/settings/messages/{language}', function ($request, $response, $args) {
+		$app->put('/settings/messages/{language}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'language' 	=> empty($args['language'])  ? '' : $args['language'],
 				'message'	=> $request->getParsedBody()
 			);
-            $data_return = $this->freepbx->Hotelwakeup->run_action("settings_messages_set", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("settings_messages_set", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkWriteScopeMiddleware('settings'));
 
 
@@ -174,13 +186,14 @@ class Hotelwakeup extends Base {
 		* @returns - true if it was removed successfully.
 		* @uri /hotelwakeup/settings/messages/:language
 		*/
-		$app->delete('/settings/messages/{language}', function ($request, $response, $args) {
+		$app->delete('/settings/messages/{language}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'language' 	=> empty($args['language']) ? '' : $args['language'],
 				'message' 	=> ""
 			);
-            $data_return = $this->freepbx->Hotelwakeup->run_action("settings_messages_delete", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("settings_messages_delete", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkWriteScopeMiddleware('settings'));
 
         /**
@@ -188,13 +201,14 @@ class Hotelwakeup extends Base {
 		* @returns - true if it was removed successfully.
 		* @uri /hotelwakeup/settings/messages/:language/:message
 		*/
-		$app->delete('/settings/messages/{language}/{message}', function ($request, $response, $args) {
+		$app->delete('/settings/messages/{language}/{message}', function ($request, $response, $args) use($freepbx) {
 			$params = array(
 				'language' 	=> empty($args['language']) ? '' : $args['language'],
 				'message' 	=> empty($args['message'])  ? '' : $args['message']
 			);
-            $data_return = $this->freepbx->Hotelwakeup->run_action("settings_messages_delete", $params);
-			return $response->withJson($data_return);
+            $data_return = $freepbx->Hotelwakeup->run_action("settings_messages_delete", $params);
+			$response->getBody()->write(json_encode($data_return));
+			return $response->withHeader('Content-Type', 'application/json');
 		})->add($this->checkWriteScopeMiddleware('settings'));
 
 	}

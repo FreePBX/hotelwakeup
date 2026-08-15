@@ -9,4 +9,4 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="modules/hotelwakeup/assets/js/views/wakeup.js"></script>
+<script type="text/javascript" src="modules/hotelwakeup/assets/js/views/wakeup.js?<?php echo @filemtime(__DIR__.'/../assets/js/views/wakeup.js') ?: time(); ?>"></script>

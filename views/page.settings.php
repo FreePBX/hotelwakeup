@@ -3,7 +3,7 @@
 	$show_page 	 = "";
 	$params_page = array();
 	
-	switch($request['action'])
+	switch($request['action'] ?? '')
 	{
 		case '':
 			// if the action is null, set the next case as the default action.
@@ -16,7 +16,7 @@
 		break;
 
 		case "messages":
-			switch($request['option'])
+			switch($request['option'] ?? '')
 			{
 				case '':
 					$_REQUEST['option'] = "list";
@@ -72,7 +72,14 @@
 				foreach($js_files as $js_file)
 				{
 					if (empty($js_file)) { continue; }
-					echo sprintf('<script type="text/javascript" src="modules/hotelwakeup/assets/js/views/%s"></script>', $js_file);
+					// Cache-bust: without this, browsers keep serving an
+					// already-loaded tab's stale copy of e.g. settings.js
+					// after the module is updated, silently dropping any
+					// field the old JS didn't know to send (surfaces server
+					// side as "missing parameters" on save).
+					$js_path  = __DIR__.'/../assets/js/views/'.$js_file;
+					$js_ver   = @filemtime($js_path) ?: time();
+					echo sprintf('<script type="text/javascript" src="modules/hotelwakeup/assets/js/views/%s?%d"></script>', $js_file, $js_ver);
 				}
 			?>
 			</div>
