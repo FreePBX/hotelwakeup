@@ -2,7 +2,7 @@
 	<rawname>hotelwakeup</rawname>
 	<name>Wake Up Calls</name>
 	<repo>standard</repo>
-	<version>17.0.1.8</version>
+	<version>17.0.1.9</version>
 	<license>GPLv2</license>
 	<licenselink>https://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
 	<publisher>Sangoma Technologies Corporation</publisher>
@@ -10,6 +10,7 @@
 	<description>FreePBX module for generating reminder and wakeup calls</description>
 	<more-info>https://sangomakb.atlassian.net/wiki/spaces/PG/pages/21299361/Wake+Up+Calls+User+Guide</more-info>
 	<changelog>
+		*17.0.1.9* 24h time picker + configurable step, and other Add/Edit Wakeup Call fixes 
 		*17.0.1.8* Added repeat wakeup call option in the Add/Edit Wakeup Call modal: consecutive days, specific weekdays, or until a given date (ported from the 16.0 branch). The Time field in the Add/Edit Wakeup Call modal now always displays/accepts 24h format (e.g. "14:30") instead of the jquery.timepicker plugin's default 12h "2:30 pm". Added a "Wakeup Time Step" setting (5/10/15/30 minutes, default 15) on ?display=hotelwakeup_settings controlling the granularity of the times offered in the Time dropdown -- typing an exact time still always works regardless of this setting. Fixed the repeat/weekday checkboxes and the selected Language dropdown item rendering with the browser's default blue instead of the FreePBX theme color in the Add/Edit Wakeup Call modal. Added cache-busting (filemtime-based version query string) to the wakeup.js/settings.js/global.js/messages.js includes: without it, a browser tab left open across a module update kept running the previous JS, which on the Settings page silently dropped any field the stale script didn't know to send and surfaced as a "missing parameters" save error.
 		*17.0.1.7* #issue-991 wakeup call audio instruction issue fix
 		*17.0.1.6* bump 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 08:20-0400\n"
+"POT-Creation-Date: 2026-08-24 04:47-0400\n"
 "PO-Revision-Date: 2017-07-25 21:58+0200\n"
 "Last-Translator: PETER <ftek@ymail.com>\n"
 "Language-Team: Vietnamese <http://weblate.freepbx.org/projects/freepbx/"
@@ -27,12 +27,12 @@ msgstr ""
 msgid "%d minutes"
 msgstr ""
 
-#: Hotelwakeup.class.php:491
+#: Hotelwakeup.class.php:515
 #, php-format
 msgid "%s can not be blank."
 msgstr ""
 
-#: Hotelwakeup.class.php:492
+#: Hotelwakeup.class.php:516
 #, php-format
 msgid "%s only allow numbers."
 msgstr ""
@@ -66,6 +66,14 @@ msgstr "Thêm một cuộc gọi đánh thức mới"
 msgid "Applications"
 msgstr "Các ứng dụng"
 
+#: assets/js/views/wakeup.js:154
+msgid "At least one weekday must be selected"
+msgstr ""
+
+#: Hotelwakeup.class.php:695
+msgid "At least one weekday must be selected!"
+msgstr ""
+
 #: views/view.settings.message.edit.php:126
 msgid ""
 "By default when detecting a number \"say_number\" is used, but if we want to "
@@ -73,7 +81,7 @@ msgid ""
 "b>, <b>xxx</b> corresponds to the number."
 msgstr ""
 
-#: views/view.settings.settings.php:190
+#: views/view.settings.settings.php:222
 msgid ""
 "CallerID for Wake Up Calls<br><br>Format: <b>&lt;#######&gt;</b>. You can "
 "also use the format: \"hidden\" <b>&lt;#######&gt;</b> to hide the CallerID "
@@ -84,7 +92,7 @@ msgstr ""
 "để ẩn các Caller ID được gửi ra khỏi đường dây kỹ thuật số nếu được hỗ trợ "
 "(E1/T1/J1/BRI/SIP/IAX)"
 
-#: views/view.wakeup.grid.create.php:82
+#: views/view.wakeup.grid.create.php:236
 msgid "Calling language"
 msgstr ""
 
@@ -92,19 +100,19 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: Hotelwakeup.class.php:692
+#: Hotelwakeup.class.php:768
 msgid "Cannot delete the call, due to insufficient data!"
 msgstr ""
 
-#: Hotelwakeup.class.php:673
+#: Hotelwakeup.class.php:749
 msgid "Cannot get info the call, due to insufficient data!"
 msgstr ""
 
-#: Hotelwakeup.class.php:680
+#: Hotelwakeup.class.php:756
 msgid "Cannot get info the call, due to not exist the call!"
 msgstr ""
 
-#: Hotelwakeup.class.php:660
+#: Hotelwakeup.class.php:734
 #, php-format
 msgid ""
 "Cannot schedule the call the scheduled time is in the past. [Time now: %s] "
@@ -113,15 +121,26 @@ msgstr ""
 "Không thể tạo lịch cuộc gọi theo như thời gian đã lập trước đó. [Thời gian "
 "hiện tại: %s]  [Thời gian đánh thức: %s]"
 
-#: Hotelwakeup.class.php:648
+#: Hotelwakeup.class.php:672
 msgid "Cannot schedule the call, due to insufficient data!"
+msgstr ""
+
+#: Hotelwakeup.class.php:713
+#, php-format
+msgid ""
+"Cannot schedule the call, the scheduled start time is in the past. [Time "
+"now: %s] [Start Time: %s]"
 msgstr ""
 
 #: views/view.settings.message.edit.line.php:57
 msgid "Checking..."
 msgstr ""
 
-#: Hotelwakeup.class.php:609
+#: views/view.wakeup.grid.create.php:108
+msgid "Choose how you want to repeat the wakeup call"
+msgstr ""
+
+#: Hotelwakeup.class.php:633
 msgid "Command not found!"
 msgstr ""
 
@@ -131,6 +150,10 @@ msgstr ""
 
 #: views/view.settings.message.edit.php:119
 msgid "Confirmation of Wake-Up Call Delay"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:97
+msgid "Consecutive Days"
 msgstr ""
 
 #: views/view.settings.message.edit.php:74
@@ -145,15 +168,19 @@ msgstr ""
 msgid "Date"
 msgstr "Ngày"
 
-#: views/view.wakeup.grid.create.php:50
+#: views/view.wakeup.grid.create.php:72
 msgid "Day"
 msgstr "Ngày"
 
-#: assets/js/views/wakeup.js:44
+#: assets/js/views/wakeup.js:176
 msgid "Day can not be blank"
 msgstr "Không để trống mục Ngày"
 
-#: views/view.wakeup.grid.create.php:60
+#: Hotelwakeup.class.php:726
+msgid "Day is required for single wakeup mode!"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:82
 msgid "Day to call"
 msgstr "Ngày gọi"
 
@@ -165,16 +192,36 @@ msgstr ""
 msgid "Destination"
 msgstr "Điểm đích"
 
-#: assets/js/views/wakeup.js:36
-msgid "Destination can not be blank"
-msgstr "Không để trống mục Điểm đích"
-
 #: views/view.wakeup.grid.create.php:20
 msgid "Destination to call"
 msgstr "Điểm đích để gọi"
 
 #: views/view.settings.message.edit.php:94
 msgid "Empty Wake Up Call List"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:54
+msgid "Enable repeat options"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:62
+msgid "Enable to repeat the wakeup call on multiple days"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:204
+msgid "End Date"
+msgstr ""
+
+#: assets/js/views/wakeup.js:167
+msgid "End date can not be blank"
+msgstr ""
+
+#: assets/js/views/wakeup.js:158
+msgid "End date can not be blank for weekdays repeat"
+msgstr ""
+
+#: Hotelwakeup.class.php:703
+msgid "End date is required for until_date mode!"
 msgstr ""
 
 #: views/view.settings.settings.php:82
@@ -185,13 +232,25 @@ msgid ""
 "extension numbers, full caller ID numbers or Asterisk dialing patterns"
 msgstr ""
 
-#: Hotelwakeup.class.php:497
+#: Hotelwakeup.class.php:719
+msgid "Error creating repeat wakeup calls: "
+msgstr ""
+
+#: Hotelwakeup.class.php:521
 msgid "File not found!"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:128
+msgid "First day to start the wakeup calls"
 msgstr ""
 
 #: hotelwakeup.i18n.php:8
 msgid "FreePBX module for generating reminder and wakeup calls"
 msgstr "Mô đun FreePBX cho việc tạo các cuộc gọi đánh thức hay nhắc nhở"
+
+#: views/view.wakeup.grid.create.php:178
+msgid "Friday"
+msgstr ""
 
 #: views/view.settings.message.edit.php:6
 msgid "Gloabl"
@@ -216,20 +275,24 @@ msgstr ""
 msgid "Invalid Option"
 msgstr ""
 
-#: Hotelwakeup.class.php:863
+#: Hotelwakeup.class.php:958
 msgid "Invalid action!"
 msgstr ""
 
-#: views/view.settings.message.list.php:23 views/view.wakeup.grid.create.php:70
-#: views/view.wakeup.grid.php:28
+#: views/view.settings.message.list.php:23
+#: views/view.wakeup.grid.create.php:224 views/view.wakeup.grid.php:28
 msgid "Language"
 msgstr ""
 
-#: Hotelwakeup.class.php:486 views/view.settings.settings.php:42
+#: views/view.wakeup.grid.create.php:214
+msgid "Last day to repeat the wakeup call"
+msgstr ""
+
+#: Hotelwakeup.class.php:510 views/view.settings.settings.php:42
 msgid "Max Destination Length"
 msgstr "DDộ dài Điểm dịch tối đa"
 
-#: Hotelwakeup.class.php:489 views/view.settings.settings.php:150
+#: Hotelwakeup.class.php:513 views/view.settings.settings.php:150
 msgid "Max Retries"
 msgstr "Lần thử lại tối đa"
 
@@ -264,15 +327,15 @@ msgstr ""
 msgid "Message requesting the data to create the wake-up call."
 msgstr ""
 
-#: Hotelwakeup.class.php:853
+#: Hotelwakeup.class.php:948
 msgid "Message setting cleared successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:812
+#: Hotelwakeup.class.php:907
 msgid "Message setting loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:834
+#: Hotelwakeup.class.php:929
 msgid "Message setting update successfully"
 msgstr ""
 
@@ -335,15 +398,19 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
+#: views/view.wakeup.grid.create.php:166
+msgid "Monday"
+msgstr ""
+
 #: views/view.settings.settings.php:18
 msgid "No"
 msgstr "Không"
 
-#: Hotelwakeup.class.php:619
+#: Hotelwakeup.class.php:643
 msgid "No language has been specified!"
 msgstr ""
 
-#: Hotelwakeup.class.php:627
+#: Hotelwakeup.class.php:651
 msgid "No message specified!"
 msgstr ""
 
@@ -355,8 +422,20 @@ msgstr ""
 msgid "Not received"
 msgstr "Không nhận được"
 
+#: views/view.wakeup.grid.create.php:138
+msgid "Number of Days"
+msgstr ""
+
 #: views/view.settings.message.edit.php:89
 msgid "Number of Wake Up Calls in List"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:150
+msgid "Number of consecutive days to repeat the wakeup call (max 365)"
+msgstr ""
+
+#: assets/js/views/wakeup.js:142
+msgid "Number of days must be between 1 and 365"
 msgstr ""
 
 #: views/view.settings.message.edit.php:10
@@ -384,12 +463,12 @@ msgstr ""
 msgid "Options Menu in List of Created Wake-Up Calls"
 msgstr ""
 
-#: Hotelwakeup.class.php:938
+#: Hotelwakeup.class.php:1097
 #, php-format
 msgid "Page Not Found (%s)!!!!"
 msgstr ""
 
-#: Hotelwakeup.class.php:182
+#: Hotelwakeup.class.php:183
 #, php-format
 msgid "Path name (%s) not supported!"
 msgstr ""
@@ -398,8 +477,16 @@ msgstr ""
 msgid "Read Wake Up Call settings"
 msgstr ""
 
-#: Hotelwakeup.class.php:270
+#: Hotelwakeup.class.php:271
 msgid "Reload"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:92
+msgid "Repeat Type"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:50
+msgid "Repeat Wakeup"
 msgstr ""
 
 #: Restore.php:17
@@ -407,23 +494,27 @@ msgstr ""
 msgid "Restoring destination : %s"
 msgstr ""
 
-#: Hotelwakeup.class.php:488 views/view.settings.settings.php:123
+#: Hotelwakeup.class.php:512 views/view.settings.settings.php:123
 msgid "Retry Time"
 msgstr "Thời gian thử lại"
 
-#: Hotelwakeup.class.php:487 views/view.settings.settings.php:96
+#: Hotelwakeup.class.php:511 views/view.settings.settings.php:96
 msgid "Ring Time"
 msgstr "Thời gian đổ chuông"
 
-#: Hotelwakeup.class.php:265
+#: views/view.wakeup.grid.create.php:181
+msgid "Saturday"
+msgstr ""
+
+#: Hotelwakeup.class.php:266
 msgid "Save"
 msgstr ""
 
-#: Hotelwakeup.class.php:795
+#: Hotelwakeup.class.php:890
 msgid "Save failed, invalid values!"
 msgstr ""
 
-#: Hotelwakeup.class.php:800
+#: Hotelwakeup.class.php:895
 msgid "Save failed, missing parameters!"
 msgstr ""
 
@@ -435,15 +526,19 @@ msgstr ""
 msgid "Select Extension"
 msgstr ""
 
-#: Hotelwakeup.class.php:1373
+#: Hotelwakeup.class.php:1539
 msgid "Select a Language"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:194
+msgid "Select which days of the week to repeat the wakeup call"
 msgstr ""
 
 #: views/view.wakeup.grid.php:8
 msgid "Server time"
 msgstr "Thời gian máy chủ"
 
-#: Hotelwakeup.class.php:478
+#: Hotelwakeup.class.php:502
 msgid "Setting Restart Successfully"
 msgstr ""
 
@@ -451,11 +546,11 @@ msgstr ""
 msgid "Settings"
 msgstr "Các cài đặt"
 
-#: Hotelwakeup.class.php:711
+#: Hotelwakeup.class.php:787
 msgid "Settings loaded successfully"
 msgstr ""
 
-#: Hotelwakeup.class.php:791
+#: Hotelwakeup.class.php:886
 msgid "Settings saved successfully"
 msgstr ""
 
@@ -467,11 +562,36 @@ msgstr ""
 msgid "Sound Languages"
 msgstr ""
 
+#: views/view.wakeup.grid.create.php:98
+msgid "Specific Weekdays"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:118
+msgid "Start Date"
+msgstr ""
+
+#: assets/js/views/wakeup.js:130
+msgid "Start date can not be blank"
+msgstr ""
+
+#: Hotelwakeup.class.php:682
+msgid "Start date is required for repeat mode!"
+msgstr ""
+
 #: views/view.settings.message.edit.php:84
 msgid "Successfully Created"
 msgstr ""
 
-#: Hotelwakeup.class.php:479
+#: Hotelwakeup.class.php:717
+#, php-format
+msgid "Successfully scheduled %d wakeup calls"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:184
+msgid "Sunday"
+msgstr ""
+
+#: Hotelwakeup.class.php:503
 msgid "The following files do not exist:"
 msgstr ""
 
@@ -499,11 +619,11 @@ msgstr ""
 "Số giây đợi giữa các lần thử. Một \"lần thử\" xảy ra nếu cuộc gọi đánh thức "
 "không được trả lời"
 
-#: Hotelwakeup.class.php:623
+#: Hotelwakeup.class.php:647
 msgid "The specified language is not available!"
 msgstr ""
 
-#: Hotelwakeup.class.php:632
+#: Hotelwakeup.class.php:656
 msgid "The specified message does not exist!"
 msgstr ""
 
@@ -516,13 +636,13 @@ msgstr ""
 "một cuộc gọi đánh thức. Cài đặt 10 hoặc 11 sẽ cho phép các cuộc gọi đánh "
 "thức đến các số bên ngoài"
 
+#: views/view.wakeup.grid.create.php:175
+msgid "Thursday"
+msgstr ""
+
 #: views/view.wakeup.grid.create.php:30 views/view.wakeup.grid.php:25
 msgid "Time"
 msgstr "Thời gian"
-
-#: assets/js/views/wakeup.js:40
-msgid "Time can not be blank"
-msgstr "Không để trống mục thời gian"
 
 #: views/view.wakeup.grid.create.php:40
 msgid "Time to call"
@@ -534,11 +654,19 @@ msgid ""
 "corresponding to the number of milliseconds we want the silence to last."
 msgstr ""
 
-#: views/view.wakeup.grid.create.php:74
+#: views/view.wakeup.grid.create.php:169
+msgid "Tuesday"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:99
+msgid "Until Date"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:228
 msgid "Use Default Language"
 msgstr ""
 
-#: Hotelwakeup.class.php:480
+#: Hotelwakeup.class.php:504
 msgid "Wait for the current playback to finish."
 msgstr ""
 
@@ -554,7 +682,7 @@ msgstr ""
 msgid "Wake Up Call Information"
 msgstr ""
 
-#: Hotelwakeup.class.php:490 views/view.settings.settings.php:177
+#: Hotelwakeup.class.php:514 views/view.settings.settings.php:209
 msgid "Wake Up Caller ID"
 msgstr "Caller ID của cuộc gọi đánh thức"
 
@@ -576,7 +704,7 @@ msgstr ""
 "nhắc nhở đến bất kỳ điểm đích hợp lệ nào. Ddể lập lịch một cuộc gọi, quay %s "
 "hoặc sử dụng mẫu sau"
 
-#: Hotelwakeup.class.php:698
+#: Hotelwakeup.class.php:774
 msgid "Wake up call does not exist!"
 msgstr ""
 
@@ -586,6 +714,10 @@ msgid ""
 "for list of created calls."
 msgstr ""
 
+#: views/view.settings.settings.php:177
+msgid "Wakeup Time Step"
+msgstr ""
+
 #: views/page.settings.php:32
 msgid "Warning: No language has been specified!"
 msgstr ""
@@ -593,6 +725,14 @@ msgstr ""
 #: views/page.settings.php:37
 #, php-format
 msgid "Warning: The language (%s) is not installed!"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:172
+msgid "Wednesday"
+msgstr ""
+
+#: views/view.wakeup.grid.create.php:160
+msgid "Weekdays"
 msgstr ""
 
 #: views/page.wakeup.php:6
@@ -609,10 +749,6 @@ msgstr ""
 "định tạo các cuộc gọi đánh thức cho bất kỳ điểm đích hợp lệ nào. Nếu bị vô "
 "hiệu các cuộc gọi có thể chỉ được đặt trở lại tới Caller ID của người dùng "
 "đang lập cuộc gọi đánh thức"
-
-#: views/view.settings.settings.php:177
-msgid "Wakeup Time Step"
-msgstr ""
 
 #: views/view.settings.message.edit.php:133
 msgid "Wildcards"
@@ -632,6 +768,12 @@ msgid ""
 "You have no sound packages installed in the %s module. Please install at "
 "least one language to use System Recordings"
 msgstr ""
+
+#~ msgid "Destination can not be blank"
+#~ msgstr "Không để trống mục Điểm đích"
+
+#~ msgid "Time can not be blank"
+#~ msgstr "Không để trống mục thời gian"
 
 #~ msgid "<b>System time:</b> "
 #~ msgstr "<b>Thời gian hệ thống:</b> "
