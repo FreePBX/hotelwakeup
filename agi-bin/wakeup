@@ -83,6 +83,7 @@ function wakeupAdd($number, $retry = 0)
 	global $hotelwakeup;
 
 	$time = $hotelwakeup->sim_background("wakeupAdd", "0123456789", 3);
+	$times = '';
 	if(strlen($time) > 1)
 	{
 		$last = '';

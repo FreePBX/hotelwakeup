@@ -41,7 +41,7 @@ function saveCall(e)
 		return false;
 	}
 	if($("#day").val().trim() === "") {
-		warnInvalid($("day"), _("Day can not be blank"));
+		warnInvalid($("#day"), _("Day can not be blank"));
 		return false;
 	}
 

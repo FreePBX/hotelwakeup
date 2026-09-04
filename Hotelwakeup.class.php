@@ -5,6 +5,24 @@ use FreePBX_Helpers;
 use PDO;
 
 class Hotelwakeup extends FreePBX_Helpers implements BMO {
+	/** @var \FreePBX */
+	public $FreePBX;
+
+	/** @var \FreePBX\Database|\PDO */
+	public $db;
+
+	/** @var \FreePBX\Database|\PDO */
+	public $Database;
+
+	/** @var \FreePBX\Media */
+	public $media;
+
+	/** @var \FreePBX\modules\Recordings */
+	public $Recordings;
+
+	/** @var \FreePBX\modules\Soundlang */
+	public $Soundlang;
+
     public static $defaultConfig = [
         'maxretries' => 3, 
         'waittime' => 60, 
@@ -147,6 +165,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 		$this->FreePBX  = $freepbx;
 		$this->db 		= $freepbx->Database;
+		$this->Database = $freepbx->Database;
 		$this->media 	= $freepbx->Media();
 
 		//Modules
@@ -470,7 +489,7 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 				break;
 
 			case 'i18n':
-				$filejs = isset($_REQUEST['filejs']) ? $_REQUEST['filejs'] : NULL;
+				$filejs = $_REQUEST['filejs'] ?? '';
 				switch( strtolower($filejs) ) 
 				{
 					case "messages":
@@ -754,7 +773,10 @@ class Hotelwakeup extends FreePBX_Helpers implements BMO {
 
 				foreach ($list_options as $key => $value)
 				{
-					if ( empty($params[$key]) && $value['requiered'] )
+					if (
+						$value['requiered']
+						&& (!array_key_exists($key, $params) || $params[$key] === '' || $params[$key] === null)
+					)
 					{
 						$missing_options[] = $key;
 						continue;
