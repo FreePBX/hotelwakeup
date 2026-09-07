@@ -21,6 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 2.4\n"
 
+#: views/view.settings.settings.php:182 views/view.settings.settings.php:183
+#: views/view.settings.settings.php:184 views/view.settings.settings.php:185
+#, php-format
+msgid "%d minutes"
+msgstr "%d minutes"
+
 #: Hotelwakeup.class.php:491
 #, php-format
 msgid "%s can not be blank."
@@ -194,6 +200,16 @@ msgstr ""
 #: views/page.settings.php:64 views/page.wakeup.php:1
 msgid "Hotel Style Wakeup Calls"
 msgstr ""
+
+#: views/view.settings.settings.php:195
+msgid ""
+"Interval, in minutes, between the times offered in the Time dropdown of the "
+"Add/Edit Wakeup Call form. Typing an exact time is always possible "
+"regardless of this setting."
+msgstr ""
+"Intervalle, en minutes, entre les heures proposées dans la liste déroulante "
+"Heure du formulaire d'ajout/modification d'appel de réveil. Saisir une "
+"heure précise reste toujours possible quel que soit ce réglage."
 
 #: views/view.settings.message.edit.php:54
 msgid "Invalid Dialing"
@@ -597,6 +613,10 @@ msgstr ""
 "désignés de créer des appels de réveil pour toute destination valide. Si "
 "celui-ci est désactivé, les appels ne peuvent être faits qu'au poste "
 "téléphonique qui planifie l'appel"
+
+#: views/view.settings.settings.php:177
+msgid "Wakeup Time Step"
+msgstr "Intervalle de l'heure de réveil"
 
 #: views/view.settings.message.edit.php:133
 msgid "Wildcards"

@@ -21,6 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2.2-dev\n"
 
+#: views/view.settings.settings.php:182 views/view.settings.settings.php:183
+#: views/view.settings.settings.php:184 views/view.settings.settings.php:185
+#, php-format
+msgid "%d minutes"
+msgstr ""
+
 #: Hotelwakeup.class.php:491
 #, php-format
 msgid "%s can not be blank."
@@ -187,6 +193,13 @@ msgstr ""
 
 #: views/page.settings.php:64 views/page.wakeup.php:1
 msgid "Hotel Style Wakeup Calls"
+msgstr ""
+
+#: views/view.settings.settings.php:195
+msgid ""
+"Interval, in minutes, between the times offered in the Time dropdown of the "
+"Add/Edit Wakeup Call form. Typing an exact time is always possible "
+"regardless of this setting."
 msgstr ""
 
 #: views/view.settings.message.edit.php:54
@@ -573,6 +586,10 @@ msgid ""
 "When Operator Mode is enabled it will allow designated extentions to create "
 "wake up calls for any valid destination. If disabled calls can only be "
 "placed back to the caller ID of the user scheduling the wakeup call"
+msgstr ""
+
+#: views/view.settings.settings.php:177
+msgid "Wakeup Time Step"
 msgstr ""
 
 #: views/view.settings.message.edit.php:133

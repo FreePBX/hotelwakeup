@@ -19,6 +19,12 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 3.0.1\n"
 
+#: views/view.settings.settings.php:182 views/view.settings.settings.php:183
+#: views/view.settings.settings.php:184 views/view.settings.settings.php:185
+#, php-format
+msgid "%d minutes"
+msgstr ""
+
 #: Hotelwakeup.class.php:491
 #, php-format
 msgid "%s can not be blank."
@@ -191,6 +197,13 @@ msgstr ""
 
 #: views/page.settings.php:64 views/page.wakeup.php:1
 msgid "Hotel Style Wakeup Calls"
+msgstr ""
+
+#: views/view.settings.settings.php:195
+msgid ""
+"Interval, in minutes, between the times offered in the Time dropdown of the "
+"Add/Edit Wakeup Call form. Typing an exact time is always possible "
+"regardless of this setting."
 msgstr ""
 
 #: views/view.settings.message.edit.php:54
@@ -595,6 +608,10 @@ msgstr ""
 "создавать вызовы для будильника для любого действительного пункта "
 "назначения. Если вызываемый отключен - вызов может быть возвращен только на "
 "CallerID пользователя, планирующего пробуждение"
+
+#: views/view.settings.settings.php:177
+msgid "Wakeup Time Step"
+msgstr ""
 
 #: views/view.settings.message.edit.php:133
 msgid "Wildcards"
