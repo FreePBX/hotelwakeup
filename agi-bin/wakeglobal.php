@@ -4,9 +4,14 @@ require_once "phpagi.php";
 
 class AGI_Hotelwakeup
 {
-	// public $AGI 		= null;
-	// public $FreePBX		= null;
-	// public $Hotelwakeup = null;
+	/** @var \FreePBX */
+	public $FreePBX;
+
+	/** @var AGI */
+	public $AGI;
+
+	/** @var \FreePBX\modules\Hotelwakeup */
+	public $Hotelwakeup;
 
 	public function __construct() {
 		$this->FreePBX = \FreePBX::create();
